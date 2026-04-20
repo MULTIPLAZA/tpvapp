@@ -1,4 +1,4 @@
-import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
@@ -126,7 +126,7 @@ async function _agregarItem(producto) {
       IDProducto: producto.IDProducto, Cantidad: 1,
     });
     if (!rows?.length) throw new Error('Sin respuesta');
-    if (String(rows[0].Procesado) !== 'True') throw new Error(rows[0].Mensaje || 'Error al agregar');
+    if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al agregar');
     await refrescarBarra();
     mostrarToast(producto.Descripcion, 'exito');
   } catch (err) {

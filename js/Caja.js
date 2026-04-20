@@ -1,4 +1,4 @@
-import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 export async function verificarYAbrir() {
   const IDEntidad = Sesion.get('IDEntidad');
@@ -51,7 +51,7 @@ function init() {
         ImporteApertura: importe, Observacion: obs,
       });
       if (!rows?.length) throw new Error('Sin respuesta del servidor');
-      if (String(rows[0].Procesado) !== 'True') throw new Error(rows[0].Mensaje || 'Error al abrir caja');
+      if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al abrir caja');
       Sesion.set('IDTransaccionCaja', rows[0].IDTransaccionCaja);
       await _irAMain();
     } catch (err) {

@@ -1,4 +1,4 @@
-import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 const fmtQty = n => parseFloat(n || 0).toString();
@@ -84,7 +84,7 @@ async function _modCantidad(IDDetalleTicket, Cantidad) {
   try {
     const rows = await LlamarSP('MOD_CANTIDAD', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Cantidad });
     if (!rows?.length) throw new Error('Sin respuesta');
-    if (String(rows[0].Procesado) !== 'True') throw new Error(rows[0].Mensaje || 'Error');
+    if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error');
     await _refrescar();
   } catch (err) {
     mostrarToast(err.message || 'Error al modificar cantidad', 'error');
@@ -99,7 +99,7 @@ async function _quitarItem(IDDetalleTicket) {
   try {
     const rows = await LlamarSP('QUITAR_ITEM', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket });
     if (!rows?.length) throw new Error('Sin respuesta');
-    if (String(rows[0].Procesado) !== 'True') throw new Error(rows[0].Mensaje || 'Error');
+    if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error');
     await _refrescar();
   } catch (err) {
     mostrarToast(err.message || 'Error al quitar ítem', 'error');

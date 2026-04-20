@@ -141,6 +141,9 @@ export const Dispositivo = {
   limpiar() { localStorage.removeItem(this.CLAVE); },
 };
 
+// ── Helper: interpreta Procesado independiente del tipo ────────
+export const esProcesado = v => v === true || v === 1 || String(v).toLowerCase() === 'true';
+
 // ── Router ─────────────────────────────────────────────────────
 export function mostrarPantalla(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('activa'));
