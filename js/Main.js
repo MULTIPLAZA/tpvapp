@@ -46,20 +46,38 @@ async function _actualizarFooter() {
 function _setFooter(items, num) {
   const total    = items.reduce((s, r) => s + (r.Total || 0), 0);
   const count    = items.length;
-  const badge    = document.getElementById('btn-ticket-badge');
-  const numEl    = document.getElementById('main-ticket-num');
-  const totalEl  = document.getElementById('main-ticket-total');
-  const cobrarEl = document.getElementById('btn-cobrar-main');
 
-  numEl.textContent   = num ? `#${num} · ${count} ítem${count !== 1 ? 's' : ''}` : '—';
-  totalEl.textContent = fmtGs(total);
-  cobrarEl.disabled   = count === 0;
+  document.getElementById('main-ticket-num').textContent   = num ? `#${num}` : '#—';
+  document.getElementById('main-ticket-total').textContent = fmtGs(total);
+  document.getElementById('btn-cobrar-main').disabled      = count === 0;
 
-  if (badge) {
-    const span = document.getElementById('main-items-count');
-    if (span) span.textContent = count;
-    badge.classList.toggle('tiene-items', count > 0);
+  const span = document.getElementById('main-items-count');
+  if (span) span.textContent = count;
+  document.getElementById('btn-ticket-badge')?.classList.toggle('tiene-items', count > 0);
+
+  _renderPanelInline(items);
+}
+
+function _renderPanelInline(items) {
+  const cont = document.getElementById('main-ticket-panel-items');
+  const totalEl = document.getElementById('main-ticket-panel-total');
+  if (!cont) return;
+  if (!items.length) {
+    cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:20px;font-size:0.8rem">Vacío</p>';
+    if (totalEl) totalEl.textContent = 'Gs 0';
+    return;
   }
+  const total = items.reduce((s, r) => s + (r.Total || 0), 0);
+  if (totalEl) totalEl.textContent = fmtGs(total);
+  cont.innerHTML = items.map(i => `
+    <div class="panel-item">
+      <div>
+        <div class="panel-item-nombre">${i.Descripcion}</div>
+        <div class="panel-item-det">${parseFloat(i.Cantidad)} × ${fmtGs(i.PrecioUni)}</div>
+      </div>
+      <div style="font-size:0.82rem;font-weight:700">${fmtGs(i.Total)}</div>
+    </div>
+  `).join('');
 }
 
 async function _nuevoTicket() {
@@ -164,6 +182,12 @@ function init() {
     const { default: Ticket } = await import('./Ticket.js');
     mostrarPantalla('screen-ticket');
     await Ticket.cargar(_IDTransaccion);
+  });
+
+  document.getElementById('btn-ticket-lista').addEventListener('click', async () => {
+    const { default: TicketsLista } = await import('./TicketsLista.js');
+    mostrarPantalla('screen-tickets-lista');
+    await TicketsLista.cargar(_IDTransaccion);
   });
 
   document.getElementById('btn-cobrar-main').addEventListener('click', () => {
