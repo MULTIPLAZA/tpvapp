@@ -178,11 +178,13 @@ async function _cargarCatalogo() {
       LlamarSP('PRODUCTOS',  { IDEntidad, IDDeposito }),
     ]);
 
-    // Mapa color por categoría con paleta por defecto
+    // Mapa color por categoría — paleta solo para las que no tienen color de BD
     _colorCat = {};
-    (cats || []).forEach((c, i) => {
-      const id = c.IDTipoProducto ?? c.IDTipo;
-      _colorCat[id] = _argbToCss(c.Color) ?? _PALETA[i % _PALETA.length];
+    let _iPaleta = 0;
+    (cats || []).forEach(c => {
+      const id    = c.IDTipoProducto ?? c.IDTipo;
+      const color = _argbToCss(c.Color);
+      _colorCat[id] = color ?? _PALETA[_iPaleta++ % _PALETA.length];
     });
 
     _todosProductos = prods || [];
@@ -191,10 +193,9 @@ async function _cargarCatalogo() {
     const cont = document.getElementById('main-categorias');
     cont.innerHTML = '';
     cont.appendChild(_crearCatBtn('Todos', 0, true, null));
-    (cats || []).forEach((c, i) => {
-      const id    = c.IDTipoProducto ?? c.IDTipo;
-      const color = _colorCat[id];
-      cont.appendChild(_crearCatBtn(c.Descripcion, id, false, color));
+    (cats || []).forEach(c => {
+      const id = c.IDTipoProducto ?? c.IDTipo;
+      cont.appendChild(_crearCatBtn(c.Descripcion, id, false, _colorCat[id]));
     });
 
     _filtrarProductos(0);
