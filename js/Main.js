@@ -50,7 +50,7 @@ async function _nuevoTicket() {
   const IDUsuario        = Sesion.get('IDUsuario');
   mostrarLoading(true);
   try {
-    const rows = await LlamarSP('NUEVO_TICKET', { IDEntidad, IDTransaccion: IDTransaccionCaja, IDUsuario });
+    const rows = await LlamarSP('NUEVO_TICKET', { IDEntidad, IDTransaccionCaja, IDUsuario });
     if (!rows?.length) throw new Error('No se pudo crear ticket');
     if (rows[0].Mensaje) throw new Error(rows[0].Mensaje);
     _IDTransaccion = rows[0].IDTransaccion;
