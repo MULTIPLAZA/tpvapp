@@ -51,11 +51,9 @@ function _render(tickets) {
 }
 
 async function _seleccionarTicket(ticket) {
-  Sesion.set('IDTransaccion', ticket.IDTransaccion);
-  Sesion.set('TicketNumero', ticket.Numero);
   const { default: Main } = await import('./Main.js');
   mostrarPantalla('screen-main');
-  await Main.refrescarBarra();
+  await Main.seleccionarTicket(ticket.IDTransaccion);
 }
 
 function init() {

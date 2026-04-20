@@ -14,43 +14,74 @@ export async function cargar() {
   document.getElementById('main-sub').textContent      = [terminal, usuario].filter(Boolean).join(' · ');
   document.getElementById('main-version').textContent  = version;
 
+  mostrarLoading(true);
   try {
-    const existente = Sesion.get('IDTransaccion');
-    if (existente) {
-      _IDTransaccion = existente;
-      await _actualizarFooter();
-    } else {
-      await _nuevoTicket();
-    }
+    await _nuevoTicket();
+    await _ticketActivo();
   } catch (err) {
     mostrarToast(err.message || 'Error al preparar ticket', 'error');
+  } finally {
+    mostrarLoading(false);
   }
   await _cargarCategorias();
 }
 
 export async function nuevoTicket() {
-  Sesion.set('IDTransaccion', '');
-  await _nuevoTicket();
-  _setFooter([], Sesion.get('TicketNumero'));
+  mostrarLoading(true);
+  try {
+    await _nuevoTicket();
+    await _ticketActivo();
+  } catch (err) {
+    mostrarToast(err.message || 'Error al crear ticket', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
   await _cargarCategorias();
+}
+
+export async function seleccionarTicket(IDTransaccion) {
+  _IDTransaccion = IDTransaccion;
+  Sesion.set('IDTransaccion', IDTransaccion);
+  mostrarLoading(true);
+  try {
+    await _ticketActivo();
+  } catch (err) {
+    mostrarToast(err.message || 'Error al cargar ticket', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
 }
 
 export async function refrescarBarra() {
   _IDTransaccion = Sesion.get('IDTransaccion') || _IDTransaccion;
-  await _actualizarFooter();
-}
-
-async function _actualizarFooter() {
-  const IDEntidad = Sesion.get('IDEntidad');
   try {
-    const items = await LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion });
-    _setFooter(items || [], Sesion.get('TicketNumero'));
+    await _ticketActivo();
   } catch { /* silencioso */ }
 }
 
+async function _nuevoTicket() {
+  const IDEntidad         = Sesion.get('IDEntidad');
+  const IDTransaccionCaja = Sesion.get('IDTransaccionCaja');
+  const IDUsuario         = Sesion.get('IDUsuario');
+  const rows = await LlamarSP('NUEVO_TICKET', { IDEntidad, IDTransaccionCaja, IDUsuario });
+  if (!rows?.length) throw new Error('No se pudo crear ticket');
+  if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al crear ticket');
+  _IDTransaccion = rows[0].IDTransaccion;
+  Sesion.set('IDTransaccion', _IDTransaccion);
+}
+
+async function _ticketActivo() {
+  const IDEntidad = Sesion.get('IDEntidad');
+  const rows = await LlamarSP('TICKET_ACTIVO', { IDEntidad, IDTransaccion: _IDTransaccion });
+  if (!rows?.length) throw new Error('Sin respuesta de ticket');
+  Sesion.set('TicketNumero', rows[0].Numero);
+  const items = await LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion });
+  _setFooter(items || [], rows[0].Numero);
+}
+
 function _setFooter(items, num) {
-  const total    = items.reduce((s, r) => s + (r.Total || 0), 0);
-  const count    = items.length;
+  const total = items.reduce((s, r) => s + (r.Total || 0), 0);
+  const count = items.length;
 
   document.getElementById('main-ticket-num').textContent   = num ? `#${num}` : '#—';
   document.getElementById('main-ticket-total').textContent = fmtGs(total);
@@ -83,24 +114,6 @@ function _renderPanelInline(items) {
       <div style="font-size:0.82rem;font-weight:700">${fmtGs(i.Total)}</div>
     </div>
   `).join('');
-}
-
-async function _nuevoTicket() {
-  const IDEntidad         = Sesion.get('IDEntidad');
-  const IDTransaccionCaja = Sesion.get('IDTransaccionCaja');
-  const IDUsuario         = Sesion.get('IDUsuario');
-  mostrarLoading(true);
-  try {
-    const rows = await LlamarSP('NUEVO_TICKET', { IDEntidad, IDTransaccionCaja, IDUsuario });
-    if (!rows?.length) throw new Error('No se pudo crear ticket');
-    if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al crear ticket');
-    _IDTransaccion = rows[0].IDTransaccion;
-    Sesion.set('IDTransaccion', _IDTransaccion);
-    Sesion.set('TicketNumero', rows[0].Numero);
-    _setFooter([], rows[0].Numero);
-  } finally {
-    mostrarLoading(false);
-  }
 }
 
 async function _cargarCategorias() {
@@ -160,10 +173,8 @@ async function _cargarProductos(IDTipoProducto) {
 
 async function _agregarItem(producto) {
   if (!_IDTransaccion) {
-    try { await _nuevoTicket(); } catch (err) {
-      mostrarToast(err.message || 'No se pudo crear ticket', 'error');
-      return;
-    }
+    mostrarToast('Sin ticket activo', 'error');
+    return;
   }
   const IDEntidad = Sesion.get('IDEntidad');
   mostrarLoading(true);
@@ -174,7 +185,7 @@ async function _agregarItem(producto) {
     });
     if (!rows?.length) throw new Error('Sin respuesta');
     if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al agregar');
-    await _actualizarFooter();
+    await _ticketActivo();
     mostrarToast(producto.Descripcion, 'exito');
   } catch (err) {
     mostrarToast(err.message || 'Error al agregar', 'error');
@@ -205,4 +216,4 @@ function init() {
   });
 }
 
-export default { init, cargar, nuevoTicket, refrescarBarra };
+export default { init, cargar, nuevoTicket, seleccionarTicket, refrescarBarra };
