@@ -36,6 +36,7 @@ export async function nuevoTicket() {
 }
 
 export async function refrescarBarra() {
+  _IDTransaccion = Sesion.get('IDTransaccion') || _IDTransaccion;
   await _actualizarFooter();
 }
 
@@ -92,7 +93,7 @@ async function _nuevoTicket() {
   try {
     const rows = await LlamarSP('NUEVO_TICKET', { IDEntidad, IDTransaccionCaja, IDUsuario });
     if (!rows?.length) throw new Error('No se pudo crear ticket');
-    if (rows[0].Mensaje) throw new Error(rows[0].Mensaje);
+    if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al crear ticket');
     _IDTransaccion = rows[0].IDTransaccion;
     Sesion.set('IDTransaccion', _IDTransaccion);
     Sesion.set('TicketNumero', rows[0].Numero);
