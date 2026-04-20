@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.4 — 2026-04-20 22:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.5 — 2026-04-21 00:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -118,7 +118,28 @@
     </div>
   </div>
 
-  <!-- ── Pantalla 4: Principal (Ticket + Productos) ── -->
+  <!-- ── Pantalla 4: Apertura de Caja ── -->
+  <div id="screen-apertura-caja" class="screen screen-centrada">
+    <div class="form-card">
+      <div class="logo-wrap">
+        <div class="logo-texto">Caja</div>
+        <div class="logo-sub" id="caja-terminal"></div>
+      </div>
+      <h2>Apertura de Caja</h2>
+      <p class="subtitulo">Ingrese el importe inicial</p>
+      <div class="campo">
+        <label>Importe de apertura (Gs)</label>
+        <input id="inp-importe-apertura" type="number" placeholder="0" min="0" autocomplete="off">
+      </div>
+      <div class="campo">
+        <label>Observación (opcional)</label>
+        <input id="inp-obs-apertura" type="text" placeholder="Nota de apertura" autocomplete="off">
+      </div>
+      <button id="btn-abrir-caja" class="btn btn-exito" style="margin-top:8px">Abrir Caja</button>
+    </div>
+  </div>
+
+  <!-- ── Pantalla 5: Principal (Productos + Ticket) ── -->
   <div id="screen-main" class="screen">
     <div class="header">
       <div>
@@ -128,12 +149,35 @@
       <div style="font-size:0.78rem;color:var(--text2)" id="main-usuario"></div>
       <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">⬅</button>
     </div>
-    <div class="contenido" style="display:flex;align-items:center;justify-content:center;color:var(--text2)">
-      <p>Pantalla principal — Etapas 4, 5, 6</p>
+    <div class="ticket-bar">
+      <div id="main-ticket-info" class="ticket-bar-info">Sin ticket</div>
+      <button id="btn-ver-ticket" class="btn btn-secundario" style="width:auto;padding:0 14px;min-height:36px;font-size:0.82rem">Ticket ▶</button>
+    </div>
+    <div id="main-categorias" class="categorias-row"></div>
+    <div id="main-productos" class="contenido productos-grid"></div>
+  </div>
+
+  <!-- ── Pantalla 6: Detalle Ticket ── -->
+  <div id="screen-ticket" class="screen">
+    <div class="header">
+      <div>
+        <div style="font-size:1rem;font-weight:600" id="ticket-numero">Ticket</div>
+        <div class="empresa" id="ticket-terminal"></div>
+      </div>
+      <button id="btn-ticket-nuevo" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">+ Nuevo</button>
+      <button id="btn-ticket-volver" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">← Volver</button>
+    </div>
+    <div id="ticket-items" class="contenido"></div>
+    <div class="footer-acciones" style="flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:0.9rem;color:var(--text2)">Total</span>
+        <span id="ticket-total" style="font-size:1.4rem;font-weight:700;color:var(--accent2)">Gs 0</span>
+      </div>
+      <button id="btn-cobrar" class="btn btn-primario" disabled>Cobrar (próximamente)</button>
     </div>
   </div>
 
-  <!-- ── Pantalla 5: Cobro / Resumen ── -->
+  <!-- ── Pantalla 7: Cobro / Resumen ── -->
   <div id="screen-cobro" class="screen">
     <div class="header">
       <h1>Resumen de cobro</h1>

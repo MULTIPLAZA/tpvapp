@@ -129,12 +129,16 @@ async function init() {
   const { default: LoginCuenta } = await import('./LoginCuenta.js');
   const { default: LoginUsuario } = await import('./LoginUsuario.js');
   const { default: Terminal } = await import('./Terminal.js');
+  const { default: Caja } = await import('./Caja.js');
   const { default: Main } = await import('./Main.js');
+  const { default: Ticket } = await import('./Ticket.js');
 
   LoginCuenta.init();
   LoginUsuario.init();
   Terminal.init();
+  Caja.init();
   Main.init();
+  Ticket.init();
 
   // Auto-restore si el dispositivo ya tiene terminal registrada
   const dispositivo = Dispositivo.obtener();

@@ -2,12 +2,8 @@ import { CONFIG, LlamarSP, Sesion, Dispositivo, mostrarPantalla, mostrarLoading,
 import { verificarTerminal } from './Terminal.js';
 
 async function irAUsuario() {
-  mostrarPantalla('screen-usuario');
-  const empresa = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial');
-  document.getElementById('empresa-nombre').textContent = empresa;
-  const terminal = Sesion.get('NombreTerminal') || '';
-  const sucursal = Sesion.get('NombreSucursal') || '';
-  document.getElementById('empresa-terminal').textContent = [sucursal, terminal].filter(Boolean).join(' — ');
+  const { mostrar } = await import('./LoginUsuario.js');
+  await mostrar();
 }
 
 function init() {

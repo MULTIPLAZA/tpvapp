@@ -1,0 +1,131 @@
+import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+
+const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const fmtQty = n => parseFloat(n || 0).toString();
+
+let _IDTransaccion = null;
+
+export async function cargar(IDTransaccion) {
+  _IDTransaccion = IDTransaccion;
+  document.getElementById('ticket-terminal').textContent = Sesion.get('NombreTerminal') || '';
+  await _refrescar();
+}
+
+async function _refrescar() {
+  const IDEntidad = Sesion.get('IDEntidad');
+  mostrarLoading(true);
+  try {
+    const rows = await LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion });
+    _renderItems(rows || []);
+  } catch (err) {
+    mostrarToast(err.message || 'Error al cargar ticket', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
+function _renderItems(items) {
+  const cont    = document.getElementById('ticket-items');
+  const totalEl = document.getElementById('ticket-total');
+  const numEl   = document.getElementById('ticket-numero');
+  const num     = Sesion.get('TicketNumero') || '';
+  numEl.textContent = `Ticket #${num}`;
+
+  if (!items.length) {
+    cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:40px">Ticket vacío</p>';
+    totalEl.textContent = 'Gs 0';
+    return;
+  }
+
+  Sesion.set('TicketNumero', items[0].Numero);
+  numEl.textContent = `Ticket #${items[0].Numero}`;
+  totalEl.textContent = fmtGs(items.reduce((s, r) => s + (r.Total || 0), 0));
+
+  cont.innerHTML = '';
+  items.forEach(item => {
+    const qty = parseFloat(item.Cantidad || 0);
+    const el  = document.createElement('div');
+    el.className = 'ticket-item';
+    el.innerHTML = `
+      <div class="ticket-item-info">
+        <div class="ticket-item-nombre">${item.Descripcion}</div>
+        ${item.Observacion ? `<div class="ticket-item-obs">${item.Observacion}</div>` : ''}
+        <div class="ticket-item-precio">${fmtGs(item.PrecioUni)} c/u</div>
+      </div>
+      <div class="ticket-item-acciones">
+        <button class="btn-qty" data-accion="menos" data-id="${item.IDDetalleTicket}" data-qty="${qty}">−</button>
+        <span class="qty-valor">${fmtQty(qty)}</span>
+        <button class="btn-qty" data-accion="mas" data-id="${item.IDDetalleTicket}" data-qty="${qty}">+</button>
+        <button class="btn-quitar" data-id="${item.IDDetalleTicket}">🗑</button>
+      </div>
+      <div class="ticket-item-total">${fmtGs(item.Total)}</div>
+    `;
+    cont.appendChild(el);
+  });
+
+  cont.querySelectorAll('.btn-qty').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id    = parseInt(btn.dataset.id);
+      const qty   = parseFloat(btn.dataset.qty);
+      const nueva = btn.dataset.accion === 'mas' ? qty + 1 : qty - 1;
+      if (nueva <= 0) await _quitarItem(id);
+      else await _modCantidad(id, nueva);
+    });
+  });
+
+  cont.querySelectorAll('.btn-quitar').forEach(btn => {
+    btn.addEventListener('click', () => _quitarItem(parseInt(btn.dataset.id)));
+  });
+}
+
+async function _modCantidad(IDDetalleTicket, Cantidad) {
+  const IDEntidad = Sesion.get('IDEntidad');
+  mostrarLoading(true);
+  try {
+    const rows = await LlamarSP('MOD_CANTIDAD', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Cantidad });
+    if (!rows?.length) throw new Error('Sin respuesta');
+    if (String(rows[0].Procesado) !== 'True') throw new Error(rows[0].Mensaje || 'Error');
+    await _refrescar();
+  } catch (err) {
+    mostrarToast(err.message || 'Error al modificar cantidad', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
+async function _quitarItem(IDDetalleTicket) {
+  const IDEntidad = Sesion.get('IDEntidad');
+  mostrarLoading(true);
+  try {
+    const rows = await LlamarSP('QUITAR_ITEM', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket });
+    if (!rows?.length) throw new Error('Sin respuesta');
+    if (String(rows[0].Procesado) !== 'True') throw new Error(rows[0].Mensaje || 'Error');
+    await _refrescar();
+  } catch (err) {
+    mostrarToast(err.message || 'Error al quitar ítem', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
+function init() {
+  document.getElementById('btn-ticket-volver').addEventListener('click', async () => {
+    const { default: Main } = await import('./Main.js');
+    mostrarPantalla('screen-main');
+    await Main.refrescarBarra();
+  });
+
+  document.getElementById('btn-ticket-nuevo').addEventListener('click', async () => {
+    if (!confirm('¿Crear nuevo ticket? El actual quedará abierto.')) return;
+    Sesion.set('IDTransaccion', '');
+    const { default: Main } = await import('./Main.js');
+    mostrarPantalla('screen-main');
+    await Main.nuevoTicket();
+  });
+
+  document.getElementById('btn-cobrar').addEventListener('click', () => {
+    mostrarToast('Cobro disponible próximamente', '');
+  });
+}
+
+export default { init, cargar };
