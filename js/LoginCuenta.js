@@ -1,4 +1,4 @@
-import { CONFIG, LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+import { CONFIG, LlamarSP, Sesion, Dispositivo, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
 import { verificarTerminal } from './Terminal.js';
 
 async function irAUsuario() {
@@ -33,6 +33,9 @@ function init() {
       // Verificar si este dispositivo tiene terminal registrada
       const terminalOk = await verificarTerminal();
       if (terminalOk) {
+        // Actualizar datos de entidad en dispositivo (token puede haber cambiado)
+        const d = Dispositivo.obtener();
+        if (d) Dispositivo.guardar({ ...d, token_apisql, IDEntidad, NombreFantasia, RazonSocial, RUC });
         await irAUsuario();
       } else {
         const { default: Terminal } = await import('./Terminal.js');

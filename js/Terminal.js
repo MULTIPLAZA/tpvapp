@@ -1,10 +1,8 @@
-import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
-
-const LS_KEY = () => `tpv_terminal_${Sesion.get('IDEntidad')}`;
+import { LlamarSP, Sesion, Dispositivo, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
 
 // ── Verificar si el dispositivo ya tiene terminal registrada ──
 export async function verificarTerminal() {
-  const guardado = JSON.parse(localStorage.getItem(LS_KEY()) || 'null');
+  const guardado = Dispositivo.obtener();
   if (!guardado?.uuid) return false;
 
   try {
@@ -31,14 +29,20 @@ function _guardarTerminalEnSesion(t) {
 }
 
 function _guardarTerminalEnLocal(t, uuid) {
-  localStorage.setItem(LS_KEY(), JSON.stringify({
+  Dispositivo.guardar({
     uuid,
-    IDTerminal: t.IDTerminal,
+    IDTerminal:    t.IDTerminal,
     NombreTerminal: t.NombreTerminal,
     NombreSucursal: t.NombreSucursal,
-    IDSucursal: t.IDSucursal,
-    IDDeposito: t.IDDeposito,
-  }));
+    IDSucursal:    t.IDSucursal,
+    IDDeposito:    t.IDDeposito,
+    // datos de entidad para auto-restore
+    token_apisql:  Sesion.get('token_apisql'),
+    IDEntidad:     Sesion.get('IDEntidad'),
+    NombreFantasia: Sesion.get('NombreFantasia'),
+    RazonSocial:   Sesion.get('RazonSocial'),
+    RUC:           Sesion.get('RUC'),
+  });
 }
 
 // ── Pantalla de registro ──

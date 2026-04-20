@@ -38,6 +38,14 @@ export const Sesion = {
   existe() { return !!sessionStorage.getItem('tpv_token_apisql'); },
 };
 
+// ── Dispositivo (localStorage — persiste entre sesiones) ────────
+export const Dispositivo = {
+  CLAVE: 'tpv_device',
+  guardar(datos) { localStorage.setItem(this.CLAVE, JSON.stringify(datos)); },
+  obtener() { try { return JSON.parse(localStorage.getItem(this.CLAVE)); } catch { return null; } },
+  limpiar() { localStorage.removeItem(this.CLAVE); },
+};
+
 // ── Router ─────────────────────────────────────────────────────
 export function mostrarPantalla(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('activa'));
@@ -94,7 +102,37 @@ async function init() {
   Terminal.init();
   Main.init();
 
-  mostrarPantalla('screen-cuenta');
+  // Auto-restore si el dispositivo ya tiene terminal registrada
+  const dispositivo = Dispositivo.obtener();
+  if (dispositivo?.uuid && dispositivo?.token_apisql) {
+    mostrarLoading(true);
+    try {
+      // Restaurar sesión de entidad
+      Sesion.set('token_apisql', dispositivo.token_apisql);
+      Sesion.set('IDEntidad',    dispositivo.IDEntidad);
+      Sesion.set('NombreFantasia', dispositivo.NombreFantasia);
+      Sesion.set('RazonSocial',  dispositivo.RazonSocial);
+      Sesion.set('RUC',          dispositivo.RUC);
+
+      // Verificar que la terminal sigue válida
+      const { verificarTerminal } = await import('./Terminal.js');
+      const ok = await verificarTerminal();
+      if (ok) {
+        const { irAUsuario } = await import('./LoginCuenta.js');
+        await irAUsuario();
+      } else {
+        Dispositivo.limpiar();
+        mostrarPantalla('screen-cuenta');
+      }
+    } catch {
+      Dispositivo.limpiar();
+      mostrarPantalla('screen-cuenta');
+    } finally {
+      mostrarLoading(false);
+    }
+  } else {
+    mostrarPantalla('screen-cuenta');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
