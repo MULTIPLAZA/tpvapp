@@ -68,6 +68,31 @@ export function mostrarToast(msg, tipo = '') {
   _toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3000);
 }
 
+// ── Instalación PWA ────────────────────────────────────────────
+let _promptInstalar = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _promptInstalar = e;
+  const btn = document.getElementById('btn-instalar');
+  if (btn) btn.style.display = 'flex';
+});
+
+window.addEventListener('appinstalled', () => {
+  _promptInstalar = null;
+  const btn = document.getElementById('btn-instalar');
+  if (btn) btn.style.display = 'none';
+  const ios = document.getElementById('banner-ios');
+  if (ios) ios.style.display = 'none';
+});
+
+export function instalarPWA() {
+  if (_promptInstalar) {
+    _promptInstalar.prompt();
+    _promptInstalar.userChoice.then(() => { _promptInstalar = null; });
+  }
+}
+
 // ── Verificar conexión ──────────────────────────────────────────
 async function verificarConexion() {
   if (!navigator.onLine) {
@@ -90,6 +115,15 @@ async function init() {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+
+  // Banner iOS — mostrar si es Safari en iOS y no está instalada
+  const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const esSafari = /safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent);
+  const yaInstalada = window.navigator.standalone === true;
+  if (esIOS && esSafari && !yaInstalada) {
+    const banner = document.getElementById('banner-ios');
+    if (banner) banner.style.display = 'block';
   }
 
   const { default: LoginCuenta } = await import('./LoginCuenta.js');

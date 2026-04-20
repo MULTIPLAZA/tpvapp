@@ -10,6 +10,7 @@
   <meta name="apple-mobile-web-app-title" content="TPVAPP">
   <title>TPVAPP</title>
   <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
   <link rel="stylesheet" href="/css/Estilo.css">
 </head>
 <body>
@@ -19,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.3 — 2026-04-20 21:30</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.4 — 2026-04-20 22:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -34,6 +35,29 @@
         </div>
         <button type="submit" class="btn btn-primario" style="margin-top:8px">Ingresar</button>
       </form>
+      <button id="btn-instalar" onclick="import('./js/App.js').then(m=>m.instalarPWA())"
+        class="btn btn-secundario" style="display:none;margin-top:12px;gap:8px">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
+        Instalar aplicación
+      </button>
+    </div>
+  </div>
+
+  <!-- Banner instalación iOS -->
+  <div id="banner-ios" style="display:none;position:fixed;bottom:16px;left:12px;right:12px;
+    background:#16213e;border:1px solid #2a2a4a;border-radius:10px;padding:14px 16px;
+    z-index:9000;box-shadow:0 4px 20px rgba(0,0,0,.5)">
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <img src="icons/icon-192.png" style="width:36px;height:36px;border-radius:8px;flex-shrink:0">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Instalar TPVAPP</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5">
+          Tocá <strong style="color:var(--text)">Compartir</strong> y luego
+          <strong style="color:var(--text)">Agregar a pantalla de inicio</strong>
+        </div>
+      </div>
+      <button onclick="document.getElementById('banner-ios').style.display='none'"
+        style="background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:0">✕</button>
     </div>
   </div>
 
