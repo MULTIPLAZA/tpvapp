@@ -110,7 +110,7 @@ async function _cargarCategorias() {
     const cont = document.getElementById('main-categorias');
     cont.innerHTML = '';
     cont.appendChild(_crearCatBtn('Todos', 0, true));
-    (rows || []).forEach(r => cont.appendChild(_crearCatBtn(r.Descripcion, r.IDTipoProducto, false)));
+    (rows || []).forEach(r => cont.appendChild(_crearCatBtn(r.Descripcion, r.IDTipoProducto ?? r.IDTipo, false)));
     await _cargarProductos(0);
   } catch (err) {
     mostrarToast(err.message || 'Error al cargar categorías', 'error');
