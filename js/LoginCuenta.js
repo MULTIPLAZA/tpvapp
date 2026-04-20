@@ -5,7 +5,9 @@ async function irAUsuario() {
   mostrarPantalla('screen-usuario');
   const empresa = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial');
   document.getElementById('empresa-nombre').textContent = empresa;
-  document.getElementById('empresa-terminal').textContent = Sesion.get('NombreTerminal') || '';
+  const terminal = Sesion.get('NombreTerminal') || '';
+  const sucursal = Sesion.get('NombreSucursal') || '';
+  document.getElementById('empresa-terminal').textContent = [sucursal, terminal].filter(Boolean).join(' — ');
 }
 
 function init() {

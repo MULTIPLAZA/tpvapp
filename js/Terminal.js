@@ -113,8 +113,8 @@ async function registrar() {
     _guardarTerminalEnLocal(rows[0], _uuid);
     _guardarTerminalEnSesion({ ...rows[0], uuid: _uuid });
 
-    mostrarToast(`Terminal "${rows[0].NombreTerminal}" registrada`, 'exito');
-    setTimeout(() => mostrarPantalla('screen-usuario'), 800);
+    mostrarToast(`Terminal "${rows[0].NombreTerminal}" registrada. Ingrese nuevamente.`, 'exito');
+    setTimeout(() => window.location.reload(), 1500);
   } catch (err) {
     mostrarToast(err.message || 'Error al registrar terminal', 'error');
   } finally {
