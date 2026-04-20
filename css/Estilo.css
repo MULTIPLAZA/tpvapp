@@ -183,26 +183,41 @@ html, body {
 /* ── Pantalla full centrada (login) ── */
 .screen-centrada { justify-content: center; padding: 20px; overflow-y: auto; }
 
-/* ── Barra de ticket (Main) ── */
-.ticket-bar {
+/* ── Badge ticket (header Main) ── */
+.ticket-badge {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text2);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ticket-badge.tiene-items {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Footer cobrar (Main) ── */
+.footer-cobrar {
   background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-shrink: 0;
-  min-height: 44px;
 }
-.ticket-bar-info {
-  font-size: 0.85rem;
-  color: var(--accent2);
-  font-weight: 600;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.footer-cobrar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 /* ── Categorías ── */

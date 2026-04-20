@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.5 — 2026-04-21 01:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.6 — 2026-04-21 02:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -139,22 +139,28 @@
     </div>
   </div>
 
-  <!-- ── Pantalla 5: Principal (Productos + Ticket) ── -->
+  <!-- ── Pantalla 5: Principal ── -->
   <div id="screen-main" class="screen">
     <div class="header">
-      <div>
-        <div style="font-size:0.85rem;font-weight:600" id="main-terminal">Terminal</div>
-        <div class="empresa" id="main-empresa"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="main-empresa"></div>
+        <div style="font-size:0.72rem;color:var(--text2);display:flex;gap:6px;align-items:center">
+          <span id="main-sub"></span>
+          <span id="main-version" style="opacity:0.45;font-size:0.65rem"></span>
+        </div>
       </div>
-      <div style="font-size:0.78rem;color:var(--text2)" id="main-usuario"></div>
+      <button id="btn-ticket-badge" class="ticket-badge">🛒 <span id="main-items-count">0</span></button>
       <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">⬅</button>
     </div>
-    <div class="ticket-bar">
-      <div id="main-ticket-info" class="ticket-bar-info">Sin ticket</div>
-      <button id="btn-ver-ticket" class="btn btn-secundario" style="width:auto;padding:0 14px;min-height:36px;font-size:0.82rem">Ticket ▶</button>
-    </div>
-    <div id="main-categorias" class="categorias-row"></div>
     <div id="main-productos" class="contenido productos-grid"></div>
+    <div id="main-categorias" class="categorias-row"></div>
+    <div class="footer-cobrar">
+      <div class="footer-cobrar-info">
+        <span id="main-ticket-num" style="font-size:0.72rem;color:var(--text2)">#—</span>
+        <span id="main-ticket-total" style="font-size:1.1rem;font-weight:700;color:var(--accent2)">Gs 0</span>
+      </div>
+      <button id="btn-cobrar-main" class="btn btn-primario" style="width:auto;padding:0 28px" disabled>COBRAR</button>
+    </div>
   </div>
 
   <!-- ── Pantalla 6: Detalle Ticket ── -->
