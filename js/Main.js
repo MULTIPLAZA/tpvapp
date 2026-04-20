@@ -14,12 +14,16 @@ export async function cargar() {
   document.getElementById('main-sub').textContent      = [terminal, usuario].filter(Boolean).join(' · ');
   document.getElementById('main-version').textContent  = version;
 
-  const existente = Sesion.get('IDTransaccion');
-  if (existente) {
-    _IDTransaccion = existente;
-    await _actualizarFooter();
-  } else {
-    await _nuevoTicket();
+  try {
+    const existente = Sesion.get('IDTransaccion');
+    if (existente) {
+      _IDTransaccion = existente;
+      await _actualizarFooter();
+    } else {
+      await _nuevoTicket();
+    }
+  } catch (err) {
+    mostrarToast(err.message || 'Error al preparar ticket', 'error');
   }
   await _cargarCategorias();
 }

@@ -91,7 +91,6 @@ function _logInyectar() {
 // ── APISQL ─────────────────────────────────────────────────────
 export async function LlamarSP(accion, params = {}, tokenOverride = null) {
   const token = tokenOverride ?? Sesion.get('token_apisql');
-  if (!token) throw new Error('Sin token de conexión');
 
   const paramStr = Object.entries(params)
     .filter(([, v]) => v !== null && v !== undefined)
@@ -102,6 +101,7 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
 
   let data;
   try {
+    if (!token) throw new Error('Sin token de conexión');
     const res = await fetch(CONFIG.APISQL_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
