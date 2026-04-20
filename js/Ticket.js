@@ -1,4 +1,4 @@
-import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
+import { LlamarSP, LlamarSPMulti, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 const fmtQty = n => parseFloat(n || 0).toString();
@@ -15,8 +15,8 @@ async function _refrescar() {
   const IDEntidad = Sesion.get('IDEntidad');
   mostrarLoading(true);
   try {
-    const rows = await LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion });
-    _renderItems(rows || []);
+    const tablas = await LlamarSPMulti('TICKET_ACTIVO', { IDEntidad, IDTransaccion: _IDTransaccion });
+    _renderItems(tablas[1] ?? [], tablas[0]?.[0]);
   } catch (err) {
     mostrarToast(err.message || 'Error al cargar ticket', 'error');
   } finally {
@@ -24,11 +24,12 @@ async function _refrescar() {
   }
 }
 
-function _renderItems(items) {
+function _renderItems(items, cabecera) {
   const cont    = document.getElementById('ticket-items');
   const totalEl = document.getElementById('ticket-total');
   const numEl   = document.getElementById('ticket-numero');
-  const num     = Sesion.get('TicketNumero') || '';
+  const num     = cabecera?.Numero || Sesion.get('TicketNumero') || '';
+  if (cabecera?.Numero) Sesion.set('TicketNumero', cabecera.Numero);
   numEl.textContent = `Ticket #${num}`;
 
   if (!items.length) {
@@ -36,9 +37,6 @@ function _renderItems(items) {
     totalEl.textContent = 'Gs 0';
     return;
   }
-
-  Sesion.set('TicketNumero', items[0].Numero);
-  numEl.textContent = `Ticket #${items[0].Numero}`;
   totalEl.textContent = fmtGs(items.reduce((s, r) => s + (r.Total || 0), 0));
 
   cont.innerHTML = '';
