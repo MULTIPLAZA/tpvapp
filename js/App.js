@@ -90,7 +90,15 @@ function _logInyectar() {
 }
 
 // ── APISQL ─────────────────────────────────────────────────────
+export async function LlamarSPMulti(accion, params = {}, tokenOverride = null) {
+  return _llamar('multi', accion, params, tokenOverride);
+}
+
 export async function LlamarSP(accion, params = {}, tokenOverride = null) {
+  return _llamar('', accion, params, tokenOverride);
+}
+
+async function _llamar(modo, accion, params = {}, tokenOverride = null) {
   const token = tokenOverride ?? Sesion.get('token_apisql');
 
   const paramStr = Object.entries(params)
@@ -99,12 +107,13 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
     .join(', ');
 
   const sql = `Exec SpTPVApp @Accion='${accion}'${paramStr ? ', ' + paramStr : ''}`;
+  const url  = CONFIG.APISQL_URL + (modo ? `/${modo}` : '');
 
   let data;
   const t0 = performance.now();
   try {
     if (!token) throw new Error('Sin token de conexión');
-    const res = await fetch(CONFIG.APISQL_URL, {
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ sp: sql }),

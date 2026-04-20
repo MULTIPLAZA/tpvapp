@@ -1,4 +1,4 @@
-import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
+import { LlamarSP, LlamarSPMulti, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
@@ -72,13 +72,12 @@ async function _nuevoTicket() {
 
 async function _ticketActivo() {
   const IDEntidad = Sesion.get('IDEntidad');
-  const [ticket, items] = await Promise.all([
-    LlamarSP('TICKET_ACTIVO', { IDEntidad, IDTransaccion: _IDTransaccion }),
-    LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion }),
-  ]);
-  if (!ticket?.length) throw new Error('Ticket no encontrado');
+  const tablas = await LlamarSPMulti('TICKET_ACTIVO', { IDEntidad, IDTransaccion: _IDTransaccion });
+  const ticket = tablas[0] ?? [];
+  const items  = tablas[1] ?? [];
+  if (!ticket.length) throw new Error('Ticket no encontrado');
   Sesion.set('TicketNumero', ticket[0].Numero);
-  _setFooter(items || [], ticket[0].Numero);
+  _setFooter(items, ticket[0].Numero);
 }
 
 function _setFooter(items, num) {
