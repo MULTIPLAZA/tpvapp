@@ -13,6 +13,44 @@ const _argbToCss = argb => {
   return `rgb(${(u >> 16) & 0xFF},${(u >> 8) & 0xFF},${u & 0xFF})`;
 };
 
+const _audio = new (window.AudioContext || window.webkitAudioContext)();
+
+function _beep(tipo) {
+  const osc  = _audio.createOscillator();
+  const gain = _audio.createGain();
+  osc.connect(gain);
+  gain.connect(_audio.destination);
+  if (tipo === 'ok') {
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.15, _audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.12);
+    osc.start();
+    osc.stop(_audio.currentTime + 0.12);
+  } else {
+    osc.type = 'sawtooth';
+    osc.frequency.value = 220;
+    gain.gain.setValueAtTime(0.2, _audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.3);
+    osc.start();
+    osc.stop(_audio.currentTime + 0.3);
+  }
+}
+
+function _efectoExito(card) {
+  card.classList.add('prod-card--ok');
+  setTimeout(() => card.classList.remove('prod-card--ok'), 400);
+  const badge = document.getElementById('btn-ticket-badge');
+  if (badge) {
+    badge.classList.add('badge--bump');
+    setTimeout(() => badge.classList.remove('badge--bump'), 400);
+  }
+}
+
+function _efectoError(card) {
+  card.classList.add('prod-card--err');
+  setTimeout(() => card.classList.remove('prod-card--err'), 500);
+}
+
 let _IDTransaccion  = null;
 let _todosProductos = [];
 let _colorCat       = {};   // IDTipoProducto → color css
@@ -198,18 +236,22 @@ function _filtrarProductos(IDTipoProducto) {
     card.className = 'prod-card';
     card.style.background = colorCard;
     card.innerHTML = `<div class="prod-nombre">${p.Descripcion}</div><div class="prod-precio">${fmtGs(p.Precio)}</div>`;
-    card.addEventListener('click', () => _agregarItem(p));
+    card.addEventListener('click', () => _agregarItem(p, card));
     cont.appendChild(card);
   });
 }
 
-async function _agregarItem(producto) {
+async function _agregarItem(producto, card) {
   if (!_IDTransaccion) {
     mostrarToast('Sin ticket activo', 'error');
     return;
   }
+
+  // Efecto inmediato — antes de esperar al SP
+  _beep('ok');
+  _efectoExito(card);
+
   const IDEntidad = Sesion.get('IDEntidad');
-  mostrarLoading(true);
   try {
     const rows = await LlamarSP('AGREGAR_ITEM', {
       IDEntidad, IDTransaccion: _IDTransaccion,
@@ -218,11 +260,11 @@ async function _agregarItem(producto) {
     if (!rows?.length) throw new Error('Sin respuesta');
     if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al agregar');
     await _ticketActivo();
-    mostrarToast(producto.Descripcion, 'exito');
   } catch (err) {
+    _beep('err');
+    _efectoError(card);
     mostrarToast(err.message || 'Error al agregar', 'error');
-  } finally {
-    mostrarLoading(false);
+    await _ticketActivo().catch(() => {});
   }
 }
 
