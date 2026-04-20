@@ -43,11 +43,14 @@ function _guardarTerminalEnLocal(t, uuid) {
 
 // ── Pantalla de registro ──
 let _depositoSeleccionado = null;
+let _uuid = null;
 
 async function cargar() {
   _depositoSeleccionado = null;
+  _uuid = crypto.randomUUID();
   document.getElementById('reg-paso2').style.display = 'none';
   document.getElementById('inp-nombre-terminal').value = '';
+  document.getElementById('reg-uuid').textContent = _uuid;
   document.getElementById('reg-empresa').textContent = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial');
 
   mostrarLoading(true);
@@ -96,21 +99,19 @@ async function registrar() {
   if (!nombre) { mostrarToast('Ingrese un nombre para la terminal', 'error'); return; }
   if (!_depositoSeleccionado) { mostrarToast('Seleccione un depósito', 'error'); return; }
 
-  const uuid = crypto.randomUUID();
-
   mostrarLoading(true);
   try {
     const rows = await LlamarSP('REGISTRAR_TERMINAL', {
       IDEntidad: Sesion.get('IDEntidad'),
       IDDeposito: _depositoSeleccionado.IDDeposito,
-      UUID: uuid,
+      UUID: _uuid,
       DescripcionTerminal: nombre,
     });
 
     if (!rows?.length || rows[0].Mensaje) throw new Error(rows[0]?.Mensaje || 'Error al registrar');
 
-    _guardarTerminalEnLocal(rows[0], uuid);
-    _guardarTerminalEnSesion({ ...rows[0], uuid });
+    _guardarTerminalEnLocal(rows[0], _uuid);
+    _guardarTerminalEnSesion({ ...rows[0], uuid: _uuid });
 
     mostrarToast(`Terminal "${rows[0].NombreTerminal}" registrada`, 'exito');
     setTimeout(() => mostrarPantalla('screen-usuario'), 800);
