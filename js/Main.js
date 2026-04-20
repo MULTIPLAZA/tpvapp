@@ -158,7 +158,12 @@ async function _cargarProductos(IDTipoProducto) {
 }
 
 async function _agregarItem(producto) {
-  if (!_IDTransaccion) return;
+  if (!_IDTransaccion) {
+    try { await _nuevoTicket(); } catch (err) {
+      mostrarToast(err.message || 'No se pudo crear ticket', 'error');
+      return;
+    }
+  }
   const IDEntidad = Sesion.get('IDEntidad');
   mostrarLoading(true);
   try {
