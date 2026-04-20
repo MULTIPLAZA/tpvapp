@@ -7,13 +7,13 @@ export const CONFIG = {
 // ── Debug Log ──────────────────────────────────────────────────
 const _logEntradas = [];
 
-function _logAdd(sql, data, error, token) {
+function _logAdd(sql, data, error, token, ms) {
   const t = new Date().toTimeString().slice(0, 8);
   const jwt = _decodeJWT(token);
   const conexion = jwt
     ? `${jwt.server || jwt.host || jwt.Server || '?'} / ${jwt.database || jwt.db || jwt.Database || '?'} / ${jwt.user || jwt.username || jwt.User || '?'}`
     : (token ? token.slice(0, 16) + '…' : '—');
-  _logEntradas.unshift({ t, sql, data, error, conexion });
+  _logEntradas.unshift({ t, sql, data, error, conexion, ms });
   if (_logEntradas.length > 50) _logEntradas.pop();
   const badge = document.getElementById('debug-badge');
   if (badge) {
@@ -39,6 +39,7 @@ function _logRenderizar() {
     <div style="border-bottom:1px solid #2a2a4a;padding:10px 12px">
       <div style="display:flex;justify-content:space-between;margin-bottom:4px">
         <span style="font-size:0.7rem;color:#888">${e.t}</span>
+        <span style="font-size:0.7rem;color:#888">${e.ms != null ? e.ms + ' ms' : ''}</span>
         <span style="font-size:0.7rem;font-weight:700;color:${e.error ? '#e74c3c' : '#27ae60'}">${e.error ? 'ERROR' : 'OK'}</span>
       </div>
       <div style="font-size:0.68rem;color:#f5a623;margin-bottom:3px">${e.conexion}</div>
@@ -100,6 +101,7 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
   const sql = `Exec SpTPVApp @Accion='${accion}'${paramStr ? ', ' + paramStr : ''}`;
 
   let data;
+  const t0 = performance.now();
   try {
     if (!token) throw new Error('Sin token de conexión');
     const res = await fetch(CONFIG.APISQL_URL, {
@@ -114,10 +116,10 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
     }
     data = await res.json();
     if (data.error) throw new Error(data.error);
-    _logAdd(sql, data, null, token);
+    _logAdd(sql, data, null, token, Math.round(performance.now() - t0));
     return data;
   } catch (err) {
-    _logAdd(sql, null, err.message, token);
+    _logAdd(sql, null, err.message, token, Math.round(performance.now() - t0));
     throw err;
   }
 }
