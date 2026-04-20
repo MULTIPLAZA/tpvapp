@@ -73,6 +73,7 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
   if (!token) throw new Error('Sin token de conexión');
 
   const paramStr = Object.entries(params)
+    .filter(([, v]) => v !== null && v !== undefined)
     .map(([k, v]) => `@${k}='${v}'`)
     .join(', ');
 
@@ -85,7 +86,11 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ sp: sql }),
     });
-    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+    if (!res.ok) {
+      let msg = `Error HTTP ${res.status}`;
+      try { const b = await res.json(); msg = b.error || b.message || b.detail || msg; } catch {}
+      throw new Error(msg);
+    }
     data = await res.json();
     if (data.error) throw new Error(data.error);
     _logAdd(sql, data, null);
