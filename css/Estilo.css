@@ -301,10 +301,10 @@ html, body {
 }
 .categorias-row::-webkit-scrollbar { display: none; }
 .cat-btn {
-  background: var(--bg3);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 2px solid var(--cat-color, var(--border));
   border-radius: 20px;
-  color: var(--text2);
+  color: var(--cat-color, var(--text2));
   font-size: 0.82rem;
   font-weight: 600;
   padding: 6px 14px;
@@ -313,7 +313,7 @@ html, body {
   min-height: 34px;
   transition: all 0.15s;
 }
-.cat-btn.activa { background: var(--cat-color, var(--accent)); border-color: var(--cat-color, var(--accent)); color: #fff; }
+.cat-btn.activa { background: var(--cat-color, var(--accent)); color: #fff; }
 
 /* ── Grilla de productos ── */
 .productos-grid {
@@ -326,13 +326,14 @@ html, body {
   background: var(--bg2);
   border: 1px solid transparent;
   border-radius: var(--radius);
-  padding: 14px 12px;
+  padding: 10px;
   cursor: pointer;
   transition: filter 0.1s, transform 0.1s;
-  min-height: 72px;
+  height: 78px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
   color: #fff;
 }
 .prod-card:active { filter: brightness(1.2); transform: scale(0.97); }
@@ -345,8 +346,16 @@ html, body {
 .prod-card--err { animation: prod-err 0.5s ease; filter: brightness(0.6); }
 .badge--bump    { animation: badge-bump 0.4s ease; }
 
-.prod-nombre { font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
-.prod-precio { font-size: 0.9rem; font-weight: 700; margin-top: 6px; opacity: 0.9; }
+.prod-nombre {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.prod-precio { font-size: 0.85rem; font-weight: 700; opacity: 0.9; flex-shrink: 0; }
 
 /* ── Items del ticket ── */
 .ticket-item {

@@ -219,9 +219,9 @@ function _crearCatBtn(texto, id, activa, color) {
 }
 
 function _filtrarProductos(IDTipoProducto) {
-  const lista = IDTipoProducto === 0
+  const lista = IDTipoProducto == 0
     ? _todosProductos
-    : _todosProductos.filter(p => p.IDTipoProducto === IDTipoProducto);
+    : _todosProductos.filter(p => p.IDTipoProducto == IDTipoProducto);
 
   const cont = document.getElementById('main-productos');
   cont.innerHTML = '';
