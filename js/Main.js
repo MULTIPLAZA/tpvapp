@@ -72,11 +72,13 @@ async function _nuevoTicket() {
 
 async function _ticketActivo() {
   const IDEntidad = Sesion.get('IDEntidad');
-  const rows = await LlamarSP('TICKET_ACTIVO', { IDEntidad, IDTransaccion: _IDTransaccion });
-  if (!rows?.length) throw new Error('Sin respuesta de ticket');
-  Sesion.set('TicketNumero', rows[0].Numero);
-  const items = await LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion });
-  _setFooter(items || [], rows[0].Numero);
+  const [ticket, items] = await Promise.all([
+    LlamarSP('TICKET_ACTIVO', { IDEntidad, IDTransaccion: _IDTransaccion }),
+    LlamarSP('TICKET_DETALLE', { IDEntidad, IDTransaccion: _IDTransaccion }),
+  ]);
+  if (!ticket?.length) throw new Error('Ticket no encontrado');
+  Sesion.set('TicketNumero', ticket[0].Numero);
+  _setFooter(items || [], ticket[0].Numero);
 }
 
 function _setFooter(items, num) {
