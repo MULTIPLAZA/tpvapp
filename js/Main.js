@@ -2,7 +2,20 @@ import { LlamarSP, LlamarSPMulti, Sesion, mostrarPantalla, mostrarLoading, mostr
 
 const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-let _IDTransaccion = null;
+const _PALETA = [
+  '#1a6b8a','#1a7a4a','#5a3a8a','#8a4a1a',
+  '#8a1a2a','#1a6a6a','#7a6a1a','#7a1a5a',
+];
+
+const _argbToCss = argb => {
+  if (!argb) return null;
+  const u = argb >>> 0;
+  return `rgb(${(u >> 16) & 0xFF},${(u >> 8) & 0xFF},${u & 0xFF})`;
+};
+
+let _IDTransaccion  = null;
+let _todosProductos = [];
+let _colorCat       = {};   // IDTipoProducto → color css
 
 export async function cargar() {
   const empresa  = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
@@ -23,7 +36,7 @@ export async function cargar() {
   } finally {
     mostrarLoading(false);
   }
-  await _cargarCategorias();
+  await _cargarCatalogo();
 }
 
 export async function nuevoTicket() {
@@ -36,7 +49,7 @@ export async function nuevoTicket() {
   } finally {
     mostrarLoading(false);
   }
-  await _cargarCategorias();
+  await _cargarCatalogo();
 }
 
 export async function seleccionarTicket(IDTransaccion) {
@@ -96,7 +109,7 @@ function _setFooter(items, num) {
 }
 
 function _renderPanelInline(items) {
-  const cont = document.getElementById('main-ticket-panel-items');
+  const cont    = document.getElementById('main-ticket-panel-items');
   const totalEl = document.getElementById('main-ticket-panel-total');
   if (!cont) return;
   if (!items.length) {
@@ -117,59 +130,77 @@ function _renderPanelInline(items) {
   `).join('');
 }
 
-async function _cargarCategorias() {
-  const IDEntidad = Sesion.get('IDEntidad');
-  mostrarLoading(true);
-  try {
-    const rows = await LlamarSP('CATEGORIAS', { IDEntidad });
-    const cont = document.getElementById('main-categorias');
-    cont.innerHTML = '';
-    cont.appendChild(_crearCatBtn('Todos', 0, true));
-    (rows || []).forEach(r => cont.appendChild(_crearCatBtn(r.Descripcion, r.IDTipoProducto ?? r.IDTipo, false)));
-    await _cargarProductos(0);
-  } catch (err) {
-    mostrarToast(err.message || 'Error al cargar categorías', 'error');
-  } finally {
-    mostrarLoading(false);
-  }
-}
-
-function _crearCatBtn(texto, id, activa) {
-  const btn = document.createElement('button');
-  btn.className = 'cat-btn' + (activa ? ' activa' : '');
-  btn.textContent = texto;
-  btn.addEventListener('click', async () => {
-    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('activa'));
-    btn.classList.add('activa');
-    await _cargarProductos(id);
-  });
-  return btn;
-}
-
-async function _cargarProductos(IDTipoProducto) {
+async function _cargarCatalogo() {
   const IDEntidad  = Sesion.get('IDEntidad');
   const IDDeposito = Sesion.get('IDDeposito');
   mostrarLoading(true);
   try {
-    const rows = await LlamarSP('PRODUCTOS', { IDEntidad, IDTipoProducto, IDDeposito });
-    const cont = document.getElementById('main-productos');
-    cont.innerHTML = '';
-    if (!rows?.length) {
-      cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:32px;grid-column:1/-1">Sin productos</p>';
-      return;
-    }
-    rows.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'prod-card';
-      card.innerHTML = `<div class="prod-nombre">${p.Descripcion}</div><div class="prod-precio">${fmtGs(p.Precio)}</div>`;
-      card.addEventListener('click', () => _agregarItem(p));
-      cont.appendChild(card);
+    const [cats, prods] = await Promise.all([
+      LlamarSP('CATEGORIAS', { IDEntidad }),
+      LlamarSP('PRODUCTOS',  { IDEntidad, IDDeposito }),
+    ]);
+
+    // Mapa color por categoría con paleta por defecto
+    _colorCat = {};
+    (cats || []).forEach((c, i) => {
+      const id = c.IDTipoProducto ?? c.IDTipo;
+      _colorCat[id] = _argbToCss(c.Color) ?? _PALETA[i % _PALETA.length];
     });
+
+    _todosProductos = prods || [];
+
+    // Renderizar categorías
+    const cont = document.getElementById('main-categorias');
+    cont.innerHTML = '';
+    cont.appendChild(_crearCatBtn('Todos', 0, true, null));
+    (cats || []).forEach((c, i) => {
+      const id    = c.IDTipoProducto ?? c.IDTipo;
+      const color = _colorCat[id];
+      cont.appendChild(_crearCatBtn(c.Descripcion, id, false, color));
+    });
+
+    _filtrarProductos(0);
   } catch (err) {
-    mostrarToast(err.message || 'Error al cargar productos', 'error');
+    mostrarToast(err.message || 'Error al cargar catálogo', 'error');
   } finally {
     mostrarLoading(false);
   }
+}
+
+function _crearCatBtn(texto, id, activa, color) {
+  const btn = document.createElement('button');
+  btn.className = 'cat-btn' + (activa ? ' activa' : '');
+  btn.textContent = texto;
+  if (color) btn.style.setProperty('--cat-color', color);
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('activa'));
+    btn.classList.add('activa');
+    _filtrarProductos(id);
+  });
+  return btn;
+}
+
+function _filtrarProductos(IDTipoProducto) {
+  const lista = IDTipoProducto === 0
+    ? _todosProductos
+    : _todosProductos.filter(p => p.IDTipoProducto === IDTipoProducto);
+
+  const cont = document.getElementById('main-productos');
+  cont.innerHTML = '';
+  if (!lista.length) {
+    cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:32px;grid-column:1/-1">Sin productos</p>';
+    return;
+  }
+  lista.forEach(p => {
+    const colorCat  = _colorCat[p.IDTipoProducto];
+    const colorCard = _argbToCss(p.Color) ?? colorCat ?? _PALETA[0];
+    const card = document.createElement('div');
+    card.className = 'prod-card';
+    card.style.background = colorCard;
+    card.innerHTML = `<div class="prod-nombre">${p.Descripcion}</div><div class="prod-precio">${fmtGs(p.Precio)}</div>`;
+    card.addEventListener('click', () => _agregarItem(p));
+    cont.appendChild(card);
+  });
 }
 
 async function _agregarItem(producto) {
