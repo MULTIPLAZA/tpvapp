@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TPVAPP">
+  <title>TPVAPP</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/css/Estilo.css">
+</head>
+<body>
+
+  <!-- ── Pantalla 1: Login Cuenta ── -->
+  <div id="screen-cuenta" class="screen screen-centrada">
+    <div class="form-card">
+      <div class="logo-wrap">
+        <div class="logo-texto">TPV</div>
+        <div class="logo-sub">Punto de Venta</div>
+      </div>
+      <h2>Acceso</h2>
+      <p class="subtitulo">Ingrese los datos de su licencia</p>
+      <form id="form-cuenta">
+        <div class="campo">
+          <label>RUC / Identificador</label>
+          <input id="inp-ruc" type="text" placeholder="Ej: 80012345-6" autocomplete="off" required>
+        </div>
+        <div class="campo">
+          <label>Código de acceso</label>
+          <input id="inp-codigo" type="password" placeholder="Código corto" required>
+        </div>
+        <button type="submit" class="btn btn-primario" style="margin-top:8px">Ingresar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Pantalla 2: Registro de Terminal (primera vez) ── -->
+  <div id="screen-registro-terminal" class="screen">
+    <div class="header">
+      <div>
+        <div style="font-size:1rem;font-weight:600" id="reg-empresa"></div>
+        <div class="empresa">Registro de terminal</div>
+      </div>
+      <button id="btn-reg-volver" class="btn btn-secundario" style="width:auto;padding:0 14px;font-size:0.8rem">← Salir</button>
+    </div>
+    <div class="contenido">
+      <p style="color:var(--text2);font-size:0.85rem;margin-bottom:14px">Seleccione el depósito donde está esta terminal:</p>
+      <div id="lista-depositos" class="lista-items"></div>
+
+      <div id="reg-paso2" style="display:none;margin-top:20px">
+        <div style="background:var(--bg3);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;font-size:0.85rem;color:var(--text2)">
+          Depósito: <strong id="reg-deposito-nombre" style="color:var(--text)"></strong>
+        </div>
+        <div class="campo">
+          <label>Nombre de esta terminal</label>
+          <input id="inp-nombre-terminal" type="text" placeholder="Ej: CAJA 1, MOSTRADOR, TABLET SALON" autocomplete="off">
+        </div>
+        <button id="btn-reg-registrar" class="btn btn-exito">Registrar terminal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pantalla 3: Login Usuario ── -->
+  <div id="screen-usuario" class="screen screen-centrada">
+    <div class="form-card">
+      <div class="logo-wrap">
+        <div class="logo-texto" id="empresa-nombre">Empresa</div>
+        <div class="logo-sub" id="empresa-terminal" style="color:var(--accent2)"></div>
+      </div>
+      <form id="form-usuario">
+        <div class="campo">
+          <label>Usuario</label>
+          <input id="inp-usuario" type="text" placeholder="Usuario" autocomplete="off" required>
+        </div>
+        <div class="campo">
+          <label>Contraseña</label>
+          <input id="inp-password" type="password" placeholder="Contraseña" required>
+        </div>
+        <button type="submit" class="btn btn-primario" style="margin-top:8px">Entrar</button>
+      </form>
+      <button id="btn-volver-cuenta" class="btn btn-secundario" style="margin-top:10px">← Volver</button>
+    </div>
+  </div>
+
+  <!-- ── Pantalla 4: Principal (Ticket + Productos) ── -->
+  <div id="screen-main" class="screen">
+    <div class="header">
+      <div>
+        <div style="font-size:0.85rem;font-weight:600" id="main-terminal">Terminal</div>
+        <div class="empresa" id="main-empresa"></div>
+      </div>
+      <div style="font-size:0.78rem;color:var(--text2)" id="main-usuario"></div>
+      <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">⬅</button>
+    </div>
+    <div class="contenido" style="display:flex;align-items:center;justify-content:center;color:var(--text2)">
+      <p>Pantalla principal — Etapas 4, 5, 6</p>
+    </div>
+  </div>
+
+  <!-- ── Pantalla 5: Cobro / Resumen ── -->
+  <div id="screen-cobro" class="screen">
+    <div class="header">
+      <h1>Resumen de cobro</h1>
+    </div>
+    <div class="contenido" style="display:flex;align-items:center;justify-content:center;color:var(--text2)">
+      <p>Resumen ticket — Etapa 7</p>
+    </div>
+  </div>
+
+  <!-- ── Globales ── -->
+  <div id="toast"></div>
+  <div id="loading"><div class="spinner"></div><span style="font-size:0.85rem;color:var(--text2)">Cargando...</span></div>
+
+  <script type="module" src="/js/App.js"></script>
+</body>
+</html>
