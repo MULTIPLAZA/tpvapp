@@ -7,9 +7,13 @@ export const CONFIG = {
 // ── Debug Log ──────────────────────────────────────────────────
 const _logEntradas = [];
 
-function _logAdd(sql, data, error) {
+function _logAdd(sql, data, error, token) {
   const t = new Date().toTimeString().slice(0, 8);
-  _logEntradas.unshift({ t, sql, data, error });
+  const jwt = _decodeJWT(token);
+  const conexion = jwt
+    ? `${jwt.server || jwt.host || jwt.Server || '?'} / ${jwt.database || jwt.db || jwt.Database || '?'} / ${jwt.user || jwt.username || jwt.User || '?'}`
+    : (token ? token.slice(0, 16) + '…' : '—');
+  _logEntradas.unshift({ t, sql, data, error, conexion });
   if (_logEntradas.length > 50) _logEntradas.pop();
   const badge = document.getElementById('debug-badge');
   if (badge) {
@@ -28,19 +32,6 @@ function _logMostrar() {
 }
 
 function _logRenderizar() {
-  const conexion = document.getElementById('debug-conexion');
-  if (conexion) {
-    const jwt = _decodeJWT(sessionStorage.getItem('tpv_token_apisql'));
-    if (jwt) {
-      conexion.innerHTML = `
-        <span style="color:#f5a623">Host:</span> ${jwt.server || jwt.host || jwt.Server || '—'} &nbsp;
-        <span style="color:#f5a623">BD:</span> ${jwt.database || jwt.db || jwt.Database || '—'} &nbsp;
-        <span style="color:#f5a623">Usuario:</span> ${jwt.user || jwt.username || jwt.User || '—'}
-      `;
-    } else {
-      conexion.textContent = 'Token no disponible';
-    }
-  }
   const lista = document.getElementById('debug-lista');
   if (!lista) return;
   if (!_logEntradas.length) { lista.innerHTML = '<p style="color:#888;padding:12px;text-align:center">Sin registros</p>'; return; }
@@ -50,6 +41,7 @@ function _logRenderizar() {
         <span style="font-size:0.7rem;color:#888">${e.t}</span>
         <span style="font-size:0.7rem;font-weight:700;color:${e.error ? '#e74c3c' : '#27ae60'}">${e.error ? 'ERROR' : 'OK'}</span>
       </div>
+      <div style="font-size:0.68rem;color:#f5a623;margin-bottom:3px">${e.conexion}</div>
       <div style="font-size:0.72rem;color:#a0a0b0;word-break:break-all;font-family:monospace">${e.sql}</div>
       ${e.error ? `<div style="font-size:0.75rem;color:#e74c3c;margin-top:4px">${e.error}</div>` : ''}
       ${e.data && !e.error ? `<div style="font-size:0.7rem;color:#27ae60;margin-top:4px">${JSON.stringify(e.data).slice(0, 120)}…</div>` : ''}
@@ -81,7 +73,6 @@ function _logInyectar() {
             style="background:#2a2a4a;border:none;color:#eaeaea;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem">✕ Cerrar</button>
         </div>
       </div>
-      <div id="debug-conexion" style="background:#0f1e38;padding:8px 12px;font-size:0.7rem;font-family:monospace;color:#a0a0b0;flex-shrink:0;border-bottom:1px solid #2a2a4a"></div>
       <div id="debug-lista" style="flex:1;overflow-y:auto;font-size:0.78rem"></div>
     </div>
   `);
@@ -123,10 +114,10 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
     }
     data = await res.json();
     if (data.error) throw new Error(data.error);
-    _logAdd(sql, data, null);
+    _logAdd(sql, data, null, token);
     return data;
   } catch (err) {
-    _logAdd(sql, null, err.message);
+    _logAdd(sql, null, err.message, token);
     throw err;
   }
 }
