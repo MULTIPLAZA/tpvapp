@@ -8,7 +8,7 @@ const _PALETA = [
 ];
 
 const _argbToCss = argb => {
-  if (!argb) return null;
+  if (!argb || argb === -1) return null;
   const u = argb >>> 0;
   return `rgb(${(u >> 16) & 0xFF},${(u >> 8) & 0xFF},${u & 0xFF})`;
 };
