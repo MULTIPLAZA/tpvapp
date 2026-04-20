@@ -18,7 +18,7 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
   const res = await fetch(CONFIG.APISQL_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify({ query: sql }),
+    body: JSON.stringify({ sp: sql }),
   });
 
   if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
