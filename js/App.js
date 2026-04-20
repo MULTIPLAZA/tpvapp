@@ -4,6 +4,69 @@ export const CONFIG = {
   TOKEN_LICENCIA: 'f14614203049662d1a64097f13b8c4eafb7956fcabb1ed66db969a4e90379a56',
 };
 
+// ── Debug Log ──────────────────────────────────────────────────
+const _logEntradas = [];
+
+function _logAdd(sql, data, error) {
+  const t = new Date().toTimeString().slice(0, 8);
+  _logEntradas.unshift({ t, sql, data, error });
+  if (_logEntradas.length > 50) _logEntradas.pop();
+  const badge = document.getElementById('debug-badge');
+  if (badge) {
+    const errores = _logEntradas.filter(e => e.error).length;
+    badge.textContent = errores > 0 ? `⚠ ${errores}` : _logEntradas.length;
+    badge.style.background = errores > 0 ? '#e74c3c' : '#0f3460';
+  }
+}
+
+function _logMostrar() {
+  const panel = document.getElementById('debug-panel');
+  if (!panel) return;
+  const visible = panel.style.display !== 'none';
+  panel.style.display = visible ? 'none' : 'flex';
+  if (!visible) _logRenderizar();
+}
+
+function _logRenderizar() {
+  const lista = document.getElementById('debug-lista');
+  if (!lista) return;
+  if (!_logEntradas.length) { lista.innerHTML = '<p style="color:#888;padding:12px;text-align:center">Sin registros</p>'; return; }
+  lista.innerHTML = _logEntradas.map(e => `
+    <div style="border-bottom:1px solid #2a2a4a;padding:10px 12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:0.7rem;color:#888">${e.t}</span>
+        <span style="font-size:0.7rem;font-weight:700;color:${e.error ? '#e74c3c' : '#27ae60'}">${e.error ? 'ERROR' : 'OK'}</span>
+      </div>
+      <div style="font-size:0.72rem;color:#a0a0b0;word-break:break-all;font-family:monospace">${e.sql}</div>
+      ${e.error ? `<div style="font-size:0.75rem;color:#e74c3c;margin-top:4px">${e.error}</div>` : ''}
+      ${e.data && !e.error ? `<div style="font-size:0.7rem;color:#27ae60;margin-top:4px">${JSON.stringify(e.data).slice(0, 120)}…</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function _logInyectar() {
+  document.body.insertAdjacentHTML('beforeend', `
+    <button id="debug-btn" onclick="(()=>{import('./js/App.js').then(m=>{/* noop */})})()"
+      style="position:fixed;bottom:70px;right:12px;z-index:9500;background:#0f3460;border:1px solid #2a2a4a;
+      border-radius:20px;color:#eaeaea;font-size:0.75rem;font-weight:700;padding:6px 12px;cursor:pointer;min-width:44px">
+      <span id="debug-badge" style="background:#0f3460;border-radius:10px">0</span>
+    </button>
+    <div id="debug-panel" style="display:none;position:fixed;inset:0;z-index:9600;flex-direction:column;background:#1a1a2e">
+      <div style="background:#16213e;border-bottom:1px solid #2a2a4a;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <span style="font-weight:700;font-size:0.9rem">Log APISQL</span>
+        <div style="display:flex;gap:8px">
+          <button onclick="document.getElementById('debug-lista').innerHTML='';window._logEntradas&&(window._logEntradas.length=0)"
+            style="background:#2a2a4a;border:none;color:#a0a0b0;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem">Limpiar</button>
+          <button onclick="document.getElementById('debug-panel').style.display='none'"
+            style="background:#2a2a4a;border:none;color:#eaeaea;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem">✕ Cerrar</button>
+        </div>
+      </div>
+      <div id="debug-lista" style="flex:1;overflow-y:auto;font-size:0.78rem"></div>
+    </div>
+  `);
+  document.getElementById('debug-btn').addEventListener('click', _logMostrar);
+}
+
 // ── APISQL ─────────────────────────────────────────────────────
 export async function LlamarSP(accion, params = {}, tokenOverride = null) {
   const token = tokenOverride ?? Sesion.get('token_apisql');
@@ -15,16 +78,22 @@ export async function LlamarSP(accion, params = {}, tokenOverride = null) {
 
   const sql = `Exec SpTPVApp @Accion='${accion}'${paramStr ? ', ' + paramStr : ''}`;
 
-  const res = await fetch(CONFIG.APISQL_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify({ sp: sql }),
-  });
-
-  if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-  return data;
+  let data;
+  try {
+    const res = await fetch(CONFIG.APISQL_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ sp: sql }),
+    });
+    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+    data = await res.json();
+    if (data.error) throw new Error(data.error);
+    _logAdd(sql, data, null);
+    return data;
+  } catch (err) {
+    _logAdd(sql, null, err.message);
+    throw err;
+  }
 }
 
 // ── Sesión (sessionStorage) ─────────────────────────────────────
@@ -112,6 +181,8 @@ window.addEventListener('offline', () => {
 // ── Init ────────────────────────────────────────────────────────
 async function init() {
   if (!await verificarConexion()) return;
+
+  _logInyectar();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
