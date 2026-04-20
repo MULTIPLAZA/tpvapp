@@ -28,6 +28,19 @@ function _logMostrar() {
 }
 
 function _logRenderizar() {
+  const conexion = document.getElementById('debug-conexion');
+  if (conexion) {
+    const jwt = _decodeJWT(sessionStorage.getItem('tpv_token_apisql'));
+    if (jwt) {
+      conexion.innerHTML = `
+        <span style="color:#f5a623">Host:</span> ${jwt.server || jwt.host || jwt.Server || '—'} &nbsp;
+        <span style="color:#f5a623">BD:</span> ${jwt.database || jwt.db || jwt.Database || '—'} &nbsp;
+        <span style="color:#f5a623">Usuario:</span> ${jwt.user || jwt.username || jwt.User || '—'}
+      `;
+    } else {
+      conexion.textContent = 'Token no disponible';
+    }
+  }
   const lista = document.getElementById('debug-lista');
   if (!lista) return;
   if (!_logEntradas.length) { lista.innerHTML = '<p style="color:#888;padding:12px;text-align:center">Sin registros</p>'; return; }
@@ -44,9 +57,16 @@ function _logRenderizar() {
   `).join('');
 }
 
+function _decodeJWT(token) {
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  } catch { return null; }
+}
+
 function _logInyectar() {
   document.body.insertAdjacentHTML('beforeend', `
-    <button id="debug-btn" onclick="(()=>{import('./js/App.js').then(m=>{/* noop */})})()"
+    <button id="debug-btn"
       style="position:fixed;bottom:70px;right:12px;z-index:9500;background:#0f3460;border:1px solid #2a2a4a;
       border-radius:20px;color:#eaeaea;font-size:0.75rem;font-weight:700;padding:6px 12px;cursor:pointer;min-width:44px">
       <span id="debug-badge" style="background:#0f3460;border-radius:10px">0</span>
@@ -55,16 +75,26 @@ function _logInyectar() {
       <div style="background:#16213e;border-bottom:1px solid #2a2a4a;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
         <span style="font-weight:700;font-size:0.9rem">Log APISQL</span>
         <div style="display:flex;gap:8px">
-          <button onclick="document.getElementById('debug-lista').innerHTML='';window._logEntradas&&(window._logEntradas.length=0)"
+          <button id="debug-btn-limpiar"
             style="background:#2a2a4a;border:none;color:#a0a0b0;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem">Limpiar</button>
-          <button onclick="document.getElementById('debug-panel').style.display='none'"
+          <button id="debug-btn-cerrar"
             style="background:#2a2a4a;border:none;color:#eaeaea;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem">✕ Cerrar</button>
         </div>
       </div>
+      <div id="debug-conexion" style="background:#0f1e38;padding:8px 12px;font-size:0.7rem;font-family:monospace;color:#a0a0b0;flex-shrink:0;border-bottom:1px solid #2a2a4a"></div>
       <div id="debug-lista" style="flex:1;overflow-y:auto;font-size:0.78rem"></div>
     </div>
   `);
   document.getElementById('debug-btn').addEventListener('click', _logMostrar);
+  document.getElementById('debug-btn-limpiar').addEventListener('click', () => {
+    _logEntradas.length = 0;
+    _logRenderizar();
+    const badge = document.getElementById('debug-badge');
+    if (badge) { badge.textContent = '0'; badge.style.background = '#0f3460'; }
+  });
+  document.getElementById('debug-btn-cerrar').addEventListener('click', () => {
+    document.getElementById('debug-panel').style.display = 'none';
+  });
 }
 
 // ── APISQL ─────────────────────────────────────────────────────
