@@ -122,7 +122,7 @@ function init() {
     const pagos = [];
     if (_efectivo > 0) pagos.push({
       TipoPago: 'EFECTIVO', Importe: _efectivo, Entregado: _efectivo,
-      Comprobante: '', Obs: '', IDUsuario,
+      Comprobante: '', Observacion: '', IDUsuario,
     });
     if (_otros > 0) pagos.push({
       TipoPago:    _tabActiva.toUpperCase(),
