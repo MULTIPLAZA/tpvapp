@@ -64,6 +64,7 @@ export async function cargar() {
   const perfil = Sesion.get('Perfil') || '';
   document.getElementById('main-empresa').textContent  = empresa;
   document.getElementById('main-version').textContent  = version;
+  document.getElementById('main-sub').textContent      = [terminal, usuario, perfil].filter(Boolean).join(' · ');
   document.getElementById('main-terminal').textContent = terminal;
   document.getElementById('main-perfil').textContent   = [usuario, perfil].filter(Boolean).join(' · ');
 
