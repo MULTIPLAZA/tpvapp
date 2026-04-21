@@ -267,17 +267,7 @@ html, body {
   background: var(--bg2);
   border-top: 2px solid var(--border);
   padding: 6px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
   flex-shrink: 0;
-}
-.footer-info {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font-size: 0.68rem;
-  padding: 0 2px;
 }
 .footer-cobrar-btn {
   width: 100%;
