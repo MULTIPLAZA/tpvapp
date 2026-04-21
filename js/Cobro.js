@@ -128,8 +128,8 @@ function init() {
       TipoPago:    _tabActiva.toUpperCase(),
       Importe:     _otros,
       EsQR:        document.getElementById('cobro-check-qr').checked ? 1 : 0,
-      Comprobante: document.getElementById('cobro-form-comprobante').value,
-      Obs:         document.getElementById('cobro-form-obs').value,
+      Comprobante:  document.getElementById('cobro-form-comprobante').value,
+      Observacion:  document.getElementById('cobro-form-obs').value,
       IDUsuario,
     });
 
