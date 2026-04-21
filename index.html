@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.7 — 2026-04-21 03:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.8 — 2026-04-21 18:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -141,17 +141,23 @@
 
   <!-- ── Pantalla 5: Principal ── -->
   <div id="screen-main" class="screen">
-    <div class="header" style="padding:4px 10px;min-height:unset">
-      <div style="flex:1;min-width:0">
-        <div style="font-size:0.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="main-empresa"></div>
-        <div style="font-size:0.6rem;color:var(--text2)"><span id="main-version"></span></div>
+    <div class="main-header-top">
+      <div style="flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden">
+        <span id="main-empresa" style="font-size:0.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>
+        <span id="main-version" style="font-size:0.62rem;color:var(--accent);white-space:nowrap;flex-shrink:0"></span>
       </div>
-      <button id="btn-ticket-badge" class="ticket-badge">🛒 <span id="main-items-count">0</span></button>
-      <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 10px;font-size:0.75rem">⬅</button>
+      <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 10px;font-size:0.75rem;flex-shrink:0">⬅ Salir</button>
     </div>
     <button id="btn-ticket-lista" class="main-ticket-selector">
-      <span style="font-size:0.62rem;color:var(--text2);line-height:1">TICKET NRO.</span>
-      <span id="main-ticket-num" style="font-size:1.1rem;font-weight:700;color:var(--accent2)">#—</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0">
+        <span style="font-size:0.6rem;color:var(--text2);line-height:1">TICKET NRO.</span>
+        <span id="main-ticket-num" style="font-size:1.4rem;font-weight:700;color:var(--accent2);line-height:1.1">#—</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;padding-left:10px;min-width:0">
+        <span id="main-ticket-hora" style="font-size:0.7rem;color:var(--text2)"></span>
+        <span id="main-ticket-ruc" style="font-size:0.7rem;color:var(--text2)"></span>
+      </div>
+      <button id="btn-ticket-badge" class="ticket-badge" style="flex-shrink:0">🛒 <span id="main-items-count">0</span></button>
     </button>
     <div id="main-contenido" class="main-contenido">
       <div class="main-productos-wrap">
@@ -168,11 +174,11 @@
       </div>
     </div>
     <div class="footer-cobrar">
+      <button id="btn-cobrar-main" class="btn btn-primario footer-cobrar-btn" disabled>COBRAR — <span id="main-ticket-total">Gs 0</span></button>
       <div class="footer-info">
         <span id="main-terminal" style="color:var(--accent);font-weight:700"></span>
         <span id="main-perfil" style="color:var(--accent2)"></span>
       </div>
-      <button id="btn-cobrar-main" class="btn btn-primario footer-cobrar-btn" disabled>COBRAR — <span id="main-ticket-total">Gs 0</span></button>
     </div>
   </div>
 

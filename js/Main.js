@@ -129,8 +129,13 @@ async function _ticketActivo() {
   const ticket = tablas[0] ?? [];
   const items  = tablas[1] ?? [];
   if (!ticket.length) throw new Error('Ticket no encontrado');
-  Sesion.set('TicketNumero', ticket[0].Numero);
-  _setFooter(items, ticket[0].Numero);
+  const cab = ticket[0];
+  Sesion.set('TicketNumero', cab.Numero);
+  const horaEl = document.getElementById('main-ticket-hora');
+  const rucEl  = document.getElementById('main-ticket-ruc');
+  if (horaEl) horaEl.textContent = cab.Hora || '';
+  if (rucEl)  rucEl.textContent  = cab.RUC  || '';
+  _setFooter(items, cab.Numero);
 }
 
 function _setFooter(items, num) {

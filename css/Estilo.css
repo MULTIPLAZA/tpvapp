@@ -1,14 +1,14 @@
 :root {
-  --bg:      #202020;
-  --bg2:     #404040;
+  --bg:      #000000;
+  --bg2:     #202020;
   --bg3:     #2a2a2a;
   --accent:  #8DC63F;
   --accent2: #F7941D;
   --text:    #F5F5F5;
-  --text2:   #a0a0a0;
+  --text2:   #909090;
   --success: #8DC63F;
   --danger:  #e74c3c;
-  --border:  #555555;
+  --border:  #3a3a3a;
   --radius:  3px;
   --touch:   48px;
 }
@@ -229,27 +229,38 @@ html, body {
   #btn-ticket-badge  { display: none; }
 }
 
+/* ── Header superior Main ── */
+.main-header-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
 /* ── Selector de ticket (barra sobre contenido) ── */
 .main-ticket-selector {
-  background: var(--bg3);
+  background: var(--bg2);
   border: none;
   border-bottom: 2px solid var(--border);
   width: 100%;
-  padding: 5px 12px;
+  padding: 6px 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
   flex-shrink: 0;
   color: var(--text);
 }
-.main-ticket-selector:active { background: var(--bg2); }
+.main-ticket-selector:active { background: var(--bg3); }
 
 /* ── Footer cobrar (Main) ── */
 .footer-cobrar {
-  background: #202020;
+  background: var(--bg2);
   border-top: 2px solid var(--border);
-  padding: 5px 8px;
+  padding: 6px 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -266,7 +277,7 @@ html, body {
   width: 100%;
   font-size: 1rem;
   font-weight: 700;
-  padding: 10px;
+  padding: 14px;
 }
 
 /* ── Panel inline ticket (wide) ── */
@@ -292,7 +303,6 @@ html, body {
   background: transparent;
   border: none;
   border-right: 1px solid var(--border);
-  color: var(--text2);
   font-size: 0.72rem;
   font-weight: 700;
   padding: 8px 2px;
@@ -300,11 +310,16 @@ html, body {
   transition: background 0.15s;
 }
 .tklista-filtro:last-child { border-right: none; }
-.tklista-filtro.activo[data-estado=""]          { background:#2a2a2a; color:var(--text); }
-.tklista-filtro.activo[data-estado="Pendiente"] { background:#3a2a00; color:#f5a623; }
-.tklista-filtro.activo[data-estado="Cobrado"]   { background:#1a3a1a; color:#2ecc71; }
-.tklista-filtro.activo[data-estado="Facturado"] { background:#1a2a4a; color:#3498db; }
-.tklista-filtro.activo[data-estado="Anulado"]   { background:#2a1a1a; color:#e74c3c; }
+.tklista-filtro[data-estado=""]          { color: var(--text2); }
+.tklista-filtro[data-estado="Pendiente"] { color: #f5a623; }
+.tklista-filtro[data-estado="Cobrado"]   { color: #2ecc71; }
+.tklista-filtro[data-estado="Facturado"] { color: #3498db; }
+.tklista-filtro[data-estado="Anulado"]   { color: #e74c3c; }
+.tklista-filtro.activo[data-estado=""]          { background: #2a2a2a; }
+.tklista-filtro.activo[data-estado="Pendiente"] { background: #3a2a00; }
+.tklista-filtro.activo[data-estado="Cobrado"]   { background: #1a3a1a; }
+.tklista-filtro.activo[data-estado="Facturado"] { background: #1a2a4a; }
+.tklista-filtro.activo[data-estado="Anulado"]   { background: #2a1a1a; }
 
 /* ── Lista de tickets ── */
 .tk-card {
