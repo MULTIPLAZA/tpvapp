@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.9.9 — 21/04/26 11:15</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v2.0.0 — 21/04/26 11:30</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -347,8 +347,11 @@
       </div>
     </div>
 
-    <div class="footer-cobrar">
-      <button id="btn-cobrar-confirmar" class="btn btn-exito footer-cobrar-btn" disabled>
+    <div class="footer-cobrar footer-cobrar--row">
+      <button id="btn-imprimir-cobro" class="btn footer-cobrar-btn footer-cobrar-btn--print" title="Imprimir">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><rect x="4" y="1" width="12" height="5" rx="1"/><rect x="2" y="7" width="16" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="12" width="10" height="6" rx="1"/><rect x="14" y="9" width="2" height="2" rx="0.5"/></svg>
+      </button>
+      <button id="btn-cobrar-confirmar" class="btn btn-exito footer-cobrar-btn footer-cobrar-btn--main" disabled>
         COBRAR — <span id="cobro-total-btn">Gs 0</span>
       </button>
     </div>

@@ -107,6 +107,10 @@ function init() {
     mostrarPantalla('screen-main');
   });
 
+  document.getElementById('btn-imprimir-cobro').addEventListener('click', () => {
+    mostrarToast('Imprimir — próximamente', '');
+  });
+
   document.getElementById('btn-cobrar-confirmar').addEventListener('click', () => {
     mostrarToast('Cobranza — próximamente', '');
   });
