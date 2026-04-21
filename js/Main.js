@@ -305,11 +305,10 @@ async function _navegar(accion) {
   mostrarLoading(true);
   try {
     const rows = await LlamarSP(accion, { IDEntidad, IDTransaccion: _IDTransaccion });
-    if (!rows?.length || !esProcesado(rows[0].Procesado)) {
-      mostrarToast(rows?.[0]?.Mensaje || 'Sin ticket', '');
-      return;
-    }
-    _IDTransaccion = rows[0].IDTransaccion;
+    if (!rows?.length) { mostrarToast('Sin respuesta', 'error'); return; }
+    const id = rows[0].IDTransaccion;
+    if (!id) { mostrarToast(rows[0].Mensaje || 'No hay más tickets', ''); return; }
+    _IDTransaccion = id;
     Sesion.set('IDTransaccion', _IDTransaccion);
     await _ticketActivo();
   } catch (err) {
