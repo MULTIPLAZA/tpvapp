@@ -256,58 +256,79 @@ html, body {
 }
 .btn-menu:active { background: var(--bg3); }
 
-/* ── Barra ticket NRO + carrito ── */
+/* ── Barra ticket: 4 celdas ── */
 .main-ticket-bar {
   display: flex;
   align-items: stretch;
   border-bottom: 2px solid var(--border);
   flex-shrink: 0;
   background: var(--bg2);
+  min-height: 52px;
 }
-.main-ticket-selector {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 6px 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text);
-  min-width: 0;
-}
-.main-ticket-selector:active { background: var(--bg3); }
-.ticket-bar-nro {
+/* Base de celda */
+.tk-cel {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  flex-shrink: 0;
-  padding-right: 6px;
+  justify-content: center;
+  padding: 5px 8px;
   border-right: 1px solid var(--border);
-}
-.ticket-bar-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   min-width: 0;
-  padding-left: 6px;
+}
+.tk-label {
+  font-size: 0.48rem;
+  letter-spacing: 0.5px;
+  color: var(--text2);
+  line-height: 1;
+  text-transform: uppercase;
+}
+/* Celda 1: Número */
+.tk-cel-nro {
+  flex-shrink: 0;
+  align-items: center;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  cursor: pointer;
+  color: var(--text);
+  padding: 5px 10px;
+}
+.tk-cel-nro:active { background: var(--bg3); }
+.tk-nro-num {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--accent2);
+  line-height: 1;
+}
+/* Celda 2: Hora + Estado */
+.tk-cel-time {
+  flex: 0 0 80px;
+  gap: 3px;
+  cursor: pointer;
+}
+.tk-cel-time:active { background: var(--bg3); }
+.tk-hora  { font-size: 0.62rem; color: var(--text2); line-height: 1.2; }
+.tk-estado{ font-size: 0.62rem; color: var(--text2); line-height: 1.2; }
+/* Celda 3: RUC */
+.tk-cel-ruc {
+  flex: 1;
+  background: #1a3a6a;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  border-right: 1px solid rgba(255,255,255,0.08);
   gap: 2px;
 }
-.ticket-ruc-btn {
-  background: #1a3a6a;
-  border: none;
-  color: #fff;
-  border-radius: var(--radius);
-  padding: 3px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  cursor: pointer;
-  width: 100%;
-  user-select: none;
+.tk-cel-ruc:active { background: #1a4a8a; }
+.tk-cel-ruc .tk-label { color: rgba(255,255,255,0.55); }
+.tk-ruc-val {
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.ticket-ruc-btn:active { background: #1a4a8a; }
 
 /* ── Menú lateral ── */
 .menu-overlay {

@@ -312,11 +312,13 @@ function init() {
     await Ticket.cargar(_IDTransaccion);
   });
 
-  document.getElementById('btn-ticket-lista').addEventListener('click', async () => {
+  const _abrirTicketsLista = async () => {
     const { default: TicketsLista } = await import('./TicketsLista.js');
     mostrarPantalla('screen-tickets-lista');
     await TicketsLista.cargar(_IDTransaccion);
-  });
+  };
+  document.getElementById('btn-ticket-lista').addEventListener('click', _abrirTicketsLista);
+  document.getElementById('tk-cel-time').addEventListener('click', _abrirTicketsLista);
 
   document.getElementById('btn-cobrar-main').addEventListener('click', () => {
     mostrarToast('Cobro disponible próximamente', '');
