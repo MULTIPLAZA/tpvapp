@@ -270,6 +270,22 @@ html, body {
   line-height: 1;
 }
 .btn-nuevo-top:active { background: var(--accent2); color: #000; }
+.btn-nav-top {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 1rem;
+  font-weight: 700;
+  width: 28px;
+  height: 36px;
+  cursor: pointer;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-nav-top:active { background: var(--bg3); color: var(--text); }
 
 /* ── Barra ticket: 4 celdas ── */
 .main-ticket-bar {
@@ -676,32 +692,36 @@ html, body {
 .ticket-item-total { font-size: 0.9rem; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
 
 /* ── Pantalla Cobro ── */
-.cobro-resumen {
+.cobro-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   background: var(--bg2);
-  border-bottom: 2px solid var(--border);
-  padding: 10px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
-.cobro-fila {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3px 0;
-}
-.cobro-etiqueta {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.8px;
+.cobro-tabs::-webkit-scrollbar { display: none; }
+.cobro-tab {
+  flex-shrink: 0;
+  padding: 0 14px;
+  min-height: 40px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
   color: var(--text2);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
 }
-.cobro-etiqueta--vuelto { color: var(--accent); }
-.cobro-monto { font-size: 1rem; font-weight: 700; }
-.cobro-monto--total   { font-size: 1.7rem; color: var(--text); }
-.cobro-monto--efectivo{ color: var(--accent2); }
-.cobro-monto--vuelto  { color: var(--accent); }
+.cobro-tab.activo { color: var(--accent2); border-bottom-color: var(--accent2); }
+.cobro-panel {
+  display: none;
+  flex: 1;
+  overflow: hidden;
+  flex-direction: column;
+}
+.cobro-panel.activo { display: flex; }
 .cobro-quick {
   flex: 1;
   display: grid;
@@ -722,9 +742,17 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: 0.3px;
 }
-.cobro-btn:active { opacity: 0.65; }
+.cobro-btn:active { opacity: 0.6; }
+/* Colores sutiles por denominación */
+.cobro-btn[data-monto="2000"],
+.cobro-btn[data-monto="5000"]    { background:#162030; border-color:#1e3848; color:#7ac4f0; }
+.cobro-btn[data-monto="10000"],
+.cobro-btn[data-monto="20000"]   { background:#162420; border-color:#1e3a30; color:#70d4a0; }
+.cobro-btn[data-monto="50000"],
+.cobro-btn[data-monto="100000"]  { background:#282010; border-color:#403018; color:#e0b060; }
+.cobro-btn[data-monto="200000"],
+.cobro-btn[data-monto="500000"]  { background:#221828; border-color:#382040; color:#c090e0; }
 .cobro-btn--exacto {
   background: rgba(247,148,29,0.12);
   border-color: var(--accent2);
@@ -735,5 +763,42 @@ html, body {
   background: rgba(231,76,60,0.08);
   border-color: var(--danger);
   color: var(--danger);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
+/* Form otros métodos */
+.cobro-form {
+  flex: 1;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+/* Resumen fijo */
+.cobro-resumen {
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-top: 2px solid var(--border);
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cobro-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+.cobro-etiqueta {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text2);
+}
+.cobro-etiqueta--vuelto { color: var(--accent); }
+.cobro-monto { font-size: 0.95rem; font-weight: 700; }
+.cobro-monto--total    { font-size: 1.5rem; color: var(--text); }
+.cobro-monto--efectivo { color: var(--accent2); }
+.cobro-monto--otros    { color: var(--text2); }
+.cobro-monto--vuelto   { color: var(--text2); }

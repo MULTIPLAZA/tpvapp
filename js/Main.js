@@ -383,6 +383,13 @@ function init() {
   });
 
   document.getElementById('btn-nuevo-top').addEventListener('click', nuevoTicket);
+
+  document.getElementById('btn-tick-prev').addEventListener('click', async () => {
+    mostrarToast('Navegación — próximamente', '');
+  });
+  document.getElementById('btn-tick-last').addEventListener('click', async () => {
+    mostrarToast('Navegación — próximamente', '');
+  });
 }
 
 export default { init, cargar, nuevoTicket, seleccionarTicket, refrescarBarra };
