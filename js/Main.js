@@ -26,6 +26,14 @@ function _beep(tipo) {
     gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.12);
     osc.start();
     osc.stop(_audio.currentTime + 0.12);
+  } else if (tipo === 'ticket') {
+    osc.frequency.setValueAtTime(880, _audio.currentTime);
+    osc.frequency.setValueAtTime(550, _audio.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.10, _audio.currentTime);
+    gain.gain.setValueAtTime(0.07, _audio.currentTime + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.22);
+    osc.start();
+    osc.stop(_audio.currentTime + 0.22);
   } else {
     osc.type = 'sawtooth';
     osc.frequency.value = 220;
@@ -272,6 +280,7 @@ async function _agregarItem(producto, card) {
     if (!rows?.length) throw new Error('Sin respuesta');
     if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al agregar');
     await _ticketActivo();
+    _beep('ticket');
   } catch (err) {
     _beep('err');
     _efectoError(card);
