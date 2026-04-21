@@ -132,8 +132,10 @@ async function _ticketActivo() {
   Sesion.set('TicketNumero', cab.Numero);
   const horaEl = document.getElementById('main-ticket-hora');
   const rucEl  = document.getElementById('main-ticket-ruc');
-  if (horaEl) horaEl.textContent = cab.Hora || '';
-  if (rucEl)  rucEl.textContent  = cab.RUC  || '';
+  if (horaEl) horaEl.textContent = cab.Hora   || '';
+  if (rucEl)  rucEl.textContent  = cab.RUC    || '';
+  const estadoEl = document.getElementById('main-ticket-estado');
+  if (estadoEl) estadoEl.textContent = cab.Estado || '';
   _setFooter(items, cab.Numero);
 }
 
@@ -276,9 +278,32 @@ async function _agregarItem(producto, card) {
   }
 }
 
+function _abrirMenu() {
+  document.getElementById('main-menu-empresa').textContent =
+    Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
+  document.getElementById('main-menu-overlay').style.display = 'flex';
+}
+function _cerrarMenu() {
+  document.getElementById('main-menu-overlay').style.display = 'none';
+}
+
 function init() {
-  document.getElementById('btn-main-salir').addEventListener('click', () => {
+  document.getElementById('btn-main-menu').addEventListener('click', _abrirMenu);
+  document.getElementById('main-menu-backdrop').addEventListener('click', _cerrarMenu);
+
+  document.getElementById('menu-caja').addEventListener('click', () => {
+    _cerrarMenu();
+    import('./Caja.js').then(m => m.verificarYAbrir());
+  });
+
+  document.getElementById('menu-cerrar-sesion').addEventListener('click', () => {
+    _cerrarMenu();
     import('./LoginUsuario.js').then(m => m.mostrar(true));
+  });
+
+  document.getElementById('menu-salir').addEventListener('click', () => {
+    _cerrarMenu();
+    import('./LoginCuenta.js').then(m => m.default.mostrar());
   });
 
   document.getElementById('btn-ticket-badge').addEventListener('click', async () => {

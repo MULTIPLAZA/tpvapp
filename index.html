@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.8.1 — 2026-04-21 19:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.8.2 — 2026-04-21 20:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -141,28 +141,46 @@
 
   <!-- ── Pantalla 5: Principal ── -->
   <div id="screen-main" class="screen">
+
+    <!-- Header superior: empresa + versión + menú -->
     <div class="main-header-top">
       <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:baseline;gap:8px;overflow:hidden">
-          <span id="main-empresa" style="font-size:0.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>
-          <span id="main-version" style="font-size:0.6rem;color:var(--accent);white-space:nowrap;flex-shrink:0"></span>
+        <div style="display:flex;align-items:baseline;gap:6px;overflow:hidden">
+          <span id="main-empresa" style="font-size:0.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>
+          <span id="main-version" style="font-size:0.58rem;color:var(--accent);white-space:nowrap;flex-shrink:0"></span>
         </div>
-        <div id="main-sub" style="font-size:0.65rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+        <div id="main-sub" style="font-size:0.62rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
       </div>
-      <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 10px;font-size:0.75rem;flex-shrink:0">⬅ Salir</button>
+      <button id="btn-main-menu" class="btn-menu">☰</button>
     </div>
+
+    <!-- Barra ticket: NRO grande · RUC · hora/estado · carrito -->
     <div class="main-ticket-bar">
       <button id="btn-ticket-lista" class="main-ticket-selector">
-        <div style="display:flex;flex-direction:column;align-items:flex-start;flex-shrink:0">
-          <span style="font-size:0.6rem;color:var(--text2);line-height:1">TICKET NRO.</span>
-          <span id="main-ticket-num" style="font-size:1.4rem;font-weight:700;color:var(--accent2);line-height:1.1">#—</span>
+        <div class="ticket-bar-nro">
+          <span style="font-size:0.55rem;color:var(--text2);line-height:1;letter-spacing:0.5px">TICKET</span>
+          <span id="main-ticket-num" style="font-size:1.6rem;font-weight:700;color:var(--accent2);line-height:1">#—</span>
         </div>
-        <div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;padding-left:10px;min-width:0">
-          <span id="main-ticket-hora" style="font-size:0.7rem;color:var(--text2)"></span>
-          <span id="main-ticket-ruc" style="font-size:0.7rem;color:var(--text2)"></span>
+        <div class="ticket-bar-info">
+          <span id="main-ticket-ruc" style="font-size:0.8rem;font-weight:600;color:var(--text)"></span>
+          <div style="display:flex;gap:8px">
+            <span id="main-ticket-hora" style="font-size:0.65rem;color:var(--text2)"></span>
+            <span id="main-ticket-estado" style="font-size:0.65rem;color:var(--text2)"></span>
+          </div>
         </div>
       </button>
       <button id="btn-ticket-badge" class="ticket-badge">🛒 <span id="main-items-count">0</span></button>
+    </div>
+
+    <!-- Menú lateral -->
+    <div id="main-menu-overlay" class="menu-overlay" style="display:none">
+      <div class="menu-panel">
+        <div class="menu-titulo" id="main-menu-empresa"></div>
+        <button class="menu-item" id="menu-caja">📦 Caja</button>
+        <button class="menu-item" id="menu-cerrar-sesion">👤 Cerrar sesión</button>
+        <button class="menu-item menu-item--danger" id="menu-salir">🚪 Salir</button>
+      </div>
+      <div class="menu-backdrop" id="main-menu-backdrop"></div>
     </div>
     <div id="main-contenido" class="main-contenido">
       <div class="main-productos-wrap">
