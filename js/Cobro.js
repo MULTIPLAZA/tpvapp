@@ -1,4 +1,4 @@
-import { Sesion, mostrarPantalla, mostrarToast } from './App.js';
+import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 const fmtInp = n => n > 0 ? Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
@@ -111,8 +111,39 @@ function init() {
     mostrarToast('Imprimir — próximamente', '');
   });
 
-  document.getElementById('btn-cobrar-confirmar').addEventListener('click', () => {
-    mostrarToast('Cobranza — próximamente', '');
+  document.getElementById('btn-cobrar-confirmar').addEventListener('click', async () => {
+    const IDEntidad = Sesion.get('IDEntidad');
+    const vuelto    = Math.max(0, _efectivo + _otros - _total);
+
+    const pagos = [];
+    if (_efectivo > 0) pagos.push({
+      TipoPago: 'EFECTIVO', Importe: _efectivo, Vuelto: vuelto,
+      Comprobante: '', Obs: '',
+    });
+    if (_otros > 0) pagos.push({
+      TipoPago: _tabActiva.toUpperCase(), Importe: _otros, Vuelto: 0,
+      Comprobante: document.getElementById('cobro-form-comprobante').value,
+      Obs:         document.getElementById('cobro-form-obs').value,
+    });
+
+    mostrarLoading(true);
+    try {
+      for (const pago of pagos) {
+        const rows = await LlamarSP('COBRAR', { IDEntidad, IDTransaccion: _IDTransaccion, ...pago });
+        if (!rows?.length || !esProcesado(rows[0].Procesado)) {
+          mostrarToast(rows?.[0]?.Mensaje || 'Error al cobrar', 'error');
+          return;
+        }
+      }
+      // Todos los pagos OK — nuevo ticket y volver
+      mostrarPantalla('screen-main');
+      const { default: Main } = await import('./Main.js');
+      await Main.nuevoTicket();
+    } catch (err) {
+      mostrarToast(err.message || 'Error al cobrar', 'error');
+    } finally {
+      mostrarLoading(false);
+    }
   });
 }
 
