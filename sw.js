@@ -1,4 +1,4 @@
-const CACHE = 'tpvapp-v201';
+const CACHE = 'tpvapp-v202';
 const ASSETS = ['/', '/index.html', '/css/Estilo.css', '/js/App.js', '/js/LoginCuenta.js', '/js/LoginUsuario.js', '/js/Terminal.js', '/js/Main.js', '/js/Cobro.js'];
 
 self.addEventListener('install', e => {

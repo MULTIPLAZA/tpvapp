@@ -113,17 +113,19 @@ function init() {
 
   document.getElementById('btn-cobrar-confirmar').addEventListener('click', async () => {
     const IDEntidad = Sesion.get('IDEntidad');
+    const IDUsuario = Sesion.get('IDUsuario');
     const vuelto    = Math.max(0, _efectivo + _otros - _total);
 
     const pagos = [];
     if (_efectivo > 0) pagos.push({
       TipoPago: 'EFECTIVO', Importe: _efectivo, Vuelto: vuelto,
-      Comprobante: '', Obs: '',
+      Comprobante: '', Obs: '', IDUsuario,
     });
     if (_otros > 0) pagos.push({
       TipoPago: _tabActiva.toUpperCase(), Importe: _otros, Vuelto: 0,
       Comprobante: document.getElementById('cobro-form-comprobante').value,
       Obs:         document.getElementById('cobro-form-obs').value,
+      IDUsuario,
     });
 
     mostrarLoading(true);
