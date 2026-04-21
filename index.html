@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v2.0.3 — 21/04/26 12:30</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v2.0.4 — 21/04/26 13:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -287,12 +287,11 @@
 
     <!-- Tabs de medio de pago -->
     <div class="cobro-tabs">
-      <button class="cobro-tab activo" data-tab="efectivo">💵 Efectivo</button>
-      <button class="cobro-tab" data-tab="qr">QR</button>
-      <button class="cobro-tab" data-tab="deb">DEB</button>
-      <button class="cobro-tab" data-tab="cred">CRED</button>
-      <button class="cobro-tab" data-tab="trans">TRANS.</button>
-      <button class="cobro-tab" data-tab="otros">OTROS</button>
+      <button class="cobro-tab activo" data-tab="efectivo">Efectivo</button>
+      <button class="cobro-tab" data-tab="deb">T. Débito</button>
+      <button class="cobro-tab" data-tab="cred">T. Crédito</button>
+      <button class="cobro-tab" data-tab="trans">Transfer.</button>
+      <button class="cobro-tab" data-tab="otros">Otros</button>
     </div>
 
     <!-- Panel Efectivo -->
@@ -309,12 +308,18 @@
       </div>
     </div>
 
-    <!-- Panel Otros métodos (compartido: QR / DEB / CRED / TRANS / OTROS) -->
+    <!-- Panel Otros métodos (compartido: DEB / CRED / TRANS / OTROS) -->
     <div class="cobro-panel" id="cobro-panel-otro">
       <div class="cobro-form">
         <div class="campo">
           <label id="cobro-form-label">Importe (Gs)</label>
           <input id="cobro-form-importe" type="text" inputmode="numeric" placeholder="0" autocomplete="off">
+        </div>
+        <div class="campo cobro-campo-qr" id="cobro-campo-qr" style="display:none">
+          <label class="cobro-check-label">
+            <input type="checkbox" id="cobro-check-qr">
+            <span>Pago vía QR</span>
+          </label>
         </div>
         <div class="campo">
           <label>N° Comprobante</label>

@@ -44,8 +44,12 @@ function _cambiarTab(tab) {
   inp.value = '';
 
   if (tab !== 'efectivo') {
-    const labels = { qr:'QR', deb:'Débito', cred:'Crédito', trans:'Transferencia', otros:'Otros' };
+    const labels = { deb:'T. Débito', cred:'T. Crédito', trans:'Transferencia', otros:'Otros' };
     document.getElementById('cobro-form-label').textContent = `Importe ${labels[tab] || ''} (Gs)`;
+    // Mostrar checkbox QR solo para TD y TC
+    const conQR = tab === 'deb' || tab === 'cred';
+    document.getElementById('cobro-campo-qr').style.display = conQR ? '' : 'none';
+    document.getElementById('cobro-check-qr').checked = false;
     // Auto-rellenar con el saldo pendiente
     const saldo = Math.max(0, _total - _efectivo);
     if (saldo > 0) { _otros = saldo; inp.value = fmtInp(saldo); }
@@ -121,7 +125,9 @@ function init() {
       Comprobante: '', Obs: '', IDUsuario,
     });
     if (_otros > 0) pagos.push({
-      TipoPago: _tabActiva.toUpperCase(), Importe: _otros, Vuelto: 0,
+      TipoPago:    _tabActiva.toUpperCase(),
+      Importe:     _otros,
+      EsQR:        document.getElementById('cobro-check-qr').checked ? 1 : 0,
       Comprobante: document.getElementById('cobro-form-comprobante').value,
       Obs:         document.getElementById('cobro-form-obs').value,
       IDUsuario,
