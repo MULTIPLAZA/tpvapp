@@ -63,9 +63,10 @@ function _efectoError(card) {
 
 let _IDTransaccion  = null;
 let _todosProductos = [];
-let _colorCat       = {};   // IDTipoProducto → color css
+let _colorCat       = {};
 let _catActivaId    = 0;
 let _textoBusca     = '';
+let _totalTicket    = 0;
 
 export async function cargar() {
   const empresa  = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
@@ -154,8 +155,9 @@ async function _ticketActivo() {
 }
 
 function _setFooter(items, num) {
-  const total = items.reduce((s, r) => s + (r.Total || 0), 0);
-  const count = items.length;
+  _totalTicket = items.reduce((s, r) => s + (r.Total || 0), 0);
+  const total  = _totalTicket;
+  const count  = items.length;
 
   document.getElementById('main-ticket-num').textContent   = num ? `#${num}` : '#—';
   document.getElementById('main-ticket-total').textContent = fmtGs(total);
@@ -374,9 +376,13 @@ function init() {
     _filtrarProductos(_catActivaId);
   }
 
-  document.getElementById('btn-cobrar-main').addEventListener('click', () => {
-    mostrarToast('Cobro disponible próximamente', '');
+  document.getElementById('btn-cobrar-main').addEventListener('click', async () => {
+    const { default: Cobro } = await import('./Cobro.js');
+    mostrarPantalla('screen-cobro');
+    await Cobro.cargar(_totalTicket, _IDTransaccion);
   });
+
+  document.getElementById('btn-nuevo-top').addEventListener('click', nuevoTicket);
 }
 
 export default { init, cargar, nuevoTicket, seleccionarTicket, refrescarBarra };

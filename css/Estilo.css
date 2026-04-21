@@ -253,6 +253,23 @@ html, body {
   justify-content: center;
 }
 .btn-menu:active { background: var(--bg3); }
+.btn-nuevo-top {
+  background: var(--bg3);
+  border: 1px solid var(--accent2);
+  color: var(--accent2);
+  font-size: 1.4rem;
+  font-weight: 700;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.btn-nuevo-top:active { background: var(--accent2); color: #000; }
 
 /* ── Barra ticket: 4 celdas ── */
 .main-ticket-bar {
@@ -657,3 +674,66 @@ html, body {
   justify-content: center;
 }
 .ticket-item-total { font-size: 0.9rem; font-weight: 700; color: var(--accent2); flex-shrink: 0; }
+
+/* ── Pantalla Cobro ── */
+.cobro-resumen {
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cobro-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0;
+}
+.cobro-etiqueta {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--text2);
+}
+.cobro-etiqueta--vuelto { color: var(--accent); }
+.cobro-monto { font-size: 1rem; font-weight: 700; }
+.cobro-monto--total   { font-size: 1.7rem; color: var(--text); }
+.cobro-monto--efectivo{ color: var(--accent2); }
+.cobro-monto--vuelto  { color: var(--accent); }
+.cobro-quick {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 2px;
+  padding: 2px;
+  overflow: hidden;
+}
+.cobro-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.3px;
+}
+.cobro-btn:active { opacity: 0.65; }
+.cobro-btn--exacto {
+  background: rgba(247,148,29,0.12);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+.cobro-btn--limpiar {
+  grid-column: 1 / -1;
+  background: rgba(231,76,60,0.08);
+  border-color: var(--danger);
+  color: var(--danger);
+  font-size: 0.9rem;
+}

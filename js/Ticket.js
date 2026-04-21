@@ -118,8 +118,11 @@ function init() {
     await Main.nuevoTicket();
   });
 
-  document.getElementById('btn-cobrar').addEventListener('click', () => {
-    mostrarToast('Cobro disponible próximamente', '');
+  document.getElementById('btn-cobrar').addEventListener('click', async () => {
+    const total = parseFloat(document.getElementById('ticket-total').textContent.replace(/[^\d]/g, '')) || 0;
+    const { default: Cobro } = await import('./Cobro.js');
+    mostrarPantalla('screen-cobro');
+    await Cobro.cargar(total, _IDTransaccion);
   });
 }
 

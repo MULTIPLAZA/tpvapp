@@ -244,6 +244,7 @@ async function init() {
   const { default: Main } = await import('./Main.js');
   const { default: Ticket }       = await import('./Ticket.js');
   const { default: TicketsLista } = await import('./TicketsLista.js');
+  const { default: Cobro }        = await import('./Cobro.js');
 
   LoginCuenta.init();
   LoginUsuario.init();
@@ -252,6 +253,7 @@ async function init() {
   Main.init();
   Ticket.init();
   TicketsLista.init();
+  Cobro.init();
 
   // Auto-restore si el dispositivo ya tiene terminal registrada
   const dispositivo = Dispositivo.obtener();

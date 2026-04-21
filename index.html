@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.9.1 — 2026-04-22 13:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.9.2 — 2026-04-22 14:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -151,6 +151,7 @@
         </div>
         <div id="main-sub" style="font-size:0.62rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
       </div>
+      <button id="btn-nuevo-top" class="btn-nuevo-top" title="Nuevo ticket">+</button>
       <button id="btn-main-menu" class="btn-menu">☰</button>
     </div>
 
@@ -255,17 +256,54 @@
         <span style="font-size:0.9rem;color:var(--text2)">Total</span>
         <span id="ticket-total" style="font-size:1.4rem;font-weight:700;color:var(--accent2)">Gs 0</span>
       </div>
-      <button id="btn-cobrar" class="btn btn-primario" disabled>Cobrar (próximamente)</button>
+      <button id="btn-cobrar" class="btn btn-exito">Cobrar</button>
     </div>
   </div>
 
-  <!-- ── Pantalla 7: Cobro / Resumen ── -->
+  <!-- ── Pantalla 7: Cobro ── -->
   <div id="screen-cobro" class="screen">
     <div class="header">
-      <h1>Resumen de cobro</h1>
+      <div>
+        <div id="cobro-num" style="font-size:1rem;font-weight:600">Cobro</div>
+        <div id="cobro-sub" class="empresa"></div>
+      </div>
+      <button id="btn-cobro-volver" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">← Volver</button>
     </div>
-    <div class="contenido" style="display:flex;align-items:center;justify-content:center;color:var(--text2)">
-      <p>Resumen ticket — Etapa 7</p>
+
+    <!-- Resumen: Total · Efectivo · Vuelto -->
+    <div class="cobro-resumen">
+      <div class="cobro-fila">
+        <span class="cobro-etiqueta">TOTAL</span>
+        <span id="cobro-total" class="cobro-monto cobro-monto--total">Gs 0</span>
+      </div>
+      <div class="cobro-fila">
+        <span class="cobro-etiqueta">EFECTIVO</span>
+        <span id="cobro-efectivo" class="cobro-monto cobro-monto--efectivo">Gs 0</span>
+      </div>
+      <div class="cobro-fila">
+        <span class="cobro-etiqueta cobro-etiqueta--vuelto">VUELTO</span>
+        <span id="cobro-vuelto" class="cobro-monto cobro-monto--vuelto">Gs 0</span>
+      </div>
+    </div>
+
+    <!-- Teclado rápido -->
+    <div class="cobro-quick">
+      <button class="cobro-btn" data-monto="2000">2.000</button>
+      <button class="cobro-btn" data-monto="5000">5.000</button>
+      <button class="cobro-btn" data-monto="10000">10.000</button>
+      <button class="cobro-btn" data-monto="20000">20.000</button>
+      <button class="cobro-btn" data-monto="50000">50.000</button>
+      <button class="cobro-btn" data-monto="100000">100.000</button>
+      <button class="cobro-btn" data-monto="200000">200.000</button>
+      <button class="cobro-btn" data-monto="500000">500.000</button>
+      <button class="cobro-btn cobro-btn--exacto" id="cobro-btn-exacto">EXACTO</button>
+      <button class="cobro-btn cobro-btn--limpiar" id="cobro-btn-limpiar">⌫ LIMPIAR</button>
+    </div>
+
+    <div class="footer-cobrar">
+      <button id="btn-cobrar-confirmar" class="btn btn-exito footer-cobrar-btn" disabled>
+        COBRAR — <span id="cobro-total-btn">Gs 0</span>
+      </button>
     </div>
   </div>
 
