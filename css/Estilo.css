@@ -229,27 +229,45 @@ html, body {
   #btn-ticket-badge  { display: none; }
 }
 
-/* ── Footer cobrar (Main) ── */
-.footer-cobrar {
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  padding: 8px 16px;
+/* ── Selector de ticket (barra sobre contenido) ── */
+.main-ticket-selector {
+  background: var(--bg3);
+  border: none;
+  border-bottom: 2px solid var(--border);
+  width: 100%;
+  padding: 5px 12px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  color: var(--text);
 }
-.footer-ticket-btn {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 6px 14px;
-  cursor: pointer;
-  text-align: left;
-  min-height: 44px;
+.main-ticket-selector:active { background: var(--bg2); }
+
+/* ── Footer cobrar (Main) ── */
+.footer-cobrar {
+  background: #202020;
+  border-top: 2px solid var(--border);
+  padding: 5px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   flex-shrink: 0;
 }
-.footer-ticket-btn:active { border-color: var(--accent); }
+.footer-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.68rem;
+  padding: 0 2px;
+}
+.footer-cobrar-btn {
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px;
+}
 
 /* ── Panel inline ticket (wide) ── */
 .panel-item {
@@ -262,6 +280,31 @@ html, body {
 }
 .panel-item-nombre { font-weight: 600; }
 .panel-item-det { font-size: 0.7rem; color: var(--text2); }
+
+/* ── Filtros lista tickets ── */
+.tklista-filtros {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 2px solid var(--border);
+}
+.tklista-filtro {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 8px 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tklista-filtro:last-child { border-right: none; }
+.tklista-filtro.activo[data-estado=""]          { background:#2a2a2a; color:var(--text); }
+.tklista-filtro.activo[data-estado="Pendiente"] { background:#3a2a00; color:#f5a623; }
+.tklista-filtro.activo[data-estado="Cobrado"]   { background:#1a3a1a; color:#2ecc71; }
+.tklista-filtro.activo[data-estado="Facturado"] { background:#1a2a4a; color:#3498db; }
+.tklista-filtro.activo[data-estado="Anulado"]   { background:#2a1a1a; color:#e74c3c; }
 
 /* ── Lista de tickets ── */
 .tk-card {

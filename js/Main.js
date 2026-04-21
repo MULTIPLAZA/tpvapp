@@ -61,9 +61,11 @@ export async function cargar() {
   const usuario  = Sesion.get('NombreUsuario')  || '';
   const version  = document.querySelector('#screen-cuenta .logo-sub small')?.textContent || '';
 
+  const perfil = Sesion.get('Perfil') || '';
   document.getElementById('main-empresa').textContent  = empresa;
-  document.getElementById('main-sub').textContent      = [terminal, usuario].filter(Boolean).join(' · ');
   document.getElementById('main-version').textContent  = version;
+  document.getElementById('main-terminal').textContent = terminal;
+  document.getElementById('main-perfil').textContent   = [usuario, perfil].filter(Boolean).join(' · ');
 
   mostrarLoading(true);
   try {
@@ -138,6 +140,7 @@ function _setFooter(items, num) {
   document.getElementById('main-ticket-num').textContent   = num ? `#${num}` : '#—';
   document.getElementById('main-ticket-total').textContent = fmtGs(total);
   document.getElementById('btn-cobrar-main').disabled      = count === 0;
+  document.getElementById('btn-cobrar-main').style.opacity = count === 0 ? '0.4' : '1';
 
   const span = document.getElementById('main-items-count');
   if (span) span.textContent = count;

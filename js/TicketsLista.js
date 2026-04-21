@@ -3,6 +3,8 @@ import { LlamarSP, Sesion, mostrarPantalla, mostrarLoading, mostrarToast } from 
 const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
 let _IDTransaccionActual = null;
+let _todosTickets        = [];
+let _filtroActivo        = '';
 
 export async function cargar(IDTransaccionActual) {
   _IDTransaccionActual = IDTransaccionActual;
@@ -13,8 +15,8 @@ export async function cargar(IDTransaccionActual) {
   try {
     const IDEntidad         = Sesion.get('IDEntidad');
     const IDTransaccionCaja = Sesion.get('IDTransaccionCaja');
-    const rows = await LlamarSP('LISTAR_TICKETS_CAJA', { IDEntidad, IDTransaccionCaja });
-    _render(rows || []);
+    _todosTickets = await LlamarSP('LISTAR_TICKETS_CAJA', { IDEntidad, IDTransaccionCaja }) || [];
+    _render();
   } catch (err) {
     mostrarToast(err.message || 'Error al cargar tickets', 'error');
   } finally {
@@ -22,10 +24,14 @@ export async function cargar(IDTransaccionActual) {
   }
 }
 
-function _render(tickets) {
+function _render() {
+  const tickets = _filtroActivo
+    ? _todosTickets.filter(t => t.Estado === _filtroActivo)
+    : _todosTickets;
+
   const cont = document.getElementById('tklista-items');
   if (!tickets.length) {
-    cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:40px">Sin tickets en esta caja</p>';
+    cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:40px">Sin tickets</p>';
     return;
   }
   cont.innerHTML = '';
@@ -66,6 +72,15 @@ function init() {
     Sesion.set('IDTransaccion', '');
     mostrarPantalla('screen-main');
     await Main.nuevoTicket();
+  });
+
+  document.querySelectorAll('.tklista-filtro').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tklista-filtro').forEach(b => b.classList.remove('activo'));
+      btn.classList.add('activo');
+      _filtroActivo = btn.dataset.estado;
+      _render();
+    });
   });
 }
 

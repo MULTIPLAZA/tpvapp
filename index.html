@@ -141,17 +141,18 @@
 
   <!-- ── Pantalla 5: Principal ── -->
   <div id="screen-main" class="screen">
-    <div class="header">
+    <div class="header" style="padding:4px 10px;min-height:unset">
       <div style="flex:1;min-width:0">
-        <div style="font-size:0.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="main-empresa"></div>
-        <div style="font-size:0.72rem;color:var(--text2);display:flex;gap:6px;align-items:center">
-          <span id="main-sub"></span>
-          <span id="main-version" style="opacity:0.45;font-size:0.65rem"></span>
-        </div>
+        <div style="font-size:0.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="main-empresa"></div>
+        <div style="font-size:0.6rem;color:var(--text2)"><span id="main-version"></span></div>
       </div>
       <button id="btn-ticket-badge" class="ticket-badge">🛒 <span id="main-items-count">0</span></button>
-      <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">⬅</button>
+      <button id="btn-main-salir" class="btn btn-secundario" style="width:auto;padding:0 10px;font-size:0.75rem">⬅</button>
     </div>
+    <button id="btn-ticket-lista" class="main-ticket-selector">
+      <span style="font-size:0.62rem;color:var(--text2);line-height:1">TICKET NRO.</span>
+      <span id="main-ticket-num" style="font-size:1.1rem;font-weight:700;color:var(--accent2)">#—</span>
+    </button>
     <div id="main-contenido" class="main-contenido">
       <div class="main-productos-wrap">
         <div id="main-productos" class="contenido productos-grid"></div>
@@ -167,24 +168,30 @@
       </div>
     </div>
     <div class="footer-cobrar">
-      <button id="btn-ticket-lista" class="footer-ticket-btn">
-        <span style="font-size:0.65rem;color:var(--text2);display:block;line-height:1">TICKET NRO.</span>
-        <span id="main-ticket-num" style="font-size:1rem;font-weight:700;color:var(--text)">#—</span>
-      </button>
-      <span id="main-ticket-total" style="font-size:1.1rem;font-weight:700;color:var(--accent2);flex:1;text-align:center">Gs 0</span>
-      <button id="btn-cobrar-main" class="btn btn-primario" style="width:auto;padding:0 24px" disabled>COBRAR</button>
+      <div class="footer-info">
+        <span id="main-terminal" style="color:var(--accent);font-weight:700"></span>
+        <span id="main-perfil" style="color:var(--accent2)"></span>
+      </div>
+      <button id="btn-cobrar-main" class="btn btn-primario footer-cobrar-btn" disabled>COBRAR — <span id="main-ticket-total">Gs 0</span></button>
     </div>
   </div>
 
   <!-- ── Pantalla 5b: Lista de Tickets ── -->
   <div id="screen-tickets-lista" class="screen">
     <div class="header">
-      <div>
+      <div style="flex:1;min-width:0">
         <div style="font-size:1rem;font-weight:600">Tickets de caja</div>
         <div class="empresa" id="tklista-sub"></div>
       </div>
       <button id="btn-tklista-nuevo" class="btn btn-exito" style="width:auto;padding:0 14px;font-size:0.8rem">+ Nuevo</button>
       <button id="btn-tklista-volver" class="btn btn-secundario" style="width:auto;padding:0 12px;font-size:0.78rem">← Volver</button>
+    </div>
+    <div class="tklista-filtros">
+      <button class="tklista-filtro activo" data-estado="">TODOS</button>
+      <button class="tklista-filtro" data-estado="Pendiente">PEND.</button>
+      <button class="tklista-filtro" data-estado="Cobrado">COB.</button>
+      <button class="tklista-filtro" data-estado="Facturado">FACT.</button>
+      <button class="tklista-filtro" data-estado="Anulado">ANUL.</button>
     </div>
     <div id="tklista-items" class="contenido"></div>
   </div>
