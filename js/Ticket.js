@@ -51,9 +51,9 @@ function _renderItems(items, cabecera) {
         <div class="ticket-item-precio">${fmtGs(item.PrecioUni)} c/u</div>
       </div>
       <div class="ticket-item-acciones">
-        <button class="btn-qty" data-accion="menos" data-id="${item.IDDetalleTicket}" data-qty="${qty}">−</button>
+        <button class="btn-qty" data-accion="menos" data-id="${item.IDDetalleTicket}">−</button>
         <span class="qty-valor">${fmtQty(qty)}</span>
-        <button class="btn-qty" data-accion="mas" data-id="${item.IDDetalleTicket}" data-qty="${qty}">+</button>
+        <button class="btn-qty" data-accion="mas" data-id="${item.IDDetalleTicket}">+</button>
         <button class="btn-quitar" data-id="${item.IDDetalleTicket}">🗑</button>
       </div>
       <div class="ticket-item-total">${fmtGs(item.Total)}</div>
@@ -62,12 +62,9 @@ function _renderItems(items, cabecera) {
   });
 
   cont.querySelectorAll('.btn-qty').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id    = parseInt(btn.dataset.id);
-      const qty   = parseFloat(btn.dataset.qty);
-      const nueva = btn.dataset.accion === 'mas' ? qty + 1 : qty - 1;
-      if (nueva <= 0) await _quitarItem(id);
-      else await _modCantidad(id, nueva);
+    btn.addEventListener('click', () => {
+      const accion = btn.dataset.accion === 'mas' ? 'MAS_ITEM' : 'MENOS_ITEM';
+      _llamarItem(accion, parseInt(btn.dataset.id));
     });
   });
 
@@ -76,16 +73,16 @@ function _renderItems(items, cabecera) {
   });
 }
 
-async function _modCantidad(IDDetalleTicket, Cantidad) {
+async function _llamarItem(accion, IDDetalleTicket) {
   const IDEntidad = Sesion.get('IDEntidad');
   mostrarLoading(true);
   try {
-    const rows = await LlamarSP('MOD_CANTIDAD', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Cantidad });
+    const rows = await LlamarSP(accion, { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket });
     if (!rows?.length) throw new Error('Sin respuesta');
     if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error');
     await _refrescar();
   } catch (err) {
-    mostrarToast(err.message || 'Error al modificar cantidad', 'error');
+    mostrarToast(err.message || 'Error', 'error');
   } finally {
     mostrarLoading(false);
   }
