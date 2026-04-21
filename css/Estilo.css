@@ -292,7 +292,22 @@ html, body {
   align-items: flex-start;
   min-width: 0;
   padding-left: 6px;
+  gap: 2px;
 }
+.ticket-ruc-btn {
+  background: #1a3a6a;
+  border: none;
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 3px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.ticket-ruc-btn:active { background: #1a4a8a; }
 
 /* ── Menú lateral ── */
 .menu-overlay {

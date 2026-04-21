@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.8.2 — 2026-04-21 20:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.8.3 — 2026-04-22 09:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -162,11 +162,12 @@
           <span id="main-ticket-num" style="font-size:1.6rem;font-weight:700;color:var(--accent2);line-height:1">#—</span>
         </div>
         <div class="ticket-bar-info">
-          <span id="main-ticket-ruc" style="font-size:0.8rem;font-weight:600;color:var(--text)"></span>
-          <div style="display:flex;gap:8px">
-            <span id="main-ticket-hora" style="font-size:0.65rem;color:var(--text2)"></span>
-            <span id="main-ticket-estado" style="font-size:0.65rem;color:var(--text2)"></span>
-          </div>
+          <span id="main-ticket-hora" style="font-size:0.6rem;color:var(--text2);line-height:1.2"></span>
+          <button id="btn-ticket-ruc" class="ticket-ruc-btn">
+            <span style="font-size:0.5rem;letter-spacing:0.5px;opacity:0.7;line-height:1">RUC / CLIENTE</span>
+            <span id="main-ticket-ruc" style="font-size:0.82rem;font-weight:700;line-height:1.2">—</span>
+          </button>
+          <span id="main-ticket-estado" style="font-size:0.6rem;color:var(--text2);line-height:1.2"></span>
         </div>
       </button>
       <button id="btn-ticket-badge" class="ticket-badge">🛒 <span id="main-items-count">0</span></button>
