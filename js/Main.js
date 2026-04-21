@@ -130,12 +130,14 @@ async function _ticketActivo() {
   if (!ticket.length) throw new Error('Ticket no encontrado');
   const cab = ticket[0];
   Sesion.set('TicketNumero', cab.Numero);
-  const horaEl = document.getElementById('main-ticket-hora');
-  const rucEl  = document.getElementById('main-ticket-ruc');
-  if (horaEl) horaEl.textContent = cab.Hora   || '';
-  if (rucEl)  rucEl.textContent  = cab.RUC    || '';
+  const horaEl   = document.getElementById('main-ticket-hora');
+  const rucEl    = document.getElementById('main-ticket-ruc');
+  const razonEl  = document.getElementById('main-ticket-razon');
   const estadoEl = document.getElementById('main-ticket-estado');
-  if (estadoEl) estadoEl.textContent = cab.Estado || '';
+  if (horaEl)   horaEl.textContent   = cab.Hora        || '';
+  if (rucEl)    rucEl.textContent    = cab.RUC         || '—';
+  if (razonEl)  razonEl.textContent  = cab.RazonSocial || cab.Cliente || '';
+  if (estadoEl) { estadoEl.textContent = cab.Estado || ''; estadoEl.dataset.estado = cab.Estado || ''; }
   _setFooter(items, cab.Numero);
 }
 

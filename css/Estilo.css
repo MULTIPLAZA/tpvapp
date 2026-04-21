@@ -303,27 +303,76 @@ html, body {
 /* Celda 2: Hora + Estado */
 .tk-cel-time {
   flex: 0 0 80px;
-  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   cursor: pointer;
 }
 .tk-cel-time:active { background: var(--bg3); }
-.tk-hora  { font-size: 0.62rem; color: var(--text2); line-height: 1.2; }
-.tk-estado{ font-size: 0.62rem; color: var(--text2); line-height: 1.2; }
+.tk-hora {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.tk-estado {
+  font-size: 0.55rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--text2);
+}
+.tk-estado[data-estado="Pendiente"] { background:#6b4a00; color:#ffc107; }
+.tk-estado[data-estado="Cobrado"]   { background:#1a4a2a; color:#6ddc80; }
+.tk-estado[data-estado="Facturado"] { background:#1a3060; color:#70bfff; }
+.tk-estado[data-estado="Anulado"]   { background:#4a1a1a; color:#ff7070; }
 /* Celda 3: RUC */
 .tk-cel-ruc {
   flex: 1;
-  background: #1a3a6a;
-  color: #fff;
-  cursor: pointer;
+  flex-direction: row;
+  background: #202020;
+  padding: 0;
+  gap: 0;
+  cursor: default;
   user-select: none;
-  border-right: 1px solid rgba(255,255,255,0.08);
-  gap: 2px;
 }
-.tk-cel-ruc:active { background: #1a4a8a; }
-.tk-cel-ruc .tk-label { color: rgba(255,255,255,0.55); }
-.tk-ruc-val {
-  font-size: 0.82rem;
+.tk-ruc-tit {
+  background: #1f5fa0;
+  border: none;
+  color: #fff;
+  font-size: 0.68rem;
   font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 0 10px;
+  flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tk-ruc-tit:active { background: #2874c8; }
+.tk-ruc-data {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 8px;
+  min-width: 0;
+}
+.tk-ruc-num {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tk-ruc-razon {
+  font-size: 0.62rem;
+  color: var(--text2);
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
