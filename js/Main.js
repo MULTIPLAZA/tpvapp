@@ -21,19 +21,21 @@ function _beep(tipo) {
   osc.connect(gain);
   gain.connect(_audio.destination);
   if (tipo === 'ok') {
-    osc.frequency.value = 880;
+    // Ascendente: 440 → 880 Hz
+    osc.frequency.setValueAtTime(440, _audio.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, _audio.currentTime + 0.1);
     gain.gain.setValueAtTime(0.15, _audio.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.13);
     osc.start();
-    osc.stop(_audio.currentTime + 0.12);
+    osc.stop(_audio.currentTime + 0.13);
   } else if (tipo === 'ticket') {
+    // Descendente: 880 → 440 Hz
     osc.frequency.setValueAtTime(880, _audio.currentTime);
-    osc.frequency.setValueAtTime(550, _audio.currentTime + 0.08);
-    gain.gain.setValueAtTime(0.10, _audio.currentTime);
-    gain.gain.setValueAtTime(0.07, _audio.currentTime + 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.22);
+    osc.frequency.exponentialRampToValueAtTime(440, _audio.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.15, _audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, _audio.currentTime + 0.13);
     osc.start();
-    osc.stop(_audio.currentTime + 0.22);
+    osc.stop(_audio.currentTime + 0.13);
   } else {
     osc.type = 'sawtooth';
     osc.frequency.value = 220;
