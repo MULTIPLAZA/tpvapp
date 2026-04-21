@@ -64,6 +64,8 @@ function _efectoError(card) {
 let _IDTransaccion  = null;
 let _todosProductos = [];
 let _colorCat       = {};   // IDTipoProducto → color css
+let _catActivaId    = 0;
+let _textoBusca     = '';
 
 export async function cargar() {
   const empresa  = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
@@ -241,9 +243,14 @@ function _crearCatBtn(texto, id, activa, color) {
 }
 
 function _filtrarProductos(IDTipoProducto) {
-  const lista = IDTipoProducto == 0
+  _catActivaId = IDTipoProducto;
+  let lista = IDTipoProducto == 0
     ? _todosProductos
     : _todosProductos.filter(p => p.IDTipoProducto == IDTipoProducto);
+  if (_textoBusca) {
+    const q = _textoBusca.toLowerCase();
+    lista = lista.filter(p => p.Descripcion.toLowerCase().includes(q));
+  }
 
   const cont = document.getElementById('main-productos');
   cont.innerHTML = '';
@@ -332,6 +339,40 @@ function init() {
   };
   document.getElementById('btn-ticket-lista').addEventListener('click', _abrirTicketsLista);
   document.getElementById('tk-cel-time').addEventListener('click', _abrirTicketsLista);
+
+  // ── Búsqueda por texto ──
+  const _btnBuscar  = document.getElementById('btn-buscar-cat');
+  const _buscarBar  = document.getElementById('buscar-bar');
+  const _inpBuscar  = document.getElementById('inp-buscar-producto');
+  const _cats       = document.getElementById('main-categorias');
+
+  _btnBuscar.addEventListener('click', () => {
+    const abriendo = _buscarBar.style.display === 'none';
+    if (abriendo) {
+      _buscarBar.style.display = 'flex';
+      _cats.style.display = 'none';
+      _btnBuscar.classList.add('activa');
+      _inpBuscar.focus();
+    } else {
+      _cerrarBusqueda();
+    }
+  });
+
+  document.getElementById('btn-buscar-cerrar').addEventListener('click', _cerrarBusqueda);
+
+  _inpBuscar.addEventListener('input', () => {
+    _textoBusca = _inpBuscar.value.trim();
+    _filtrarProductos(_catActivaId);
+  });
+
+  function _cerrarBusqueda() {
+    _textoBusca = '';
+    _inpBuscar.value = '';
+    _buscarBar.style.display = 'none';
+    _cats.style.display = 'flex';
+    _btnBuscar.classList.remove('activa');
+    _filtrarProductos(_catActivaId);
+  }
 
   document.getElementById('btn-cobrar-main').addEventListener('click', () => {
     mostrarToast('Cobro disponible próximamente', '');
