@@ -114,11 +114,10 @@ function init() {
   document.getElementById('btn-cobrar-confirmar').addEventListener('click', async () => {
     const IDEntidad = Sesion.get('IDEntidad');
     const IDUsuario = Sesion.get('IDUsuario');
-    const vuelto    = Math.max(0, _efectivo + _otros - _total);
 
     const pagos = [];
     if (_efectivo > 0) pagos.push({
-      TipoPago: 'EFECTIVO', Importe: _efectivo, Vuelto: vuelto,
+      TipoPago: 'EFECTIVO', Importe: _efectivo, Entregado: _efectivo,
       Comprobante: '', Obs: '', IDUsuario,
     });
     if (_otros > 0) pagos.push({
