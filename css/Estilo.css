@@ -232,12 +232,19 @@ html, body {
 .main-header-top {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
+  gap: 4px;
+  padding: 5px 8px;
   background: #000;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
+.nav-group {
+  display: flex;
+  flex-shrink: 0;
+}
+.nav-group .btn-nav-top { border-radius: 0; border-right-width: 0; }
+.nav-group .btn-nav-top:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.nav-group .btn-nav-top:last-child  { border-radius: 0 var(--radius) var(--radius) 0; border-right-width: 1px; }
 .btn-menu {
   background: transparent;
   border: 1px solid var(--border);
@@ -272,20 +279,17 @@ html, body {
 .btn-nuevo-top:active { background: var(--accent2); color: #000; }
 .btn-nav-top {
   background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text2);
-  font-size: 1rem;
-  font-weight: 700;
-  width: 28px;
-  height: 36px;
+  border: 1px solid #2a4060;
+  color: #5a8ab8;
+  width: 30px;
+  height: 34px;
   cursor: pointer;
-  border-radius: var(--radius);
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.btn-nav-top:active { background: var(--bg3); color: var(--text); }
+.btn-nav-top:active { background: #1a2a3a; color: #8ab8e8; }
 
 /* ── Barra ticket: 4 celdas ── */
 .main-ticket-bar {

@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.9.4 — 2026-04-21 09:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.9.5 — 2026-04-21 10:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -151,10 +151,23 @@
         </div>
         <div id="main-sub" style="font-size:0.62rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
       </div>
-      <button id="btn-tick-prev" class="btn-nav-top" title="Ticket anterior">‹</button>
-      <button id="btn-tick-last" class="btn-nav-top" title="Último ticket">›|</button>
-      <button id="btn-nuevo-top" class="btn-nuevo-top" title="Nuevo ticket">+</button>
-      <button id="btn-main-menu" class="btn-menu">☰</button>
+      <div class="nav-group">
+        <button id="btn-tick-prev" class="btn-nav-top" title="Ticket anterior">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><rect x="1" y="1" width="2" height="11" rx="1"/><path d="M12 1.5L4.5 6.5 12 11.5z"/></svg>
+        </button>
+        <button id="btn-tick-next" class="btn-nav-top" title="Ticket siguiente">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><path d="M1 1.5l7.5 5L1 11.5z"/></svg>
+        </button>
+        <button id="btn-tick-last" class="btn-nav-top" title="Último ticket">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><path d="M1 1.5l7.5 5L1 11.5z"/><rect x="10" y="1" width="2" height="11" rx="1"/></svg>
+        </button>
+      </div>
+      <button id="btn-nuevo-top" class="btn-nuevo-top" title="Nuevo ticket">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+      <button id="btn-main-menu" class="btn-menu">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect y="2.5" width="16" height="2" rx="1"/><rect y="7" width="16" height="2" rx="1"/><rect y="11.5" width="16" height="2" rx="1"/></svg>
+      </button>
     </div>
 
     <!-- Barra ticket: 4 celdas → NRO | Hora+Estado | RUC | Carrito -->

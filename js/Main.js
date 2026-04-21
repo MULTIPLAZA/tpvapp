@@ -300,6 +300,25 @@ async function _agregarItem(producto, card) {
   }
 }
 
+async function _navegar(accion) {
+  const IDEntidad = Sesion.get('IDEntidad');
+  mostrarLoading(true);
+  try {
+    const rows = await LlamarSP(accion, { IDEntidad, IDTransaccion: _IDTransaccion });
+    if (!rows?.length || !esProcesado(rows[0].Procesado)) {
+      mostrarToast(rows?.[0]?.Mensaje || 'Sin ticket', '');
+      return;
+    }
+    _IDTransaccion = rows[0].IDTransaccion;
+    Sesion.set('IDTransaccion', _IDTransaccion);
+    await _ticketActivo();
+  } catch (err) {
+    mostrarToast(err.message || 'Error de navegación', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
 function _abrirMenu() {
   document.getElementById('main-menu-empresa').textContent =
     Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
@@ -384,12 +403,9 @@ function init() {
 
   document.getElementById('btn-nuevo-top').addEventListener('click', nuevoTicket);
 
-  document.getElementById('btn-tick-prev').addEventListener('click', async () => {
-    mostrarToast('Navegación — próximamente', '');
-  });
-  document.getElementById('btn-tick-last').addEventListener('click', async () => {
-    mostrarToast('Navegación — próximamente', '');
-  });
+  document.getElementById('btn-tick-prev').addEventListener('click',  () => _navegar('TICKET_ANTERIOR'));
+  document.getElementById('btn-tick-next').addEventListener('click',  () => _navegar('TICKET_SIGUIENTE'));
+  document.getElementById('btn-tick-last').addEventListener('click',  () => _navegar('TICKET_ULTIMO'));
 }
 
 export default { init, cargar, nuevoTicket, seleccionarTicket, refrescarBarra };
