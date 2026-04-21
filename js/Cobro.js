@@ -1,6 +1,7 @@
 import { Sesion, mostrarPantalla, mostrarToast } from './App.js';
 
-const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const fmtInp = n => n > 0 ? Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
 
 let _total         = 0;
 let _efectivo      = 0;
@@ -47,7 +48,7 @@ function _cambiarTab(tab) {
     document.getElementById('cobro-form-label').textContent = `Importe ${labels[tab] || ''} (Gs)`;
     // Auto-rellenar con el saldo pendiente
     const saldo = Math.max(0, _total - _efectivo);
-    if (saldo > 0) { _otros = saldo; inp.value = saldo; }
+    if (saldo > 0) { _otros = saldo; inp.value = fmtInp(saldo); }
   }
   _actualizar();
 }
@@ -94,9 +95,11 @@ function init() {
     _actualizar();
   });
 
-  // Importe en form otros: actualiza _otros en tiempo real
+  // Importe en form otros: formatea con separador de miles, actualiza _otros
   document.getElementById('cobro-form-importe').addEventListener('input', e => {
-    _otros = parseFloat(e.target.value) || 0;
+    const raw = e.target.value.replace(/\D/g, '');
+    _otros = parseInt(raw) || 0;
+    e.target.value = fmtInp(_otros);
     _actualizar();
   });
 

@@ -761,6 +761,7 @@ html, body {
   background: rgba(247,148,29,0.12);
   border-color: var(--accent2);
   color: var(--accent2);
+  grid-column: 3;
 }
 .cobro-btn--limpiar {
   background: rgba(231,76,60,0.08);
