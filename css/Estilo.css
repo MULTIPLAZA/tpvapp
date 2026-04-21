@@ -305,7 +305,7 @@ html, body {
   align-items: flex-start;
   cursor: pointer;
   width: 100%;
-  text-align: left;
+  user-select: none;
 }
 .ticket-ruc-btn:active { background: #1a4a8a; }
 
