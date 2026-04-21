@@ -36,10 +36,20 @@ function _cambiarTab(tab) {
     b.classList.toggle('activo', b.dataset.tab === tab));
   document.getElementById('cobro-panel-efectivo').classList.toggle('activo', tab === 'efectivo');
   document.getElementById('cobro-panel-otro').classList.toggle('activo',     tab !== 'efectivo');
+
+  // Siempre resetear _otros al cambiar tab para evitar acumulación entre métodos
+  _otros = 0;
+  const inp = document.getElementById('cobro-form-importe');
+  inp.value = '';
+
   if (tab !== 'efectivo') {
     const labels = { qr:'QR', deb:'Débito', cred:'Crédito', trans:'Transferencia', otros:'Otros' };
     document.getElementById('cobro-form-label').textContent = `Importe ${labels[tab] || ''} (Gs)`;
+    // Auto-rellenar con el saldo pendiente
+    const saldo = Math.max(0, _total - _efectivo);
+    if (saldo > 0) { _otros = saldo; inp.value = saldo; }
   }
+  _actualizar();
 }
 
 function _actualizar() {
