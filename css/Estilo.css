@@ -726,7 +726,7 @@ html, body {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 2px;
   padding: 2px;
   overflow: hidden;
@@ -759,7 +759,6 @@ html, body {
   color: var(--accent2);
 }
 .cobro-btn--limpiar {
-  grid-column: 1 / -1;
   background: rgba(231,76,60,0.08);
   border-color: var(--danger);
   color: var(--danger);
@@ -779,26 +778,26 @@ html, body {
   flex-shrink: 0;
   background: var(--bg2);
   border-top: 2px solid var(--border);
-  padding: 8px 16px;
+  padding: 10px 18px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 .cobro-fila {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2px 0;
+  padding: 3px 0;
 }
 .cobro-etiqueta {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.8px;
   color: var(--text2);
 }
 .cobro-etiqueta--vuelto { color: var(--accent); }
-.cobro-monto { font-size: 0.95rem; font-weight: 700; }
-.cobro-monto--total    { font-size: 1.5rem; color: var(--text); }
+.cobro-monto { font-size: 1.15rem; font-weight: 700; }
+.cobro-monto--total    { font-size: 1.9rem; color: var(--text); }
 .cobro-monto--efectivo { color: var(--accent2); }
 .cobro-monto--otros    { color: var(--text2); }
 .cobro-monto--vuelto   { color: var(--text2); }
