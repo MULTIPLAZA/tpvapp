@@ -1,19 +1,19 @@
-import { LlamarSP, Sesion, Dispositivo, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+import { LlamarSP, Sesion, Dispositivo, obtenerIDDispositivo, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
 
 // ── Verificar si el dispositivo ya tiene terminal registrada ──
 export async function verificarTerminal() {
-  const guardado = Dispositivo.obtener();
-  if (!guardado?.uuid) return false;
+  const uuid = obtenerIDDispositivo();
 
   try {
     const rows = await LlamarSP('VERIFICAR_TERMINAL', {
       IDEntidad: Sesion.get('IDEntidad'),
-      UUID: guardado.uuid,
+      UUID: uuid,
     });
     if (!rows?.length || rows[0].Mensaje) return false;
 
-    // Terminal válida — guardar en sesión
-    _guardarTerminalEnSesion({ ...rows[0], uuid: guardado.uuid });
+    // Terminal válida — restaurar localStorage y sesión
+    _guardarTerminalEnLocal(rows[0], uuid);
+    _guardarTerminalEnSesion({ ...rows[0], uuid });
     return true;
   } catch {
     return false;
@@ -51,7 +51,7 @@ let _uuid = null;
 
 async function cargar() {
   _depositoSeleccionado = null;
-  _uuid = crypto.randomUUID();
+  _uuid = obtenerIDDispositivo();
   document.getElementById('reg-paso2').style.display = 'none';
   document.getElementById('inp-nombre-terminal').value = '';
   document.getElementById('reg-uuid').textContent = _uuid;

@@ -144,6 +144,28 @@ export const Sesion = {
   existe() { return !!sessionStorage.getItem('tpv_token_apisql'); },
 };
 
+// ── ID único de dispositivo — persiste en localStorage + cookie 10 años ────
+const _DEVICE_ID_KEY = 'tpv_device_id';
+
+function _leerCookie(nombre) {
+  const m = document.cookie.match('(?:^|; )' + nombre + '=([^;]*)');
+  return m ? decodeURIComponent(m[1]) : null;
+}
+function _escribirCookie(nombre, valor) {
+  const exp = new Date(Date.now() + 10 * 365 * 24 * 3600 * 1000).toUTCString();
+  document.cookie = `${nombre}=${encodeURIComponent(valor)};expires=${exp};path=/;SameSite=Strict`;
+}
+
+export function obtenerIDDispositivo() {
+  let id = localStorage.getItem(_DEVICE_ID_KEY) || _leerCookie(_DEVICE_ID_KEY);
+  if (!id) {
+    id = crypto.randomUUID ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2));
+  }
+  localStorage.setItem(_DEVICE_ID_KEY, id);
+  _escribirCookie(_DEVICE_ID_KEY, id);
+  return id;
+}
+
 // ── Dispositivo (localStorage — persiste entre sesiones) ────────
 export const Dispositivo = {
   CLAVE: 'tpv_device',
