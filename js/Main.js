@@ -345,11 +345,11 @@ function _renderTicketInline() {
       ${i.Observacion ? `<div class="ticket-item-obs" style="padding:0">${i.Observacion}</div>` : ''}
       <div class="ti2-bottom">
         <div class="ticket-item-acciones">
-          <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalle}">−</button>
+          <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalleTicket}">−</button>
           <span class="qty-valor">${parseFloat(i.Cantidad)}</span>
-          <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalle}">+</button>
-          <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalle}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
-          <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalle}">✕</button>
+          <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalleTicket}">+</button>
+          <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalleTicket}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
+          <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalleTicket}">✕</button>
         </div>
         <div class="ti2-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
       </div>
@@ -361,11 +361,12 @@ function _renderTicketInline() {
     btn.addEventListener('click', async () => {
       const accion    = btn.dataset.accion;
       const IDDetalle = btn.dataset.id;
+      const IDDetalleTicket = btn.dataset.id;
       if (accion === 'obs') {
         const nueva = await _pedirObservacion(btn.dataset.obs);
         if (nueva === null) return;
         try {
-          await LlamarSP('ITEM_OBSERVACION', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalle, Observacion: nueva });
+          await LlamarSP('ITEM_OBSERVACION', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Observacion: nueva });
           await _ticketActivo();
         } catch (err) {
           mostrarToast(err.message || 'Error al guardar observación', 'error');
@@ -373,7 +374,7 @@ function _renderTicketInline() {
         return;
       }
       try {
-        await LlamarSP(spMap[accion], { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalle });
+        await LlamarSP(spMap[accion], { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket });
         await _ticketActivo();
       } catch (err) {
         mostrarToast(err.message || 'Error', 'error');
