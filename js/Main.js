@@ -98,6 +98,7 @@ export async function nuevoTicket() {
   try {
     await _nuevoTicket();
     await _ticketActivo();
+    _setModoCarrito(false);
   } catch (err) {
     mostrarToast(err.message || 'Error al crear ticket', 'error');
   } finally {
@@ -111,6 +112,7 @@ export async function seleccionarTicket(IDTransaccion) {
   mostrarLoading(true);
   try {
     await _ticketActivo();
+    _setModoCarrito(true);
   } catch (err) {
     mostrarToast(err.message || 'Error al cargar ticket', 'error');
   } finally {
@@ -303,19 +305,23 @@ async function _agregarItem(producto, card) {
   }
 }
 
-function _toggleCarrito() {
-  _modoCarrito = !_modoCarrito;
+function _setModoCarrito(activo) {
+  if (_modoCarrito === activo) {
+    if (activo) _renderTicketInline();
+    return;
+  }
+  _modoCarrito = activo;
   const prod   = document.getElementById('main-productos');
   const cats   = document.querySelector('.categorias-wrap');
   const inline = document.getElementById('main-ticket-inline');
   const badge  = document.getElementById('btn-ticket-badge');
 
-  if (_modoCarrito) {
+  if (activo) {
     prod.style.display   = 'none';
     cats.style.display   = 'none';
     inline.style.display = 'flex';
     badge.classList.add('modo-ticket');
-    badge.querySelector('.badge-modo-prod').style.display  = 'none';
+    badge.querySelector('.badge-modo-prod').style.display   = 'none';
     badge.querySelector('.badge-modo-ticket').style.display = '';
     _renderTicketInline();
   } else {
@@ -323,10 +329,12 @@ function _toggleCarrito() {
     cats.style.display   = '';
     inline.style.display = 'none';
     badge.classList.remove('modo-ticket');
-    badge.querySelector('.badge-modo-prod').style.display  = '';
+    badge.querySelector('.badge-modo-prod').style.display   = '';
     badge.querySelector('.badge-modo-ticket').style.display = 'none';
   }
 }
+
+function _toggleCarrito() { _setModoCarrito(!_modoCarrito); }
 
 function _renderTicketInline() {
   const cont = document.getElementById('main-ticket-inline');
@@ -417,6 +425,7 @@ async function _navegar(accion) {
     _IDTransaccion = id;
     Sesion.set('IDTransaccion', _IDTransaccion);
     await _ticketActivo();
+    _setModoCarrito(true);
   } catch (err) {
     mostrarToast(err.message || 'Error de navegación', 'error');
   } finally {
