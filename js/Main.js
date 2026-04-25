@@ -351,7 +351,7 @@ function _renderTicketInline() {
           <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalleTicket}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
           <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalleTicket}">✕</button>
         </div>
-        <div class="ti2-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
+        <div class="ti2-precio">${fmtGs(i.PrecioUni)} c/u</div>
       </div>
     </div>
   `).join('');
