@@ -1,7 +1,7 @@
 // ── Configuración ──────────────────────────────────────────────
 export const CONFIG = {
-  APISQL_URL: 'https://apisql-production-665e.up.railway.app/sql',
-  TOKEN_LICENCIA: 'f14614203049662d1a64097f13b8c4eafb7956fcabb1ed66db969a4e90379a56',
+  APISQL_URL: 'https://nodoinformatica.ddns.net/sql',
+  TOKEN_LICENCIA: 'f702c3f7874a4ef1f7d4277476d5a63cfdb4a29d4823e4c5083b1f99a93d59b0',
 };
 
 // ── Debug Log ──────────────────────────────────────────────────
