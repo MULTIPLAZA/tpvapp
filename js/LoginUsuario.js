@@ -18,6 +18,21 @@ function _borrarCred() {
   localStorage.removeItem(_CRED_KEY);
 }
 
+function _preguntarRecordar() {
+  return new Promise(resolve => {
+    const modal = document.getElementById('modal-recordar');
+    modal.style.display = 'flex';
+    const onSi  = () => { modal.style.display = 'none'; cleanup(); resolve(true);  };
+    const onNo  = () => { modal.style.display = 'none'; cleanup(); resolve(false); };
+    const cleanup = () => {
+      document.getElementById('modal-recordar-si').removeEventListener('click', onSi);
+      document.getElementById('modal-recordar-no').removeEventListener('click', onNo);
+    };
+    document.getElementById('modal-recordar-si').addEventListener('click', onSi);
+    document.getElementById('modal-recordar-no').addEventListener('click', onNo);
+  });
+}
+
 async function _procesarLogin(IDEntidad, usuario, password) {
   const rows = await LlamarSP('LOGIN', { IDEntidad, Usuario: usuario, Password: password });
   if (!rows?.length) throw new Error('Usuario o contraseña incorrectos');
@@ -68,21 +83,23 @@ export async function mostrar(forceForm = false) {
 function init() {
   document.getElementById('form-usuario').addEventListener('submit', async e => {
     e.preventDefault();
-    const usuario   = document.getElementById('inp-usuario').value.trim();
-    const password  = document.getElementById('inp-password').value;
-    const recordar  = document.getElementById('chk-recordar').checked;
+    const usuario  = document.getElementById('inp-usuario').value.trim();
+    const password = document.getElementById('inp-password').value;
     if (!usuario || !password) return;
     mostrarLoading(true);
     try {
       const IDEntidad = Sesion.get('IDEntidad');
       await _procesarLogin(IDEntidad, usuario, password);
-      if (recordar) _guardarCred(IDEntidad, usuario, password);
-      else _borrarCred();
+      mostrarLoading(false);
+      // Solo preguntar si no hay credenciales guardadas para esta entidad
+      if (!_leerCred(IDEntidad)) {
+        const recordar = await _preguntarRecordar();
+        if (recordar) _guardarCred(IDEntidad, usuario, password);
+      }
       await _irACaja();
     } catch (err) {
-      mostrarToast(err.message || 'Error al iniciar sesión', 'error');
-    } finally {
       mostrarLoading(false);
+      mostrarToast(err.message || 'Error al iniciar sesión', 'error');
     }
   });
 

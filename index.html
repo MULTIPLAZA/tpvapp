@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.26 — 25/04/26 10:30</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.27 — 25/04/26 11:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -112,13 +112,21 @@
           <label>Contraseña</label>
           <input id="inp-password" type="password" placeholder="Contraseña" required>
         </div>
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--text2);margin-top:4px;cursor:pointer">
-          <input type="checkbox" id="chk-recordar" style="width:16px;height:16px;accent-color:var(--accent)">
-          Recordar en este dispositivo
-        </label>
         <button type="submit" class="btn btn-primario" style="margin-top:8px">Entrar</button>
       </form>
       <button id="btn-volver-cuenta" class="btn btn-secundario" style="margin-top:10px">← Volver</button>
+    </div>
+  </div>
+
+  <!-- Modal: Recordar credenciales -->
+  <div id="modal-recordar" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.7);align-items:center;justify-content:center">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;max-width:300px;width:90%;text-align:center">
+      <div style="font-size:1rem;font-weight:700;margin-bottom:8px">¿Recordar sesión?</div>
+      <div style="font-size:0.82rem;color:var(--text2);margin-bottom:20px">¿Guardar credenciales en este dispositivo para ingresar automáticamente?</div>
+      <div style="display:flex;gap:10px">
+        <button id="modal-recordar-no"  class="btn btn-secundario" style="flex:1">No</button>
+        <button id="modal-recordar-si"  class="btn btn-primario"   style="flex:1">Sí</button>
+      </div>
     </div>
   </div>
 
