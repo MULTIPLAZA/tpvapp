@@ -761,6 +761,47 @@ html, body {
   flex-shrink: 0;
 }
 .ticket-item-total { font-size: 0.9rem; font-weight: 700; color: var(--accent2); flex-shrink: 0; white-space: nowrap; }
+/* ── Ticket inline — layout 2 líneas ── */
+.ti2 {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.ti2-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ti2-nombre {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ti2-total {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ti2-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ti2-precio {
+  font-size: 0.72rem;
+  color: var(--text2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .btn-obs {
   background: none;
   border: 1px solid var(--border);

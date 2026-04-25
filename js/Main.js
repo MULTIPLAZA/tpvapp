@@ -337,20 +337,22 @@ function _renderTicketInline() {
   }
   const IDEntidad = Sesion.get('IDEntidad');
   cont.innerHTML = _ultimosItems.map(i => `
-    <div class="ticket-item">
-      <div class="ticket-item-info">
-        <div class="ticket-item-nombre">${i.Descripcion}</div>
-        ${i.Observacion ? `<div class="ticket-item-obs">${i.Observacion}</div>` : ''}
-        <div class="ticket-item-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
+    <div class="ti2">
+      <div class="ti2-top">
+        <div class="ti2-nombre">${i.Descripcion}</div>
+        <div class="ti2-total">${fmtGs(i.Total)}</div>
       </div>
-      <div class="ticket-item-acciones">
-        <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalle}">−</button>
-        <span class="qty-valor">${parseFloat(i.Cantidad)}</span>
-        <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalle}">+</button>
-        <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalle}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
-        <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalle}">✕</button>
+      ${i.Observacion ? `<div class="ticket-item-obs" style="padding:0">${i.Observacion}</div>` : ''}
+      <div class="ti2-bottom">
+        <div class="ticket-item-acciones">
+          <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalle}">−</button>
+          <span class="qty-valor">${parseFloat(i.Cantidad)}</span>
+          <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalle}">+</button>
+          <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalle}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
+          <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalle}">✕</button>
+        </div>
+        <div class="ti2-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
       </div>
-      <div class="ticket-item-total">${fmtGs(i.Total)}</div>
     </div>
   `).join('');
 
