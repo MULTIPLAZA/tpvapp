@@ -633,6 +633,17 @@ html, body {
   gap: 2px;
   align-content: start;
 }
+.main-ticket-inline {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.ticket-badge.modo-ticket {
+  background: var(--bg3);
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
 .cat-btn {
   background: transparent;
   border: 2px solid var(--cat-color, var(--border));

@@ -67,6 +67,8 @@ let _colorCat       = {};
 let _catActivaId    = 0;
 let _textoBusca     = '';
 let _totalTicket    = 0;
+let _modoCarrito    = false;
+let _ultimosItems   = [];
 
 export async function cargar() {
   const empresa  = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
@@ -154,6 +156,7 @@ async function _ticketActivo() {
 }
 
 function _setFooter(items, num) {
+  _ultimosItems = items;
   _totalTicket = items.reduce((s, r) => s + (r.Total || 0), 0);
   const total  = _totalTicket;
   const count  = items.length;
@@ -168,6 +171,7 @@ function _setFooter(items, num) {
   document.getElementById('btn-ticket-badge')?.classList.toggle('tiene-items', count > 0);
 
   _renderPanelInline(items);
+  if (_modoCarrito) _renderTicketInline();
 }
 
 function _renderPanelInline(items) {
@@ -299,6 +303,70 @@ async function _agregarItem(producto, card) {
   }
 }
 
+function _toggleCarrito() {
+  _modoCarrito = !_modoCarrito;
+  const prod   = document.getElementById('main-productos');
+  const cats   = document.querySelector('.categorias-wrap');
+  const inline = document.getElementById('main-ticket-inline');
+  const badge  = document.getElementById('btn-ticket-badge');
+
+  if (_modoCarrito) {
+    prod.style.display   = 'none';
+    cats.style.display   = 'none';
+    inline.style.display = 'flex';
+    badge.classList.add('modo-ticket');
+    badge.querySelector('.badge-modo-prod').style.display  = 'none';
+    badge.querySelector('.badge-modo-ticket').style.display = '';
+    _renderTicketInline();
+  } else {
+    prod.style.display   = '';
+    cats.style.display   = '';
+    inline.style.display = 'none';
+    badge.classList.remove('modo-ticket');
+    badge.querySelector('.badge-modo-prod').style.display  = '';
+    badge.querySelector('.badge-modo-ticket').style.display = 'none';
+  }
+}
+
+function _renderTicketInline() {
+  const cont = document.getElementById('main-ticket-inline');
+  if (!cont) return;
+  if (!_ultimosItems.length) {
+    cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:32px">Ticket vacío</p>';
+    return;
+  }
+  const IDEntidad = Sesion.get('IDEntidad');
+  cont.innerHTML = _ultimosItems.map(i => `
+    <div class="ticket-item" style="padding:10px 14px">
+      <div class="ticket-item-info">
+        <div class="ticket-item-nombre">${i.Descripcion}</div>
+        <div class="ticket-item-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
+      </div>
+      <div class="ticket-item-acciones">
+        <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalle}">−</button>
+        <span class="qty-valor">${parseFloat(i.Cantidad)}</span>
+        <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalle}">+</button>
+        <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalle}">✕</button>
+      </div>
+      <div class="ticket-item-total">${fmtGs(i.Total)}</div>
+    </div>
+  `).join('');
+
+  const spMap = { mas: 'MAS_ITEM', menos: 'MENOS_ITEM', quitar: 'QUITAR_ITEM' };
+  cont.querySelectorAll('[data-accion]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const accion    = btn.dataset.accion;
+      const IDDetalle = btn.dataset.id;
+      try {
+        await LlamarSP(spMap[accion], { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalle });
+        await _ticketActivo();
+      } catch (err) {
+        mostrarToast(err.message || 'Error', 'error');
+      }
+    });
+  });
+}
+
 async function _navegar(accion) {
   const IDEntidad = Sesion.get('IDEntidad');
   mostrarLoading(true);
@@ -345,11 +413,7 @@ function init() {
     import('./LoginCuenta.js').then(m => m.default.mostrar());
   });
 
-  document.getElementById('btn-ticket-badge').addEventListener('click', async () => {
-    const { default: Ticket } = await import('./Ticket.js');
-    mostrarPantalla('screen-ticket');
-    await Ticket.cargar(_IDTransaccion);
-  });
+  document.getElementById('btn-ticket-badge').addEventListener('click', _toggleCarrito);
 
   const _abrirTicketsLista = async () => {
     const { default: TicketsLista } = await import('./TicketsLista.js');
@@ -396,7 +460,7 @@ function init() {
       card.className = 'prod-card';
       card.style.background = colorCard;
       card.innerHTML = `<div class="prod-nombre">${p.Descripcion}</div><div class="prod-precio">${fmtGs(p.Precio)}</div>`;
-      card.addEventListener('click', () => _agregarItem(p, card));
+      card.addEventListener('click', () => { _cerrarBusqueda(); _agregarItem(p, card); });
       _resCont.appendChild(card);
     });
   }

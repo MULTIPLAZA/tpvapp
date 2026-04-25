@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.30 — 25/04/26 16:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.31 — 25/04/26 17:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -206,7 +206,10 @@
         </div>
       </div>
       <!-- Celda 4: Carrito -->
-      <button id="btn-ticket-badge" class="ticket-badge">🛒 <span id="main-items-count">0</span></button>
+      <button id="btn-ticket-badge" class="ticket-badge">
+        <span class="badge-modo-prod">🛒 <span id="main-items-count">0</span></span>
+        <span class="badge-modo-ticket" style="display:none">☰ Prod.</span>
+      </button>
     </div>
 
     <!-- Menú lateral -->
@@ -222,6 +225,7 @@
     <div id="main-contenido" class="main-contenido">
       <div class="main-productos-wrap">
         <div id="main-productos" class="contenido productos-grid"></div>
+        <div id="main-ticket-inline" class="main-ticket-inline"></div>
         <div class="categorias-wrap">
           <button id="btn-buscar-cat" class="cat-buscar-btn" title="Buscar producto">
             <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
