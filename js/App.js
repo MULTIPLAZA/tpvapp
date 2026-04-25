@@ -166,6 +166,16 @@ export function obtenerIDDispositivo() {
   return id;
 }
 
+const _SESSION_KEY = 'tpv_session_bak';
+
+export function guardarSesionCookie(datos) {
+  _escribirCookie(_SESSION_KEY, JSON.stringify(datos));
+}
+
+export function leerSesionCookie() {
+  try { return JSON.parse(_leerCookie(_SESSION_KEY)); } catch { return null; }
+}
+
 // ── Dispositivo (localStorage — persiste entre sesiones) ────────
 export const Dispositivo = {
   CLAVE: 'tpv_device',
@@ -277,9 +287,10 @@ async function init() {
   TicketsLista.init();
   Cobro.init();
 
-  // Auto-restore si el dispositivo ya tiene terminal registrada
-  const dispositivo = Dispositivo.obtener();
-  if (dispositivo?.uuid && dispositivo?.token_apisql) {
+  // Auto-restore: localStorage primero, cookie como fallback
+  const dispositivo = Dispositivo.obtener() || leerSesionCookie();
+  if (dispositivo?.token_apisql) {
+    if (!Dispositivo.obtener()) Dispositivo.guardar(dispositivo); // restaurar localStorage
     mostrarLoading(true);
     try {
       // Restaurar sesión de entidad

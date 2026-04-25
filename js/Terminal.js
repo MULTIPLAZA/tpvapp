@@ -1,4 +1,4 @@
-import { LlamarSP, Sesion, Dispositivo, obtenerIDDispositivo, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
+import { LlamarSP, Sesion, Dispositivo, obtenerIDDispositivo, guardarSesionCookie, mostrarPantalla, mostrarLoading, mostrarToast } from './App.js';
 
 // ── Verificar si el dispositivo ya tiene terminal registrada ──
 export async function verificarTerminal() {
@@ -29,20 +29,21 @@ function _guardarTerminalEnSesion(t) {
 }
 
 function _guardarTerminalEnLocal(t, uuid) {
-  Dispositivo.guardar({
+  const datos = {
     uuid,
-    IDTerminal:    t.IDTerminal,
+    IDTerminal:     t.IDTerminal,
     NombreTerminal: t.NombreTerminal,
     NombreSucursal: t.NombreSucursal,
-    IDSucursal:    t.IDSucursal,
-    IDDeposito:    t.IDDeposito,
-    // datos de entidad para auto-restore
-    token_apisql:  Sesion.get('token_apisql'),
-    IDEntidad:     Sesion.get('IDEntidad'),
+    IDSucursal:     t.IDSucursal,
+    IDDeposito:     t.IDDeposito,
+    token_apisql:   Sesion.get('token_apisql'),
+    IDEntidad:      Sesion.get('IDEntidad'),
     NombreFantasia: Sesion.get('NombreFantasia'),
-    RazonSocial:   Sesion.get('RazonSocial'),
-    RUC:           Sesion.get('RUC'),
-  });
+    RazonSocial:    Sesion.get('RazonSocial'),
+    RUC:            Sesion.get('RUC'),
+  };
+  Dispositivo.guardar(datos);
+  guardarSesionCookie(datos); // backup en cookie 10 años
 }
 
 // ── Pantalla de registro ──

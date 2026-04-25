@@ -76,7 +76,6 @@ export async function mostrar(forceForm = false) {
   // Mostrar formulario — pre-limpiar campos
   document.getElementById('inp-usuario').value  = '';
   document.getElementById('inp-password').value = '';
-  document.getElementById('chk-recordar').checked = false;
   mostrarPantalla('screen-usuario');
 }
 
