@@ -101,7 +101,6 @@ export async function nuevoTicket() {
   } finally {
     mostrarLoading(false);
   }
-  await _cargarCatalogo();
 }
 
 export async function seleccionarTicket(IDTransaccion) {
@@ -401,6 +400,8 @@ function init() {
   });
 
   document.getElementById('btn-nuevo-top').addEventListener('click', nuevoTicket);
+
+  document.getElementById('btn-refrescar-cat').addEventListener('click', _cargarCatalogo);
 
   document.getElementById('btn-tick-prev').addEventListener('click',  () => _navegar('TICKET_ANTERIOR'));
   document.getElementById('btn-tick-next').addEventListener('click',  () => _navegar('TICKET_SIGUIENTE'));
