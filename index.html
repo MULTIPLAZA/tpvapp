@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.29 — 25/04/26 12:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.30 — 25/04/26 16:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -230,10 +230,6 @@
           <button id="btn-refrescar-cat" class="cat-buscar-btn" title="Refrescar productos">
             <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
           </button>
-          <div id="buscar-bar" class="buscar-bar" style="display:none">
-            <input id="inp-buscar-producto" type="search" placeholder="Buscar producto..." autocomplete="off" autocorrect="off" spellcheck="false">
-            <button id="btn-buscar-cerrar" class="buscar-cerrar">✕</button>
-          </div>
         </div>
       </div>
       <div id="main-ticket-panel" class="main-ticket-panel">
@@ -375,6 +371,15 @@
         COBRAR — <span id="cobro-total-btn">Gs 0</span>
       </button>
     </div>
+  </div>
+
+  <!-- ── Overlay de búsqueda ── -->
+  <div id="buscar-overlay">
+    <div class="buscar-overlay-bar">
+      <input id="inp-buscar-producto" type="search" placeholder="Buscar producto..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="search">
+      <button id="btn-buscar-cerrar">✕</button>
+    </div>
+    <div id="buscar-resultados" class="buscar-resultados-grid"></div>
   </div>
 
   <!-- ── Globales ── -->

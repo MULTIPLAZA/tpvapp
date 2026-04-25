@@ -359,38 +359,52 @@ function init() {
   document.getElementById('btn-ticket-lista').addEventListener('click', _abrirTicketsLista);
   document.getElementById('tk-cel-time').addEventListener('click', _abrirTicketsLista);
 
-  // ── Búsqueda por texto ──
-  const _btnBuscar  = document.getElementById('btn-buscar-cat');
-  const _buscarBar  = document.getElementById('buscar-bar');
-  const _inpBuscar  = document.getElementById('inp-buscar-producto');
-  const _cats       = document.getElementById('main-categorias');
+  // ── Búsqueda por texto — overlay pantalla completa ──
+  const _btnBuscar = document.getElementById('btn-buscar-cat');
+  const _overlay   = document.getElementById('buscar-overlay');
+  const _inpBuscar = document.getElementById('inp-buscar-producto');
+  const _resCont   = document.getElementById('buscar-resultados');
 
   _btnBuscar.addEventListener('click', () => {
-    const abriendo = _buscarBar.style.display === 'none';
-    if (abriendo) {
-      _buscarBar.style.display = 'flex';
-      _cats.style.display = 'none';
-      _btnBuscar.classList.add('activa');
-      _inpBuscar.focus();
-    } else {
-      _cerrarBusqueda();
-    }
+    _overlay.style.display = 'flex';
+    _btnBuscar.classList.add('activa');
+    _inpBuscar.value = '';
+    _textoBusca = '';
+    _resCont.innerHTML = '';
+    setTimeout(() => _inpBuscar.focus(), 50);
   });
 
   document.getElementById('btn-buscar-cerrar').addEventListener('click', _cerrarBusqueda);
 
   _inpBuscar.addEventListener('input', () => {
     _textoBusca = _inpBuscar.value.trim();
-    _filtrarProductos(_catActivaId);
+    if (!_textoBusca) { _resCont.innerHTML = ''; return; }
+    const q = _textoBusca.toLowerCase();
+    const lista = _todosProductos.filter(p => p.Descripcion.toLowerCase().includes(q));
+    _renderBusqueda(lista);
   });
+
+  function _renderBusqueda(lista) {
+    _resCont.innerHTML = '';
+    if (!lista.length) {
+      _resCont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:32px;grid-column:1/-1">Sin resultados</p>';
+      return;
+    }
+    lista.forEach(p => {
+      const colorCard = _argbToCss(p.Color) ?? _colorCat[p.IDTipoProducto] ?? _PALETA[0];
+      const card = document.createElement('div');
+      card.className = 'prod-card';
+      card.style.background = colorCard;
+      card.innerHTML = `<div class="prod-nombre">${p.Descripcion}</div><div class="prod-precio">${fmtGs(p.Precio)}</div>`;
+      card.addEventListener('click', () => _agregarItem(p, card));
+      _resCont.appendChild(card);
+    });
+  }
 
   function _cerrarBusqueda() {
     _textoBusca = '';
-    _inpBuscar.value = '';
-    _buscarBar.style.display = 'none';
-    _cats.style.display = 'flex';
+    _overlay.style.display = 'none';
     _btnBuscar.classList.remove('activa');
-    _filtrarProductos(_catActivaId);
   }
 
   document.getElementById('btn-cobrar-main').addEventListener('click', async () => {
