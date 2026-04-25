@@ -337,7 +337,7 @@ function _renderTicketInline() {
   }
   const IDEntidad = Sesion.get('IDEntidad');
   cont.innerHTML = _ultimosItems.map(i => `
-    <div class="ticket-item" style="padding:10px 14px">
+    <div class="ticket-item">
       <div class="ticket-item-info">
         <div class="ticket-item-nombre">${i.Descripcion}</div>
         <div class="ticket-item-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
