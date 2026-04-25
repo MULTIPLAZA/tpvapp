@@ -340,12 +340,14 @@ function _renderTicketInline() {
     <div class="ticket-item">
       <div class="ticket-item-info">
         <div class="ticket-item-nombre">${i.Descripcion}</div>
+        ${i.Observacion ? `<div class="ticket-item-obs">${i.Observacion}</div>` : ''}
         <div class="ticket-item-precio">${fmtGs(i.PrecioUni)} × ${parseFloat(i.Cantidad)}</div>
       </div>
       <div class="ticket-item-acciones">
         <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalle}">−</button>
         <span class="qty-valor">${parseFloat(i.Cantidad)}</span>
         <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalle}">+</button>
+        <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalle}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
         <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalle}">✕</button>
       </div>
       <div class="ticket-item-total">${fmtGs(i.Total)}</div>
@@ -357,6 +359,17 @@ function _renderTicketInline() {
     btn.addEventListener('click', async () => {
       const accion    = btn.dataset.accion;
       const IDDetalle = btn.dataset.id;
+      if (accion === 'obs') {
+        const nueva = await _pedirObservacion(btn.dataset.obs);
+        if (nueva === null) return;
+        try {
+          await LlamarSP('ITEM_OBSERVACION', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalle, Observacion: nueva });
+          await _ticketActivo();
+        } catch (err) {
+          mostrarToast(err.message || 'Error al guardar observación', 'error');
+        }
+        return;
+      }
       try {
         await LlamarSP(spMap[accion], { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalle });
         await _ticketActivo();
@@ -364,6 +377,29 @@ function _renderTicketInline() {
         mostrarToast(err.message || 'Error', 'error');
       }
     });
+  });
+}
+
+function _pedirObservacion(obsActual) {
+  return new Promise(resolve => {
+    const modal = document.getElementById('modal-obs-item');
+    const inp   = document.getElementById('inp-obs-item');
+    inp.value   = obsActual || '';
+    modal.style.display = 'flex';
+    setTimeout(() => inp.focus(), 50);
+
+    const onGuardar  = () => { modal.style.display = 'none'; cleanup(); resolve(inp.value.trim()); };
+    const onCancelar = () => { modal.style.display = 'none'; cleanup(); resolve(null); };
+    const onKey      = e  => { if (e.key === 'Enter') onGuardar(); else if (e.key === 'Escape') onCancelar(); };
+
+    function cleanup() {
+      document.getElementById('modal-obs-guardar').removeEventListener('click', onGuardar);
+      document.getElementById('modal-obs-cancelar').removeEventListener('click', onCancelar);
+      inp.removeEventListener('keydown', onKey);
+    }
+    document.getElementById('modal-obs-guardar').addEventListener('click', onGuardar);
+    document.getElementById('modal-obs-cancelar').addEventListener('click', onCancelar);
+    inp.addEventListener('keydown', onKey);
   });
 }
 

@@ -761,6 +761,23 @@ html, body {
   flex-shrink: 0;
 }
 .ticket-item-total { font-size: 0.9rem; font-weight: 700; color: var(--accent2); flex-shrink: 0; white-space: nowrap; }
+.btn-obs {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text2);
+  font-size: 1rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.btn-obs.tiene-obs { border-color: var(--accent2); color: var(--accent2); }
 
 /* ── Pantalla Cobro ── */
 .cobro-tabs {

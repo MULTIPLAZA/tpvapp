@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.32 — 25/04/26 17:30</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.33 — 25/04/26 18:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -374,6 +374,19 @@
       <button id="btn-cobrar-confirmar" class="btn btn-exito footer-cobrar-btn footer-cobrar-btn--main" disabled>
         COBRAR — <span id="cobro-total-btn">Gs 0</span>
       </button>
+    </div>
+  </div>
+
+  <!-- ── Modal: Observación de item ── -->
+  <div id="modal-obs-item" style="display:none;position:fixed;inset:0;z-index:9100;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center">
+    <div style="background:var(--bg2);border-radius:var(--radius) var(--radius) 0 0;padding:20px 16px;width:100%;max-width:480px;border-top:1px solid var(--border)">
+      <div style="font-size:0.88rem;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Observación del item</div>
+      <input id="inp-obs-item" type="text" placeholder="Dejá vacío para quitar la observación" autocomplete="off"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:1rem;padding:11px 14px;outline:none;margin-bottom:14px;display:block">
+      <div style="display:flex;gap:8px">
+        <button id="modal-obs-cancelar" class="btn btn-secundario" style="flex:1">Cancelar</button>
+        <button id="modal-obs-guardar" class="btn btn-primario" style="flex:2">Guardar</button>
+      </div>
     </div>
   </div>
 
