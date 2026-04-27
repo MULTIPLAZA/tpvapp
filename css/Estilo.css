@@ -488,7 +488,7 @@ html, body {
 .footer-ruc {
   display: flex;
   align-items: stretch;
-  min-height: 40px;
+  min-height: 54px;
   background: var(--bg3);
   border: none;
   border-bottom: 1px solid var(--border);
@@ -612,7 +612,7 @@ html, body {
   display: flex;
   flex: 1;
   gap: 2px;
-  padding: 2px;
+  padding: 0 2px;
   overflow-x: auto;
   scrollbar-width: none;
 }
