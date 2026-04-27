@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.38 — 27/04/26 10:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.39 — 27/04/26 10:30</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -92,6 +92,33 @@
           Depósito: <strong id="reg-deposito-nombre" style="color:var(--text)"></strong>
         </div>
         <button id="btn-reg-registrar" class="btn btn-exito">Registrar terminal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pantalla 2b: Opción de terminal ── -->
+  <div id="screen-opcion-terminal" class="screen">
+    <div class="header">
+      <div>
+        <div style="font-size:1rem;font-weight:600" id="opcion-empresa"></div>
+        <div class="empresa">Terminal no registrada</div>
+      </div>
+      <button id="btn-opcion-volver" class="btn btn-secundario" style="width:auto;padding:0 14px;font-size:0.8rem">← Salir</button>
+    </div>
+    <div class="contenido">
+      <div style="background:#2a1a1a;border:1px solid #5a2a2a;border-radius:var(--radius);padding:12px 14px;margin-bottom:16px">
+        <div style="color:#e74c3c;font-weight:600;font-size:0.9rem;margin-bottom:6px">⚠ Dispositivo no reconocido</div>
+        <div style="color:var(--text2);font-size:0.8rem;margin-bottom:8px">Este dispositivo no está asociado a ninguna terminal.</div>
+        <div style="font-size:0.72rem;color:var(--text2)">Código de dispositivo:</div>
+        <div id="opcion-uuid" style="font-size:0.72rem;color:var(--accent2);word-break:break-all;margin-top:2px;font-family:monospace"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button id="btn-opcion-nueva" class="btn btn-exito">+ Registrar como nueva terminal</button>
+        <button id="btn-opcion-reemplazar" class="btn btn-secundario">↺ Reemplazar terminal existente</button>
+      </div>
+      <div id="opcion-reemplazar-wrap" style="display:none;margin-top:20px">
+        <p style="color:var(--text2);font-size:0.85rem;margin:0 0 10px">Seleccione la terminal a reemplazar:</p>
+        <div id="opcion-lista-terminales" class="lista-items"></div>
       </div>
     </div>
   </div>

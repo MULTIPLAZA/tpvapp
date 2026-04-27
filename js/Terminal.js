@@ -46,6 +46,67 @@ function _guardarTerminalEnLocal(t, uuid) {
   guardarSesionCookie(datos); // backup en cookie 10 años
 }
 
+// ── Pantalla de opción: nueva terminal vs reemplazar existente ──
+async function cargarOpcion() {
+  document.getElementById('opcion-empresa').textContent = Sesion.get('NombreFantasia') || Sesion.get('RazonSocial');
+  document.getElementById('opcion-uuid').textContent = obtenerIDDispositivo();
+  document.getElementById('opcion-reemplazar-wrap').style.display = 'none';
+  mostrarPantalla('screen-opcion-terminal');
+}
+
+async function _cargarListaReemplazar() {
+  const wrap = document.getElementById('opcion-reemplazar-wrap');
+  const lista = document.getElementById('opcion-lista-terminales');
+  wrap.style.display = 'block';
+  lista.innerHTML = '<p style="color:var(--text2);text-align:center;padding:20px">Cargando...</p>';
+
+  mostrarLoading(true);
+  try {
+    const rows = await LlamarSP('LISTAR_TERMINALES', { IDEntidad: Sesion.get('IDEntidad') });
+    if (!rows?.length) {
+      lista.innerHTML = '<p style="color:var(--text2);text-align:center;padding:20px">Sin terminales disponibles</p>';
+      return;
+    }
+    lista.innerHTML = '';
+    rows.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'item-card';
+      div.innerHTML = `<div><div class="nombre">${t.NombreTerminal}</div><div style="font-size:0.75rem;color:var(--text2)">${t.NombreSucursal}</div></div><span style="color:var(--text2);font-size:1.2rem">›</span>`;
+      div.addEventListener('click', () => _confirmarReemplazar(t));
+      lista.appendChild(div);
+    });
+  } catch (err) {
+    mostrarToast(err.message || 'Error al cargar terminales', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
+async function _confirmarReemplazar(terminal) {
+  if (!confirm(`¿Asignar este dispositivo a "${terminal.NombreTerminal}"?\n\nSi otro dispositivo usaba esta terminal, quedará desvinculado.`)) return;
+
+  const uuid = obtenerIDDispositivo();
+  mostrarLoading(true);
+  try {
+    const rows = await LlamarSP('REEMPLAZAR_TERMINAL', {
+      IDEntidad: Sesion.get('IDEntidad'),
+      IDTerminal: terminal.IDTerminal,
+      UUID: uuid,
+    });
+    if (!rows?.length || rows[0].Mensaje) throw new Error(rows[0]?.Mensaje || 'Error al reemplazar');
+
+    _guardarTerminalEnLocal(rows[0], uuid);
+    _guardarTerminalEnSesion({ ...rows[0], uuid });
+
+    mostrarToast(`Terminal "${rows[0].NombreTerminal}" asignada. Ingrese nuevamente.`, 'exito');
+    setTimeout(() => window.location.reload(), 1500);
+  } catch (err) {
+    mostrarToast(err.message || 'Error al reemplazar terminal', 'error');
+  } finally {
+    mostrarLoading(false);
+  }
+}
+
 // ── Pantalla de registro ──
 let _depositoSeleccionado = null;
 let _uuid = null;
@@ -130,6 +191,12 @@ async function registrar() {
 function init() {
   document.getElementById('btn-reg-registrar').addEventListener('click', registrar);
   document.getElementById('btn-reg-volver').addEventListener('click', () => mostrarPantalla('screen-cuenta'));
+  document.getElementById('btn-opcion-volver').addEventListener('click', () => mostrarPantalla('screen-cuenta'));
+  document.getElementById('btn-opcion-nueva').addEventListener('click', () => {
+    mostrarPantalla('screen-registro-terminal');
+    cargar();
+  });
+  document.getElementById('btn-opcion-reemplazar').addEventListener('click', _cargarListaReemplazar);
 }
 
-export default { init, cargar, verificarTerminal };
+export default { init, cargar, cargarOpcion, verificarTerminal };

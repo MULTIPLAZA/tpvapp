@@ -35,8 +35,7 @@ function init() {
         await irAUsuario();
       } else {
         const { default: Terminal } = await import('./Terminal.js');
-        mostrarPantalla('screen-registro-terminal');
-        Terminal.cargar();
+        Terminal.cargarOpcion();
       }
     } catch (err) {
       mostrarToast(err.message || 'Error al validar licencia', 'error');
