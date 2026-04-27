@@ -1,7 +1,7 @@
 // ── Configuración ──────────────────────────────────────────────
 export const CONFIG = {
-  APISQL_URL: 'https://nodoinformatica.ddns.net/sql',
-  TOKEN_LICENCIA: 'fc1516d19066e463b77e466e71cb49f95f383e482a0d988aa4be05f8d68d4cc6',
+  APISQL_URL: 'https://nodoapi.ddns.net/sql',
+  TOKEN_LICENCIA: '18725042e4a021b9dd7c6f5afedf82b066ef5232049218943fb7614808c695b7',
 };
 
 // ── Debug Log ──────────────────────────────────────────────────
