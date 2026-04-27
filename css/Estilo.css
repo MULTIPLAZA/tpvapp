@@ -362,7 +362,15 @@ html, body {
 .tk-estado[data-estado="Cobrado"]   { background:#1a4a2a; color:#6ddc80; }
 .tk-estado[data-estado="Facturado"] { background:#1a3060; color:#70bfff; }
 .tk-estado[data-estado="Anulado"]   { background:#4a1a1a; color:#ff7070; }
-/* Celda 3: RUC */
+/* Celda 3: Nav + Nuevo */
+.tk-cel-nav {
+  flex-shrink: 0;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Celda RUC (usada en footer) */
 .tk-cel-ruc {
   flex: 1;
   flex-direction: row;
@@ -421,9 +429,9 @@ html, body {
   position: fixed;
   inset: 0;
   z-index: 9000;
-  display: flex !important;
+  display: none;
 }
-.menu-overlay[style*="display:none"] { display: none !important; }
+.menu-overlay.visible { display: flex; }
 .menu-panel {
   width: 220px;
   background: var(--bg2);
@@ -450,7 +458,7 @@ html, body {
   cursor: pointer;
 }
 .menu-item:active { background: var(--bg3); }
-.menu-item--danger { color: var(--danger); margin-top: auto; }
+.menu-item--danger { color: var(--danger); }
 .menu-backdrop {
   flex: 1;
   background: rgba(0,0,0,0.6);

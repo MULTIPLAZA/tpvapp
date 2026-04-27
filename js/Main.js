@@ -1,4 +1,4 @@
-import { LlamarSP, LlamarSPMulti, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
+import { LlamarSP, LlamarSPMulti, Sesion, Dispositivo, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
 const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
@@ -436,10 +436,10 @@ async function _navegar(accion) {
 function _abrirMenu() {
   document.getElementById('main-menu-empresa').textContent =
     Sesion.get('NombreFantasia') || Sesion.get('RazonSocial') || '';
-  document.getElementById('main-menu-overlay').style.display = 'flex';
+  document.getElementById('main-menu-overlay').classList.add('visible');
 }
 function _cerrarMenu() {
-  document.getElementById('main-menu-overlay').style.display = 'none';
+  document.getElementById('main-menu-overlay').classList.remove('visible');
 }
 
 function init() {
@@ -448,8 +448,18 @@ function init() {
 
   document.getElementById('menu-caja').addEventListener('click', () => {
     _cerrarMenu();
-    import('./Caja.js').then(m => m.verificarYAbrir());
+    mostrarPantalla('screen-caja-panel');
   });
+
+  document.getElementById('menu-actualizar').addEventListener('click', () => {
+    _cerrarMenu();
+    _cargarCatalogo();
+  });
+
+  document.getElementById('menu-reportes').addEventListener('click', () => { _cerrarMenu(); mostrarPantalla('screen-reportes'); });
+  document.getElementById('menu-impresora').addEventListener('click', () => { _cerrarMenu(); mostrarPantalla('screen-impresora'); });
+  document.getElementById('menu-opciones').addEventListener('click',  () => { _cerrarMenu(); mostrarPantalla('screen-opciones'); });
+  document.getElementById('menu-datos').addEventListener('click',     () => { _cerrarMenu(); mostrarPantalla('screen-datos'); });
 
   document.getElementById('menu-cerrar-sesion').addEventListener('click', () => {
     _cerrarMenu();
@@ -458,7 +468,13 @@ function init() {
 
   document.getElementById('menu-salir').addEventListener('click', () => {
     _cerrarMenu();
-    import('./LoginCuenta.js').then(m => m.default.mostrar());
+    Sesion.clear();
+    mostrarPantalla('screen-cuenta');
+  });
+
+  ['caja-panel','reportes','impresora','opciones','datos'].forEach(id => {
+    document.getElementById(`btn-${id}-volver`)
+      ?.addEventListener('click', () => mostrarPantalla('screen-main'));
   });
 
   document.getElementById('btn-ticket-badge').addEventListener('click', _toggleCarrito);
@@ -526,8 +542,6 @@ function init() {
   });
 
   document.getElementById('btn-nuevo-top').addEventListener('click', nuevoTicket);
-
-  document.getElementById('btn-refrescar-cat').addEventListener('click', _cargarCatalogo);
 
   document.getElementById('btn-tick-prev').addEventListener('click',  () => _navegar('TICKET_ANTERIOR'));
   document.getElementById('btn-tick-next').addEventListener('click',  () => _navegar('TICKET_SIGUIENTE'));
