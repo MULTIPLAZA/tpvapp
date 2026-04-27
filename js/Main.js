@@ -472,9 +472,17 @@ function init() {
     mostrarPantalla('screen-cuenta');
   });
 
-  ['caja-panel','reportes','impresora','opciones','datos'].forEach(id => {
+  ['caja-panel','reportes','impresora','opciones','datos','cliente'].forEach(id => {
     document.getElementById(`btn-${id}-volver`)
       ?.addEventListener('click', () => mostrarPantalla('screen-main'));
+  });
+
+  document.getElementById('btn-ticket-ruc').addEventListener('click', () => {
+    mostrarPantalla('screen-cliente');
+    document.getElementById('inp-buscar-cliente').value = '';
+    document.getElementById('cliente-resultados').innerHTML =
+      '<p style="color:var(--text2);text-align:center;padding:40px 16px;font-size:0.85rem">Ingrese RUC o nombre para buscar</p>';
+    setTimeout(() => document.getElementById('inp-buscar-cliente').focus(), 100);
   });
 
   document.getElementById('btn-ticket-badge').addEventListener('click', _toggleCarrito);

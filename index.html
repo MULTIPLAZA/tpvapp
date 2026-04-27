@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.44 — 27/04/26 13:30</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.45 — 27/04/26 14:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -207,6 +207,8 @@
         <span id="main-ticket-hora" class="tk-hora"></span>
         <span id="main-ticket-estado" class="tk-estado"></span>
       </div>
+      <!-- Espacio vacante -->
+      <div style="flex:1;border-right:1px solid var(--border)"></div>
       <!-- Celda 3: Navegación + Nuevo -->
       <div class="tk-cel tk-cel-nav">
         <div class="nav-group">
@@ -280,6 +282,21 @@
         </div>
       </div>
       <button id="btn-cobrar-main" class="btn btn-primario footer-cobrar-btn" disabled>COBRAR — <span id="main-ticket-total">Gs 0</span></button>
+    </div>
+  </div>
+
+  <!-- ── Pantalla: Buscar Cliente ── -->
+  <div id="screen-cliente" class="screen">
+    <div class="header">
+      <div style="font-size:1rem;font-weight:600">Buscar Cliente</div>
+      <button id="btn-cliente-volver" class="btn btn-secundario" style="width:auto;padding:0 14px;font-size:0.8rem">← Volver</button>
+    </div>
+    <div style="padding:10px 12px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0">
+      <input id="inp-buscar-cliente" type="search" placeholder="RUC o Razón Social..." autocomplete="off" autocorrect="off" spellcheck="false"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:1rem;padding:11px 14px;outline:none;display:block">
+    </div>
+    <div id="cliente-resultados" class="contenido">
+      <p style="color:var(--text2);text-align:center;padding:40px 16px;font-size:0.85rem">Ingrese RUC o nombre para buscar</p>
     </div>
   </div>
 

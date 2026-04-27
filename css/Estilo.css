@@ -337,11 +337,12 @@ html, body {
 }
 /* Celda 2: Hora + Estado */
 .tk-cel-time {
-  flex: 1;
+  flex: none;
   align-items: center;
   justify-content: center;
   gap: 4px;
   cursor: pointer;
+  padding: 5px 12px;
 }
 .tk-cel-time:active { background: var(--bg3); }
 .tk-hora {
