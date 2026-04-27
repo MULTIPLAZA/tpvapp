@@ -258,6 +258,7 @@ async function init() {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
   }
 
   // Banner iOS — mostrar si es Safari en iOS y no está instalada
