@@ -478,32 +478,34 @@ html, body {
 .footer-cobrar {
   background: var(--bg2);
   border-top: 2px solid var(--border);
-  padding: 6px 8px;
+  padding: 0;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
 }
 /* Barra RUC en footer */
 .footer-ruc {
   display: flex;
   align-items: stretch;
-  height: 40px;
+  min-height: 40px;
   background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
   overflow: hidden;
   cursor: pointer;
 }
-.footer-ruc:active { border-color: var(--accent); }
+.footer-ruc:active { background: var(--bg2); }
 .footer-cobrar--row {
   display: flex;
-  gap: 6px;
+  gap: 0;
 }
 .footer-cobrar-btn {
   font-size: 1.05rem;
   font-weight: 700;
-  padding: 18px;
+  padding: 0;
+  min-height: 52px;
 }
 .footer-cobrar-btn--main { flex: 4; }
 .footer-cobrar-btn--print {
@@ -610,7 +612,7 @@ html, body {
   display: flex;
   flex: 1;
   gap: 2px;
-  padding: 4px;
+  padding: 2px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -683,10 +685,11 @@ html, body {
   color: var(--cat-color, var(--text2));
   font-size: 0.82rem;
   font-weight: 600;
-  padding: 6px 14px;
+  padding: 3px 8px;
   cursor: pointer;
   white-space: nowrap;
-  min-height: 34px;
+  min-height: 0;
+  align-self: stretch;
   transition: all 0.15s;
 }
 .cat-btn.activa { background: var(--cat-color, var(--accent)); color: #fff; }
