@@ -368,7 +368,14 @@ html, body {
   flex-shrink: 0;
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 0;
+  padding: 0;
+}
+.tk-cel-nav .btn-nav-top,
+.tk-cel-nav .btn-nuevo-top {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
 }
 
 /* Celda RUC (usada en footer) */
