@@ -337,7 +337,7 @@ html, body {
 }
 /* Celda 2: Hora + Estado */
 .tk-cel-time {
-  flex: 0 0 80px;
+  flex: 1;
   align-items: center;
   justify-content: center;
   gap: 4px;
@@ -463,7 +463,22 @@ html, body {
   border-top: 2px solid var(--border);
   padding: 6px 8px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
+/* Barra RUC en footer */
+.footer-ruc {
+  display: flex;
+  align-items: stretch;
+  height: 40px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+}
+.footer-ruc:active { border-color: var(--accent); }
 .footer-cobrar--row {
   display: flex;
   gap: 6px;

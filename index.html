@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.42 — 27/04/26 12:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.43 — 27/04/26 12:30</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -209,7 +209,7 @@
       </button>
     </div>
 
-    <!-- Barra ticket: 4 celdas → NRO | Hora+Estado | RUC | Carrito -->
+    <!-- Barra ticket: 3 celdas → NRO | Hora+Estado | Carrito -->
     <div class="main-ticket-bar">
       <!-- Celda 1: Número de ticket -->
       <button id="btn-ticket-lista" class="tk-cel tk-cel-nro">
@@ -221,18 +221,7 @@
         <span id="main-ticket-hora" class="tk-hora"></span>
         <span id="main-ticket-estado" class="tk-estado"></span>
       </div>
-      <!-- Celda 3: RUC / Cliente -->
-      <div id="btn-ticket-ruc" class="tk-cel tk-cel-ruc">
-        <button class="tk-ruc-tit">
-          <svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-          RUC
-        </button>
-        <div class="tk-ruc-data">
-          <span id="main-ticket-ruc" class="tk-ruc-num">—</span>
-          <span id="main-ticket-razon" class="tk-ruc-razon"></span>
-        </div>
-      </div>
-      <!-- Celda 4: Carrito -->
+      <!-- Celda 3: Carrito -->
       <button id="btn-ticket-badge" class="ticket-badge">
         <span class="badge-modo-prod">🛒 <span id="main-items-count">0</span></span>
         <span class="badge-modo-ticket" style="display:none">☰ Prod.</span>
@@ -251,8 +240,6 @@
     </div>
     <div id="main-contenido" class="main-contenido">
       <div class="main-productos-wrap">
-        <div id="main-productos" class="contenido productos-grid"></div>
-        <div id="main-ticket-inline" class="main-ticket-inline"></div>
         <div class="categorias-wrap">
           <button id="btn-buscar-cat" class="cat-buscar-btn" title="Buscar producto">
             <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
@@ -262,6 +249,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
           </button>
         </div>
+        <div id="main-productos" class="contenido productos-grid"></div>
+        <div id="main-ticket-inline" class="main-ticket-inline"></div>
       </div>
       <div id="main-ticket-panel" class="main-ticket-panel">
         <div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:0.8rem;font-weight:600;color:var(--text2)">TICKET ACTUAL</div>
@@ -273,6 +262,16 @@
       </div>
     </div>
     <div class="footer-cobrar">
+      <div id="btn-ticket-ruc" class="footer-ruc">
+        <button class="tk-ruc-tit">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          RUC
+        </button>
+        <div class="tk-ruc-data">
+          <span id="main-ticket-ruc" class="tk-ruc-num">—</span>
+          <span id="main-ticket-razon" class="tk-ruc-razon"></span>
+        </div>
+      </div>
       <button id="btn-cobrar-main" class="btn btn-primario footer-cobrar-btn" disabled>COBRAR — <span id="main-ticket-total">Gs 0</span></button>
     </div>
   </div>
