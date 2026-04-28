@@ -29,6 +29,23 @@ export async function cargar() {
   }
 }
 
+const _ESTADO = {
+  'Cancelado': { ini: 'C', color: '#8DC63F', bg: '#1a3a14' },
+  'Pendiente':  { ini: 'P', color: '#F7941D', bg: '#3a2a0a' },
+  'Anulado':    { ini: 'A', color: '#e74c3c', bg: '#3a1414' },
+};
+
+function _estadoBadge(estado) {
+  const e = _ESTADO[estado] ?? { ini: (estado ?? '?')[0], color: 'var(--text2)', bg: 'var(--bg3)' };
+  return `<span style="display:inline-block;padding:2px 6px;border-radius:3px;font-size:0.7rem;font-weight:700;background:${e.bg};color:${e.color}">${e.ini}</span>`;
+}
+
+function _facturaCorta(factura) {
+  if (!factura || factura === '---') return '—';
+  const partes = factura.split('-');
+  return partes[partes.length - 1] ?? factura;
+}
+
 function _renderMovimientos(rows) {
   let totalEntro = 0;
   let totalSalio = 0;
@@ -41,16 +58,20 @@ function _renderMovimientos(rows) {
     totalSalio += debito;
     if (r.Tipo === 'TIK' && credito > 0) cantTickets++;
 
-    const esMov   = r.Tipo !== 'TIK';
-    const italic  = esMov ? 'font-style:italic;color:var(--text2)' : '';
-    const nro     = esMov ? 'MV' : (r.Comprobante ?? '—');
-    const hora    = (r.Hora ?? '').slice(0, 5);
-    const sub = esMov
-      ? 'Mov. manual'
-      : (r.FormaPago || r.Estado || '');
+    const esMov  = r.Tipo !== 'TIK';
+    const hora   = (r.Hora ?? '').slice(0, 5);
+    const italic = esMov ? 'font-style:italic;' : '';
+
+    const sub = esMov ? 'Mov. manual' : (r.FormaPago || '');
     const concepto = esMov
-      ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.72rem;font-weight:400">${sub}</small>`
-      : `Ticket #${r.Comprobante}<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">${sub}</small>`;
+      ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.7rem;font-weight:400;color:var(--text2)">${sub}</small>`
+      : `#${r.Comprobante}<br><small style="font-size:0.7rem;color:var(--text2);font-weight:400">${sub}</small>`;
+
+    const estadoCelda = esMov
+      ? `<td style="${TD};text-align:center">—</td>`
+      : `<td style="${TD};text-align:center">${_estadoBadge(r.Estado)}</td>`;
+
+    const facturaCelda = `<td style="${TD};font-size:0.75rem;color:var(--text2);text-align:center">${_facturaCorta(r.Factura)}</td>`;
 
     const celdaEntro = credito > 0
       ? `<td style="${TD};text-align:right;color:${esMov ? '#5a9e2f' : '#8DC63F'};font-weight:600">${fmtGs(credito)}</td>`
@@ -60,15 +81,14 @@ function _renderMovimientos(rows) {
       : `<td style="${TD};text-align:right;color:var(--bg3)">—</td>`;
 
     return `<tr style="border-bottom:1px solid var(--border);${italic}">
-      <td style="${TD};font-size:0.75rem;color:var(--text2)">${nro}</td>
       <td style="${TD};font-size:0.75rem;white-space:nowrap;color:var(--text2)">${hora}</td>
       <td style="${TD};font-weight:500">${concepto}</td>
-      ${celdaEntro}${celdaSalio}
+      ${estadoCelda}${facturaCelda}${celdaEntro}${celdaSalio}
     </tr>`;
   }).join('');
 
   document.getElementById('cierre-body-mov').innerHTML = html ||
-    `<tr><td colspan="5" style="padding:20px;text-align:center;color:var(--text2);font-size:0.85rem">Sin movimientos</td></tr>`;
+    `<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--text2);font-size:0.85rem">Sin movimientos</td></tr>`;
 
   document.getElementById('cierre-total-entro').textContent = fmtGs(totalEntro);
   document.getElementById('cierre-total-salio').textContent = fmtGs(totalSalio);
