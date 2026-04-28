@@ -2,7 +2,7 @@ import { LlamarSPMulti, LlamarSP, Sesion, mostrarLoading, mostrarToast, mostrarP
 
 const fmtGs = n => {
   const v = typeof n === 'string' ? parseFloat(n.replace(',', '.')) : (n || 0);
-  return 'Gs ' + Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 };
 
 const parsear = str => typeof str === 'string' ? parseFloat(str.replace(',', '.')) || 0 : (str || 0);
