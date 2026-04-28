@@ -1,4 +1,5 @@
 import { LlamarSP, LlamarSPMulti, Sesion, Dispositivo, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
+import * as CierreCaja from './CierreCaja.js';
 
 const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
@@ -466,7 +467,9 @@ function init() {
     document.getElementById('cierre-sub').textContent =
       [Sesion.get('NombreSucursal'), Sesion.get('NombreTerminal')].filter(Boolean).join(' — ');
     mostrarPantalla('screen-cierre-caja');
+    CierreCaja.cargar();
   });
+  CierreCaja.initBotones();
 
   document.getElementById('menu-cerrar-sesion').addEventListener('click', () => {
     _cerrarMenu();

@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.53 — 28/04/26 17:45</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.54 — 28/04/26 18:15</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -343,28 +343,7 @@
               <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:right;border-bottom:1px solid var(--border);width:100px">Total</th>
             </tr>
           </thead>
-          <tbody id="cierre-body-pago">
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:9px 8px;font-weight:500">Efectivo</td>
-              <td style="padding:9px 8px;text-align:center;color:var(--text2)">3</td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">280.000</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:9px 8px;font-weight:500">T. Débito</td>
-              <td style="padding:9px 8px;text-align:center;color:var(--text2)">1</td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">120.000</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:9px 8px;font-weight:500">T. Crédito · QR</td>
-              <td style="padding:9px 8px;text-align:center;color:var(--text2)">1</td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">200.000</td>
-            </tr>
-            <tr style="background:var(--bg3)">
-              <td style="padding:9px 8px;font-weight:700;font-size:0.78rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.4px">Totales</td>
-              <td style="padding:9px 8px;text-align:center;font-weight:700">5</td>
-              <td style="padding:9px 8px;text-align:right;font-weight:700;color:#8DC63F">600.000</td>
-            </tr>
-          </tbody>
+          <tbody id="cierre-body-pago"></tbody>
         </table>
       </div>
 
@@ -381,51 +360,7 @@
               <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:right;border-bottom:1px solid var(--border);width:90px">Salió</th>
             </tr>
           </thead>
-          <tbody id="cierre-body-mov">
-            <!-- datos de ejemplo (mockup) -->
-            <tr style="border-bottom:1px solid var(--border);color:var(--text2);font-style:italic">
-              <td style="padding:9px 8px;font-size:0.75rem">—</td>
-              <td style="padding:9px 8px;font-size:0.75rem;white-space:nowrap">08:00</td>
-              <td style="padding:9px 8px;font-weight:500">Apertura de caja</td>
-              <td style="padding:9px 8px;text-align:right;color:#5a9e2f;font-weight:600">1.000.000</td>
-              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">001</td>
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">08:35</td>
-              <td style="padding:9px 8px;font-weight:500">Ticket #001<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">Efectivo</small></td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">85.000</td>
-              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">002</td>
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">09:12</td>
-              <td style="padding:9px 8px;font-weight:500">Ticket #002<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">T. Débito</small></td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">120.000</td>
-              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border);color:var(--text2);font-style:italic">
-              <td style="padding:9px 8px;font-size:0.75rem">MV</td>
-              <td style="padding:9px 8px;font-size:0.75rem;white-space:nowrap">11:00</td>
-              <td style="padding:9px 8px;font-weight:500">Rendición parcial<br><small style="font-size:0.72rem;font-weight:400">Mov. manual</small></td>
-              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
-              <td style="padding:9px 8px;text-align:right;color:#a83228;font-weight:600">300.000</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">003</td>
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">12:30</td>
-              <td style="padding:9px 8px;font-weight:500">Ticket #003<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">T. Crédito · QR</small></td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">200.000</td>
-              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
-            </tr>
-            <tr>
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">004</td>
-              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">15:55</td>
-              <td style="padding:9px 8px;font-weight:500">Ticket #004<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">Efectivo</small></td>
-              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">95.000</td>
-              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
-            </tr>
-          </tbody>
+          <tbody id="cierre-body-mov"></tbody>
         </table>
       </div>
 
@@ -433,15 +368,15 @@
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;">
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center;">
           <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Entró</div>
-          <div id="cierre-total-entro" style="font-size:0.92rem;font-weight:700;color:#8DC63F">1.500.000</div>
+          <div id="cierre-total-entro" style="font-size:0.92rem;font-weight:700;color:#8DC63F">—</div>
         </div>
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center;">
           <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Salió</div>
-          <div id="cierre-total-salio" style="font-size:0.92rem;font-weight:700;color:#e74c3c">300.000</div>
+          <div id="cierre-total-salio" style="font-size:0.92rem;font-weight:700;color:#e74c3c">—</div>
         </div>
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);border-color:var(--accent2);padding:10px 12px;text-align:center;">
           <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Saldo</div>
-          <div id="cierre-saldo" style="font-size:0.92rem;font-weight:700;color:var(--accent2)">1.200.000</div>
+          <div id="cierre-saldo" style="font-size:0.92rem;font-weight:700;color:var(--accent2)">—</div>
         </div>
       </div>
 
