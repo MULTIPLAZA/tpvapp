@@ -11,12 +11,12 @@ const TH = 'background:var(--bg3);color:var(--text2);font-size:0.7rem;text-trans
 const TD = 'padding:9px 8px';
 
 export async function cargar() {
-  const IDEntidad  = Sesion.get('IDEntidad');
-  const IDTerminal = Sesion.get('IDTerminal');
+  const IDEntidad        = Sesion.get('IDEntidad');
+  const IDTransaccionCaja = Sesion.get('IDTransaccionCaja');
 
   mostrarLoading(true);
   try {
-    const tablas = await LlamarSPMulti('RESUMEN_CAJA', { IDEntidad, IDTerminal });
+    const tablas = await LlamarSPMulti('RESUMEN_CAJA', { IDEntidad, IDTransaccionCaja });
     _renderMovimientos(tablas[0] ?? []);
     _renderFormaPago(tablas[1] ?? []);
     _renderMovEspeciales(tablas[2] ?? []);
@@ -146,13 +146,13 @@ export function initBotones() {
 async function _confirmarCierre() {
   if (!confirm('¿Confirmar el cierre de caja? Esta acción no se puede deshacer.')) return;
 
-  const IDEntidad  = Sesion.get('IDEntidad');
-  const IDTerminal = Sesion.get('IDTerminal');
-  const IDUsuario  = Sesion.get('IDUsuario');
+  const IDEntidad         = Sesion.get('IDEntidad');
+  const IDTransaccionCaja = Sesion.get('IDTransaccionCaja');
+  const IDUsuario         = Sesion.get('IDUsuario');
 
   mostrarLoading(true);
   try {
-    await LlamarSP('CERRAR_CAJA', { IDEntidad, IDTerminal, IDUsuario });
+    await LlamarSP('CERRAR_CAJA', { IDEntidad, IDTransaccionCaja, IDUsuario });
     mostrarToast('Caja cerrada correctamente', 'exito');
     mostrarPantalla('screen-main');
   } catch (e) {
