@@ -17,11 +17,11 @@ export async function cargar() {
   mostrarLoading(true);
   try {
     const tablas = await LlamarSPMulti('RESUMEN_CAJA', { IDEntidad, IDTransaccionCaja });
-    _renderMovimientos(tablas[0] ?? []);
-    _renderFormaPago(tablas[1] ?? []);
-    _renderMovEspeciales(tablas[2] ?? []);
-    _renderProductos(tablas[3] ?? []);
-    _renderInfoCaja(tablas[4] ?? []);
+    _renderInfoCaja(tablas[0] ?? []);
+    _renderMovimientos(tablas[1] ?? []);
+    _renderFormaPago(tablas[2] ?? []);
+    _renderMovEspeciales(tablas[3] ?? []);
+    _renderProductos(tablas[4] ?? []);
   } catch (e) {
     mostrarToast('Error al cargar resumen de caja', 'error');
   } finally {
