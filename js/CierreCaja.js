@@ -17,8 +17,9 @@ export async function cargar() {
   mostrarLoading(true);
   try {
     const tablas = await LlamarSPMulti('RESUMEN_CAJA', { IDEntidad, IDTransaccionCaja });
+    const mapFP = _buildMapFormaPago(tablas[5] ?? []);
     _renderInfoCaja(tablas[0] ?? []);
-    _renderMovimientos(tablas[1] ?? []);
+    _renderMovimientos(tablas[1] ?? [], mapFP);
     _renderFormaPago(tablas[2] ?? []);
     _renderMovEspeciales(tablas[3] ?? []);
     _renderProductos(tablas[4] ?? []);
@@ -46,7 +47,22 @@ function _facturaCorta(factura) {
   return partes[partes.length - 1] ?? factura;
 }
 
-function _renderMovimientos(rows) {
+function _buildMapFormaPago(rows) {
+  const map = new Map();
+  for (const r of rows) {
+    const cmp = String(r.Comprobante ?? '');
+    const fp  = (r.FormaPago ?? '').trim();
+    if (!fp) continue;
+    if (map.has(cmp)) {
+      map.set(cmp, map.get(cmp) + ' + ' + fp);
+    } else {
+      map.set(cmp, fp);
+    }
+  }
+  return map;
+}
+
+function _renderMovimientos(rows, mapFP = new Map()) {
   let totalEntro = 0;
   let totalSalio = 0;
   let cantTickets = 0;
@@ -62,7 +78,7 @@ function _renderMovimientos(rows) {
     const hora   = (r.Hora ?? '').slice(0, 5);
     const italic = esMov ? 'font-style:italic;' : '';
 
-    const formaPago = esMov ? 'Efectivo' : (r.FormaPago || '');
+    const formaPago = esMov ? 'Efectivo' : (mapFP.get(String(r.Comprobante ?? '')) || '');
     const concepto = esMov
       ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.7rem;font-weight:400;color:var(--text2)">${formaPago}</small>`
       : `#${r.Comprobante}<br><small style="font-size:0.7rem;color:var(--text2);font-weight:400">${formaPago}</small>`;
