@@ -21,6 +21,7 @@ export async function cargar() {
     _renderFormaPago(tablas[1] ?? []);
     _renderMovEspeciales(tablas[2] ?? []);
     _renderProductos(tablas[3] ?? []);
+    _renderInfoCaja(tablas[4] ?? []);
   } catch (e) {
     mostrarToast('Error al cargar resumen de caja', 'error');
   } finally {
@@ -44,10 +45,12 @@ function _renderMovimientos(rows) {
     const italic  = esMov ? 'font-style:italic;color:var(--text2)' : '';
     const nro     = esMov ? 'MV' : (r.Comprobante ?? '—');
     const hora    = (r.Hora ?? '').slice(0, 5);
-    const estado  = r.Estado ? `<small style="font-size:0.72rem;color:var(--text2);font-weight:400">${r.Estado}</small>` : '';
+    const sub = esMov
+      ? 'Mov. manual'
+      : (r.FormaPago || r.Estado || '');
     const concepto = esMov
-      ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.72rem;font-weight:400">Mov. manual</small>`
-      : `Ticket #${r.Comprobante}<br>${estado}`;
+      ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.72rem;font-weight:400">${sub}</small>`
+      : `Ticket #${r.Comprobante}<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">${sub}</small>`;
 
     const celdaEntro = credito > 0
       ? `<td style="${TD};text-align:right;color:${esMov ? '#5a9e2f' : '#8DC63F'};font-weight:600">${fmtGs(credito)}</td>`
@@ -135,6 +138,29 @@ function _renderProductos(rows) {
 
   // badge del botón colapsable
   document.getElementById('cierre-prod-badge').textContent = `${rows.length} items`;
+}
+
+function _renderInfoCaja(rows) {
+  const r = rows[0];
+  if (!r) return;
+
+  // Hora apertura: HoraApertura viene como "HH:MM:SS", mostramos HH:MM
+  const horaAp = (r.HoraApertura ?? '').slice(0, 5);
+  // Fecha apertura
+  const fechaAp = r.Apertura
+    ? new Date(r.Apertura).toLocaleDateString('es-PY', { day:'2-digit', month:'2-digit', year:'2-digit' })
+    : '—';
+
+  document.getElementById('cierre-hora-apertura').textContent =
+    horaAp ? `${fechaAp} ${horaAp}` : fechaAp;
+  document.getElementById('cierre-importe-inicial').textContent =
+    fmtGs(parsear(r.ImporteApertura));
+
+  // Número de caja en el subtítulo del header
+  if (r.Caja) {
+    const sub = document.getElementById('cierre-sub');
+    if (sub) sub.textContent += `  ·  Caja #${r.Caja}`;
+  }
 }
 
 export function initBotones() {
