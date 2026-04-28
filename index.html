@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.51 — 28/04/26 17:00</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.52 — 28/04/26 17:30</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -406,6 +406,108 @@
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);border-color:var(--accent2);padding:10px 12px;text-align:center;">
           <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Saldo</div>
           <div id="cierre-saldo" style="font-size:0.92rem;font-weight:700;color:var(--accent2)">1.200.000</div>
+        </div>
+      </div>
+
+      <!-- Forma de Pago -->
+      <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)">Forma de Pago</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <table id="cierre-tabla-pago" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+          <thead>
+            <tr>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:left;border-bottom:1px solid var(--border)">Medio</th>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:center;border-bottom:1px solid var(--border);width:50px">Cant.</th>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:right;border-bottom:1px solid var(--border);width:100px">Total</th>
+            </tr>
+          </thead>
+          <tbody id="cierre-body-pago">
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:9px 8px;font-weight:500">Efectivo</td>
+              <td style="padding:9px 8px;text-align:center;color:var(--text2)">3</td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">280.000</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:9px 8px;font-weight:500">T. Débito</td>
+              <td style="padding:9px 8px;text-align:center;color:var(--text2)">1</td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">120.000</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:9px 8px;font-weight:500">T. Crédito · QR</td>
+              <td style="padding:9px 8px;text-align:center;color:var(--text2)">1</td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">200.000</td>
+            </tr>
+            <!-- fila totales -->
+            <tr style="background:var(--bg3)">
+              <td style="padding:9px 8px;font-weight:700;font-size:0.78rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.4px">Totales</td>
+              <td style="padding:9px 8px;text-align:center;font-weight:700">5</td>
+              <td style="padding:9px 8px;text-align:right;font-weight:700;color:#8DC63F">600.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Productos Vendidos (colapsable) -->
+      <button id="btn-cierre-toggle-prod"
+        onclick="(function(){var s=document.getElementById('cierre-sec-prod');var v=s.style.display==='none';s.style.display=v?'block':'none';document.getElementById('btn-cierre-toggle-prod').querySelector('span').textContent=v?'▲ Ocultar productos':'▼ Ver productos vendidos';})()"
+        style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:0.78rem;padding:10px 12px;text-align:left;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="text-transform:uppercase;letter-spacing:0.6px;font-weight:600">▼ Ver productos vendidos</span>
+        <span id="cierre-prod-badge" style="background:var(--bg3);border-radius:var(--radius);padding:2px 8px;font-size:0.72rem;font-weight:700">9 items</span>
+      </button>
+
+      <div id="cierre-sec-prod" style="display:none;margin-top:6px;">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+          <table id="cierre-tabla-prod" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+            <thead>
+              <tr>
+                <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:left;border-bottom:1px solid var(--border)">Producto</th>
+                <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:center;border-bottom:1px solid var(--border);width:50px">Cant.</th>
+                <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:right;border-bottom:1px solid var(--border);width:100px">Total</th>
+              </tr>
+            </thead>
+            <tbody id="cierre-body-prod">
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">PIZZA ENTERA MUZZARELLA</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">3</td>
+                <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">186.000</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">COMBO FAMILIAR</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">2</td>
+                <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">160.000</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">MITAD POLLO CATUPIRY</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">4</td>
+                <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">124.000</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">PEPSI COLA 2LTS</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">5</td>
+                <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">75.000</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">PORCIÓN ACEITUNAS</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">3</td>
+                <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">36.000</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">DELIVERY ZONA 2</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">2</td>
+                <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">16.000</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:9px 8px;font-weight:500">Descuento</td>
+                <td style="padding:9px 8px;text-align:center;color:var(--text2)">1</td>
+                <td style="padding:9px 8px;text-align:right;color:#e74c3c;font-weight:600">-25.000</td>
+              </tr>
+              <!-- fila totales -->
+              <tr style="background:var(--bg3)">
+                <td style="padding:9px 8px;font-weight:700;font-size:0.78rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.4px">Totales</td>
+                <td style="padding:9px 8px;text-align:center;font-weight:700">18</td>
+                <td style="padding:9px 8px;text-align:right;font-weight:700;color:#8DC63F">572.000</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
