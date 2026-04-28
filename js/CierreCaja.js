@@ -62,10 +62,10 @@ function _renderMovimientos(rows) {
     const hora   = (r.Hora ?? '').slice(0, 5);
     const italic = esMov ? 'font-style:italic;' : '';
 
-    const sub = esMov ? 'Mov. manual' : (r.FormaPago || '');
+    const formaPago = esMov ? 'Efectivo' : (r.FormaPago || '');
     const concepto = esMov
-      ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.7rem;font-weight:400;color:var(--text2)">${sub}</small>`
-      : `#${r.Comprobante}<br><small style="font-size:0.7rem;color:var(--text2);font-weight:400">${sub}</small>`;
+      ? `${r.Observacion || r.TipoComprobante || 'Movimiento'}<br><small style="font-size:0.7rem;font-weight:400;color:var(--text2)">${formaPago}</small>`
+      : `#${r.Comprobante}<br><small style="font-size:0.7rem;color:var(--text2);font-weight:400">${formaPago}</small>`;
 
     const estadoCelda = esMov
       ? `<td style="${TD};text-align:center">—</td>`
