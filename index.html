@@ -20,7 +20,7 @@
     <div class="form-card">
       <div class="logo-wrap">
         <div class="logo-texto">TPV</div>
-        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.50 — 28/04/26 16:30</small></div>
+        <div class="logo-sub">Punto de Venta <small style="opacity:0.45">v1.0.51 — 28/04/26 17:00</small></div>
       </div>
       <h2>Acceso</h2>
       <p class="subtitulo">Ingrese los datos de su licencia</p>
@@ -243,6 +243,7 @@
         <button class="menu-item" id="menu-impresora">🖨️ Impresora</button>
         <button class="menu-item" id="menu-opciones">⚙️ Opciones</button>
         <button class="menu-item" id="menu-datos">🗄️ Datos</button>
+        <button class="menu-item" id="menu-cierre-caja">🏁 Cierre de Caja</button>
         <div style="flex:1"></div>
         <div style="border-top:1px solid var(--border)"></div>
         <button class="menu-item" id="menu-cerrar-sesion">👤 Cerrar Sesión</button>
@@ -308,6 +309,123 @@
     </div>
     <div class="contenido" style="display:flex;align-items:center;justify-content:center">
       <span style="color:var(--text2);font-size:0.9rem">Próximamente</span>
+    </div>
+  </div>
+
+  <!-- ── Pantalla: Cierre de Caja ── -->
+  <div id="screen-cierre-caja" class="screen">
+    <div class="header">
+      <div>
+        <div style="font-size:1rem;font-weight:600">Cierre de Caja</div>
+        <div id="cierre-sub" style="font-size:0.75rem;color:var(--text2)"></div>
+      </div>
+      <button id="btn-cierre-caja-volver" class="btn btn-secundario" style="width:auto;padding:0 14px;font-size:0.8rem">← Volver</button>
+    </div>
+
+    <div class="contenido" style="flex:1;overflow-y:auto;padding:14px 12px;">
+
+      <!-- Info apertura -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;">
+        <div style="font-size:0.8rem"><div style="color:var(--text2);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.4px">Apertura</div><div style="font-weight:600" id="cierre-hora-apertura">—</div></div>
+        <div style="font-size:0.8rem"><div style="color:var(--text2);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.4px">Cierre</div><div style="font-weight:600" id="cierre-hora-cierre">—</div></div>
+        <div style="font-size:0.8rem"><div style="color:var(--text2);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.4px">Importe inicial</div><div style="font-weight:600;color:var(--accent)" id="cierre-importe-inicial">—</div></div>
+        <div style="font-size:0.8rem"><div style="color:var(--text2);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.4px">Tickets cobrados</div><div style="font-weight:600" id="cierre-cant-tickets">—</div></div>
+      </div>
+
+      <!-- Tabla movimientos -->
+      <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)">Movimientos de Caja</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+        <table id="cierre-tabla-mov" style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+          <thead>
+            <tr>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:left;border-bottom:1px solid var(--border);width:38px">N°</th>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:left;border-bottom:1px solid var(--border);width:48px">Hora</th>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:left;border-bottom:1px solid var(--border)">Concepto</th>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:right;border-bottom:1px solid var(--border);width:90px">Entró</th>
+              <th style="background:var(--bg3);color:var(--text2);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;padding:8px;text-align:right;border-bottom:1px solid var(--border);width:90px">Salió</th>
+            </tr>
+          </thead>
+          <tbody id="cierre-body-mov">
+            <!-- datos de ejemplo (mockup) -->
+            <tr style="border-bottom:1px solid var(--border);color:var(--text2);font-style:italic">
+              <td style="padding:9px 8px;font-size:0.75rem">—</td>
+              <td style="padding:9px 8px;font-size:0.75rem;white-space:nowrap">08:00</td>
+              <td style="padding:9px 8px;font-weight:500">Apertura de caja</td>
+              <td style="padding:9px 8px;text-align:right;color:#5a9e2f;font-weight:600">1.000.000</td>
+              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">001</td>
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">08:35</td>
+              <td style="padding:9px 8px;font-weight:500">Ticket #001<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">Efectivo</small></td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">85.000</td>
+              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">002</td>
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">09:12</td>
+              <td style="padding:9px 8px;font-weight:500">Ticket #002<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">T. Débito</small></td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">120.000</td>
+              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);color:var(--text2);font-style:italic">
+              <td style="padding:9px 8px;font-size:0.75rem">MV</td>
+              <td style="padding:9px 8px;font-size:0.75rem;white-space:nowrap">11:00</td>
+              <td style="padding:9px 8px;font-weight:500">Rendición parcial<br><small style="font-size:0.72rem;font-weight:400">Mov. manual</small></td>
+              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
+              <td style="padding:9px 8px;text-align:right;color:#a83228;font-weight:600">300.000</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">003</td>
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">12:30</td>
+              <td style="padding:9px 8px;font-weight:500">Ticket #003<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">T. Crédito · QR</small></td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">200.000</td>
+              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
+            </tr>
+            <tr>
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2)">004</td>
+              <td style="padding:9px 8px;font-size:0.75rem;color:var(--text2);white-space:nowrap">15:55</td>
+              <td style="padding:9px 8px;font-weight:500">Ticket #004<br><small style="font-size:0.72rem;color:var(--text2);font-weight:400">Efectivo</small></td>
+              <td style="padding:9px 8px;text-align:right;color:#8DC63F;font-weight:600">95.000</td>
+              <td style="padding:9px 8px;text-align:right;color:var(--bg3)">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Barra saldo -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;">
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center;">
+          <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Entró</div>
+          <div id="cierre-total-entro" style="font-size:0.92rem;font-weight:700;color:#8DC63F">1.500.000</div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center;">
+          <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Salió</div>
+          <div id="cierre-total-salio" style="font-size:0.92rem;font-weight:700;color:#e74c3c">300.000</div>
+        </div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);border-color:var(--accent2);padding:10px 12px;text-align:center;">
+          <div style="font-size:0.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">Saldo</div>
+          <div id="cierre-saldo" style="font-size:0.92rem;font-weight:700;color:var(--accent2)">1.200.000</div>
+        </div>
+      </div>
+
+      <div style="height:8px"></div>
+    </div>
+
+    <!-- Footer 3 botones -->
+    <div class="footer-acciones" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:10px 12px;">
+      <button id="btn-cierre-movimiento" class="btn btn-secundario" style="font-size:0.8rem;padding:0 8px">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;flex-shrink:0"><path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h12v2H3v-2zm0 4h18v2H3v-2zm0 4h12v2H3v-2zM17 14v-3l4 4-4 4v-3h-4v-2h4z"/></svg>
+        Mov. Caja
+      </button>
+      <button id="btn-cierre-imprimir" class="btn btn-secundario" style="font-size:0.8rem;padding:0 8px">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;flex-shrink:0"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        Impresión
+      </button>
+      <button id="btn-cierre-confirmar" class="btn" style="background:var(--accent2);color:#fff;font-size:0.8rem;padding:0 8px">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;flex-shrink:0"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        Cerrar Caja
+      </button>
     </div>
   </div>
 

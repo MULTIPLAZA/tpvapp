@@ -461,6 +461,13 @@ function init() {
   document.getElementById('menu-opciones').addEventListener('click',  () => { _cerrarMenu(); mostrarPantalla('screen-opciones'); });
   document.getElementById('menu-datos').addEventListener('click',     () => { _cerrarMenu(); mostrarPantalla('screen-datos'); });
 
+  document.getElementById('menu-cierre-caja').addEventListener('click', () => {
+    _cerrarMenu();
+    document.getElementById('cierre-sub').textContent =
+      [Sesion.get('NombreSucursal'), Sesion.get('NombreTerminal')].filter(Boolean).join(' — ');
+    mostrarPantalla('screen-cierre-caja');
+  });
+
   document.getElementById('menu-cerrar-sesion').addEventListener('click', () => {
     _cerrarMenu();
     import('./LoginUsuario.js').then(m => m.mostrar(true));
@@ -472,7 +479,7 @@ function init() {
     mostrarPantalla('screen-cuenta');
   });
 
-  ['caja-panel','reportes','impresora','opciones','datos','cliente'].forEach(id => {
+  ['caja-panel','reportes','impresora','opciones','datos','cliente','cierre-caja'].forEach(id => {
     document.getElementById(`btn-${id}-volver`)
       ?.addEventListener('click', () => mostrarPantalla('screen-main'));
   });
