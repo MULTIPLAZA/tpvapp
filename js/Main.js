@@ -290,10 +290,20 @@ async function _agregarItem(producto, card) {
 
   const IDEntidad = Sesion.get('IDEntidad');
   try {
-    const rows = await LlamarSP('AGREGAR_ITEM', {
-      IDEntidad, IDTransaccion: _IDTransaccion,
-      IDProducto: producto.IDProducto, Cantidad: 1,
-    });
+    // Buscar item existente con las mismas 4 claves: IDProducto, PrecioUni, Observacion, Descuento
+    const existente = _ultimosItems.find(i =>
+      i.IDProducto   == producto.IDProducto &&
+      parseFloat(i.PrecioUni  || 0) === parseFloat(producto.Precio || 0) &&
+      (i.Observacion || '')   === '' &&
+      (i.Descuento   || 0)    === 0
+    );
+
+    let rows;
+    if (existente) {
+      rows = await LlamarSP('MAS_ITEM', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket: existente.IDDetalleTicket });
+    } else {
+      rows = await LlamarSP('AGREGAR_ITEM', { IDEntidad, IDTransaccion: _IDTransaccion, IDProducto: producto.IDProducto, Cantidad: 1 });
+    }
     if (!rows?.length) throw new Error('Sin respuesta');
     if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al agregar');
     await _ticketActivo();

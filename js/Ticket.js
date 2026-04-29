@@ -1,5 +1,26 @@
 import { LlamarSP, LlamarSPMulti, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
+function _pedirObservacion(obsActual) {
+  return new Promise(resolve => {
+    const modal = document.getElementById('modal-obs-item');
+    const inp   = document.getElementById('inp-obs-item');
+    inp.value   = obsActual || '';
+    modal.style.display = 'flex';
+    setTimeout(() => inp.focus(), 50);
+    const onGuardar  = () => { modal.style.display = 'none'; cleanup(); resolve(inp.value.trim()); };
+    const onCancelar = () => { modal.style.display = 'none'; cleanup(); resolve(null); };
+    const onKey      = e  => { if (e.key === 'Enter') onGuardar(); else if (e.key === 'Escape') onCancelar(); };
+    function cleanup() {
+      document.getElementById('modal-obs-guardar').removeEventListener('click', onGuardar);
+      document.getElementById('modal-obs-cancelar').removeEventListener('click', onCancelar);
+      inp.removeEventListener('keydown', onKey);
+    }
+    document.getElementById('modal-obs-guardar').addEventListener('click', onGuardar);
+    document.getElementById('modal-obs-cancelar').addEventListener('click', onCancelar);
+    inp.addEventListener('keydown', onKey);
+  });
+}
+
 const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 const fmtQty = n => parseFloat(n || 0).toString();
 
@@ -54,6 +75,7 @@ function _renderItems(items, cabecera) {
         <button class="btn-qty" data-accion="menos" data-id="${item.IDDetalleTicket}">−</button>
         <span class="qty-valor">${fmtQty(qty)}</span>
         <button class="btn-qty" data-accion="mas" data-id="${item.IDDetalleTicket}">+</button>
+        <button class="btn-obs${item.Observacion ? ' tiene-obs' : ''}" data-id="${item.IDDetalleTicket}" data-obs="${(item.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
         <button class="btn-quitar" data-id="${item.IDDetalleTicket}">🗑</button>
       </div>
       <div class="ticket-item-total">${fmtGs(item.Total)}</div>
@@ -65,6 +87,26 @@ function _renderItems(items, cabecera) {
     btn.addEventListener('click', () => {
       const accion = btn.dataset.accion === 'mas' ? 'MAS_ITEM' : 'MENOS_ITEM';
       _llamarItem(accion, parseInt(btn.dataset.id));
+    });
+  });
+
+  cont.querySelectorAll('.btn-obs').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const nueva = await _pedirObservacion(btn.dataset.obs);
+      if (nueva === null) return;
+      const IDEntidad       = Sesion.get('IDEntidad');
+      const IDDetalleTicket = parseInt(btn.dataset.id);
+      mostrarLoading(true);
+      try {
+        const rows = await LlamarSP('ITEM_OBSERVACION', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Observacion: nueva });
+        if (!rows?.length) throw new Error('Sin respuesta');
+        if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error');
+        await _refrescar();
+      } catch (err) {
+        mostrarToast(err.message || 'Error al guardar observación', 'error');
+      } finally {
+        mostrarLoading(false);
+      }
     });
   });
 
