@@ -1,7 +1,7 @@
 import { LlamarSP, LlamarSPMulti, Sesion, Dispositivo, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 import * as CierreCaja from './CierreCaja.js';
 
-const fmtGs = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const fmtGs = n => Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
 const _PALETA = [
   '#1a6b8a','#1a7a4a','#5a3a8a','#8a4a1a',
@@ -183,7 +183,7 @@ function _renderPanelInline(items) {
   if (!cont) return;
   if (!items.length) {
     cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:20px;font-size:0.8rem">Vacío</p>';
-    if (totalEl) totalEl.textContent = 'Gs 0';
+    if (totalEl) totalEl.textContent = '0';
     return;
   }
   const total = items.reduce((s, r) => s + (r.Total || 0), 0);
@@ -367,7 +367,7 @@ function _renderTicketInline() {
           <button class="btn-qty" data-accion="menos" data-id="${i.IDDetalleTicket}">−</button>
           <span class="qty-valor">${parseFloat(i.Cantidad)}</span>
           <button class="btn-qty" data-accion="mas" data-id="${i.IDDetalleTicket}">+</button>
-          <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalleTicket}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
+          <button class="btn-obs${i.Observacion ? ' tiene-obs' : ''}" data-accion="obs" data-id="${i.IDDetalleTicket}" data-obs="${(i.Observacion||'').replace(/"/g,'&quot;')}" title="Observación"><svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px;pointer-events:none"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15h8v2H8zm0-4h8v2H8z"/></svg></button>
           <button class="btn-quitar" data-accion="quitar" data-id="${i.IDDetalleTicket}">✕</button>
         </div>
         <div class="ti2-precio">${fmtGs(i.PrecioUni)} c/u</div>

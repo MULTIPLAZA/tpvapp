@@ -755,7 +755,11 @@ html, body {
 }
 .ticket-item-obs { font-size: 0.75rem; color: var(--text2); }
 .ticket-item-precio { font-size: 0.75rem; color: var(--text2); margin-top: 2px; white-space: nowrap; }
-.ticket-item-acciones { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.ticket-item-acciones { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+.ticket-item-acciones .btn-qty,
+.ticket-item-acciones .btn-obs,
+.ticket-item-acciones .btn-cant,
+.ticket-item-acciones .btn-quitar { width: 26px; height: 26px; min-width: 26px; font-size: 0.85rem; }
 .btn-qty {
   background: var(--bg3);
   border: 1px solid var(--border);

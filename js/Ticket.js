@@ -101,7 +101,7 @@ function _renderItems(items, cabecera) {
         <span class="qty-valor">${fmtQty(qty)}</span>
         <button class="btn-qty" data-accion="mas" data-id="${item.IDDetalleTicket}">+</button>
         <button class="btn-cant" data-id="${item.IDDetalleTicket}" title="Agregar cantidad">+N</button>
-        <button class="btn-obs${item.Observacion ? ' tiene-obs' : ''}" data-id="${item.IDDetalleTicket}" data-obs="${(item.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
+        <button class="btn-obs${item.Observacion ? ' tiene-obs' : ''}" data-id="${item.IDDetalleTicket}" data-obs="${(item.Observacion||'').replace(/"/g,'&quot;')}" title="Observación"><svg viewBox="0 0 24 24" fill="currentColor" style="width:13px;height:13px;pointer-events:none"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15h8v2H8zm0-4h8v2H8z"/></svg></button>
         <button class="btn-quitar" data-id="${item.IDDetalleTicket}">🗑</button>
       </div>
       <div class="ticket-item-total">${fmtGs(item.Total)}</div>
