@@ -1,5 +1,30 @@
 import { LlamarSP, LlamarSPMulti, Sesion, mostrarPantalla, mostrarLoading, mostrarToast, esProcesado } from './App.js';
 
+function _pedirCantidad() {
+  return new Promise(resolve => {
+    const modal = document.getElementById('modal-cant-item');
+    const inp   = document.getElementById('inp-cant-item');
+    inp.value   = '';
+    modal.style.display = 'flex';
+    setTimeout(() => inp.focus(), 50);
+    const onGuardar  = () => {
+      const v = parseFloat(inp.value.replace(',', '.'));
+      modal.style.display = 'none'; cleanup();
+      resolve(isNaN(v) || v <= 0 ? null : v);
+    };
+    const onCancelar = () => { modal.style.display = 'none'; cleanup(); resolve(null); };
+    const onKey      = e  => { if (e.key === 'Enter') onGuardar(); else if (e.key === 'Escape') onCancelar(); };
+    function cleanup() {
+      document.getElementById('modal-cant-guardar').removeEventListener('click', onGuardar);
+      document.getElementById('modal-cant-cancelar').removeEventListener('click', onCancelar);
+      inp.removeEventListener('keydown', onKey);
+    }
+    document.getElementById('modal-cant-guardar').addEventListener('click', onGuardar);
+    document.getElementById('modal-cant-cancelar').addEventListener('click', onCancelar);
+    inp.addEventListener('keydown', onKey);
+  });
+}
+
 function _pedirObservacion(obsActual) {
   return new Promise(resolve => {
     const modal = document.getElementById('modal-obs-item');
@@ -21,7 +46,7 @@ function _pedirObservacion(obsActual) {
   });
 }
 
-const fmtGs  = n => 'Gs ' + Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const fmtGs  = n => Math.round(n || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 const fmtQty = n => parseFloat(n || 0).toString();
 
 let _IDTransaccion = null;
@@ -55,7 +80,7 @@ function _renderItems(items, cabecera) {
 
   if (!items.length) {
     cont.innerHTML = '<p style="color:var(--text2);text-align:center;padding:40px">Ticket vacío</p>';
-    totalEl.textContent = 'Gs 0';
+    totalEl.textContent = '0';
     return;
   }
   totalEl.textContent = fmtGs(items.reduce((s, r) => s + (r.Total || 0), 0));
@@ -75,6 +100,7 @@ function _renderItems(items, cabecera) {
         <button class="btn-qty" data-accion="menos" data-id="${item.IDDetalleTicket}">−</button>
         <span class="qty-valor">${fmtQty(qty)}</span>
         <button class="btn-qty" data-accion="mas" data-id="${item.IDDetalleTicket}">+</button>
+        <button class="btn-cant" data-id="${item.IDDetalleTicket}" title="Agregar cantidad">+N</button>
         <button class="btn-obs${item.Observacion ? ' tiene-obs' : ''}" data-id="${item.IDDetalleTicket}" data-obs="${(item.Observacion||'').replace(/"/g,'&quot;')}" title="Observación">✎</button>
         <button class="btn-quitar" data-id="${item.IDDetalleTicket}">🗑</button>
       </div>
@@ -87,6 +113,26 @@ function _renderItems(items, cabecera) {
     btn.addEventListener('click', () => {
       const accion = btn.dataset.accion === 'mas' ? 'MAS_ITEM' : 'MENOS_ITEM';
       _llamarItem(accion, parseInt(btn.dataset.id));
+    });
+  });
+
+  cont.querySelectorAll('.btn-cant').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const cant = await _pedirCantidad();
+      if (cant === null) return;
+      const IDEntidad       = Sesion.get('IDEntidad');
+      const IDDetalleTicket = parseInt(btn.dataset.id);
+      mostrarLoading(true);
+      try {
+        const rows = await LlamarSP('AUMENTAR_CANTIDAD', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Cantidad: cant });
+        if (!rows?.length) throw new Error('Sin respuesta');
+        if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error');
+        await _refrescar();
+      } catch (err) {
+        mostrarToast(err.message || 'Error al actualizar cantidad', 'error');
+      } finally {
+        mostrarLoading(false);
+      }
     });
   });
 
