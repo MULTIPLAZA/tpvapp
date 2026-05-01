@@ -385,7 +385,9 @@ function _renderTicketInline() {
         const nueva = await _pedirObservacion(btn.dataset.obs);
         if (nueva === null) return;
         try {
-          await LlamarSP('ITEM_OBSERVACION', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Observacion: nueva });
+          const rows = await LlamarSP('ITEM_OBSERVACION', { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket, Observacion: nueva });
+          if (!rows?.length) throw new Error('Sin respuesta');
+          if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error al guardar observación');
           await _ticketActivo();
         } catch (err) {
           mostrarToast(err.message || 'Error al guardar observación', 'error');
@@ -393,7 +395,9 @@ function _renderTicketInline() {
         return;
       }
       try {
-        await LlamarSP(spMap[accion], { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket });
+        const rows = await LlamarSP(spMap[accion], { IDEntidad, IDTransaccion: _IDTransaccion, IDDetalleTicket });
+        if (!rows?.length) throw new Error('Sin respuesta');
+        if (!esProcesado(rows[0].Procesado)) throw new Error(rows[0].Mensaje || 'Error');
         await _ticketActivo();
       } catch (err) {
         mostrarToast(err.message || 'Error', 'error');
