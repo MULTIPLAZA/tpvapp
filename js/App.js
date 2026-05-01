@@ -199,14 +199,42 @@ export function mostrarLoading(visible) {
   document.getElementById('loading').classList.toggle('visible', visible);
 }
 
+let _audioCtx = null;
+function _getAudio() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+function _beepError() {
+  try {
+    const ctx  = _getAudio();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(280, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.25);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.3);
+  } catch {}
+}
+
 let _toastTimer;
 export function mostrarToast(msg, tipo = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = tipo;
+  // Reiniciar animación: quitar clase, forzar reflow, volver a poner
+  t.className = '';
   t.style.display = 'block';
+  // eslint-disable-next-line no-unused-expressions
+  t.offsetWidth; // fuerza reflow para reiniciar animación CSS
+  t.className = tipo;
+  if (tipo === 'error') _beepError();
   clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3000);
+  _toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3500);
 }
 
 // ── Instalación PWA ────────────────────────────────────────────
