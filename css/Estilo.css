@@ -1018,3 +1018,11 @@ html, body {
 .cobro-monto--efectivo { color: var(--accent2); }
 .cobro-monto--otros    { color: var(--text2); }
 .cobro-monto--vuelto   { color: var(--text2); }
+
+/* ── Tablet responsive (Option A: escala rem) ── */
+@media (min-width: 600px) {
+  html { font-size: 18px; }
+}
+@media (min-width: 800px) {
+  html { font-size: 20px; }
+}
